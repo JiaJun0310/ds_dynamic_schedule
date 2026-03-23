@@ -25,3 +25,45 @@ document.addEventListener('DOMContentLoaded', function() {
   
     calendar.render();
   });
+
+
+
+const buttons = document.querySelectorAll('.semesterButtons')
+
+buttons.forEach(button => {
+
+  button.onclick = function()
+  {
+    let sem = button.textContent[button.textContent.length - 1];
+    const SemesterDiv = document.getElementById(`Semester${sem}`);
+    
+    const div1 = document.createElement("div");
+    SemesterDiv.appendChild(div1);
+    div1.className = "course";
+    
+    const p1 = document.createElement("p");
+    p1.textContent = "Τεχνητή Νοημοσύνη";
+    div1.appendChild(p1);
+
+    const checkbox1 = document.createElement("input");
+    checkbox1.type = "checkbox";
+    div1.appendChild(checkbox1);
+    checkbox1.className = "checkbox"
+
+  
+
+
+
+    const checkbox2 = document.createElement("checkbox");
+    const checkbox3 = document.createElement("checkbox");
+    const checkbox4 = document.createElement("checkbox");
+    const checkbox5 = document.createElement("checkbox");
+  
+    SemesterDiv.appendChild(checkbox2);
+    SemesterDiv.appendChild(checkbox3);
+    SemesterDiv.appendChild(checkbox4);
+    SemesterDiv.appendChild(checkbox5);
+
+  }
+  
+})

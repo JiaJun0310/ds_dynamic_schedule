@@ -9,6 +9,8 @@ header
 {
     background-color: #2f385f;
     height: 100px;
+    border: 1px solid;
+
 }
 
 main 
@@ -32,24 +34,43 @@ main
 
 #semesters
 {
-    background-color: #afafaf;
-    border: 2px solid;
-    flex:0 0 20%;
+    background-color: rgb(107, 6, 6);
+    border: 2px solid rgb(107, 6, 6);
+    flex:0 0 19.75%;
     display: flex;
     flex-direction: column;
-    
+    /* background-color: #9A1D2E */
 }
 
 .semesterButtons
 {
     height: 3.5em;
-    border: 0px;
+    border: 2px solid rgb(107, 6, 6);
     font-size: 20px;
     background-color: #8c2635;
     color: white;
 }
 
-.semesterButtons:hover
+/* .semesterButtons:hover
 {
-    /* color: white; */
+    color: white; 
+} */
+
+.course
+{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 5px;
+    justify-content: center;
+    
 }
+
+
+/* 
+.checkbox 
+{
+    
+} */
+
+
