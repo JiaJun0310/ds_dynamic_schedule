@@ -5,6 +5,10 @@
 
 }
 
+.fc-timegrid-slot {
+    height: 2.5em !important; /*row height */
+}
+
 header
 {
     background-color: #2f385f;
