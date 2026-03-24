@@ -26,12 +26,15 @@ document.addEventListener("DOMContentLoaded", function () {
   calendar.render();
 });
 
-const buttons = document.querySelectorAll(".semesterButtons");
+const buttons = document.querySelectorAll(".buttonDiv");
 
 buttons.forEach((button) => {
   let pressed = false;
 
-  let sem = button.textContent[button.textContent.length - 1];
+  let cleanText = button.textContent.trim(); 
+  let sem = cleanText[cleanText.length - 1];
+
+  let arrow = button.querySelector(".velaki")
   const SemesterDiv = document.getElementById(`Semester${sem}`);
 
   const subjects = [
@@ -39,11 +42,16 @@ buttons.forEach((button) => {
     ["Ανάλυση 2", "Java", "Αρχιτεκτονικές Υπολογιστών"],
   ];
 
-  button.onclick = function () {
+
+
+  button.onclick = function kati() {
     pressed = !pressed;
+
+	arrow.src = pressed ? "/images/velaki_katw.svg":"/images/velaki_deksia.svg" 
 
     if (pressed) {
       for (let i = 0; i < subjects[sem - 1].length; i++) {
+
         const div = document.createElement("div");
         const p = document.createElement("p");
         const checkbox = document.createElement("input");
@@ -64,7 +72,8 @@ buttons.forEach((button) => {
 			}
 		};
 
-      }
+    }
+	
 
       // SemesterDiv.appendChild(div1);
       // div1.className = "course";
@@ -82,4 +91,8 @@ buttons.forEach((button) => {
       SemesterDiv.innerHTML = ``;
     }
   };
+
+	
 });
+
+
