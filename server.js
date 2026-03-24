@@ -49,9 +49,35 @@ app.post("/sendData", async (req, res) => {
     }
 });
 
-app.post("/getSubject", async (req, res) => {
-    const semester = req.body;
-    
+app.post("/getSemester", async (req, res) => {
+    try
+    {
+        const {semester} = req.body;
+
+        const schedules = await Calendar.find({ semester: semester }).select('title');
+
+        res.status(200).json({schedules});
+    }
+    catch(err)
+    {
+        res.status(400).json({ error: err.message });
+    }
+
+})
+
+app.post("/getClass", async (req, res) => {
+    try
+    {
+        const {title} = req.body;
+
+        const schedules = await Calendar.find({ title: title }).select('title daysOfWeek startTime endTime color professor');
+
+        res.status(200).json({schedules});
+    }
+    catch(err)
+    {
+        res.status(400).json({ error: err.message });
+    }
 
 })
 
