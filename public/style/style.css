@@ -9,6 +9,8 @@
     height: 2.5em !important; /*row height */
 }
 
+
+
 header
 {
     background-color: #2f385f;
@@ -60,7 +62,12 @@ main
     font: 1em sans-serif;
 }
 
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 
+}
 
 
 
@@ -71,6 +78,8 @@ main
     flex: 1;
     gap: 5px;
     justify-content: center;
+    color: white;
+    border: 2px solid rgb(86, 3, 3);
     
 }
 
@@ -94,8 +103,30 @@ main
  .buttonDiv:hover
 {
     color: rgb(176, 166, 166);
-    background-color: rgb(75, 3, 20);
+    background-color:  #a22538;
 } 
+
+footer{
+    background-color: hsl(229, 34%, 28%);
+    /* position:absolute; */
+    /* left: 0; */
+    /* bottom: 0; */
+    width: 100%;
+    z-index: 100;
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    margin-top: 22%;
+}
+
+.announcements{
+    color: #bec6ea;
+
+}
+
+.announcements::clicked{
+    color: #bec6ea;
+}
 
 /* 
 .checkbox 
