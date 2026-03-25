@@ -6,23 +6,25 @@ document.addEventListener("DOMContentLoaded", function () {
     calendar = new FullCalendar.Calendar(calendarEl, {
         themeSystem: "bootstrap5",
         timeZone: "UTC",
-        initialView: "timeGridFiveDay",
+  
+        initialView: "timeGridWeek", 
         locale: "el",
+        
+
+        firstDay: 1, 
+        
         slotMinTime: "08:00:00",
         slotMaxTime: "21:00:00",
         allDaySlot: false,
         nowIndicator: true,
         height: "auto",
-        headerToolbar: {
-            left: "",
+
+		headerToolbar: {
+            left: "", 
             center: "title",
+            right: "today prev,next" 
         },
-        views: {
-            timeGridFiveDay: {
-                type: "timeGrid",
-                duration: { days: 7 },
-            },
-        },
+        
         events: "subjects.json",
     });
 
