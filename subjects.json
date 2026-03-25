@@ -1,16 +1,7 @@
 [
     {
       "title": "ΨΣ-002-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ - ΚΕΚΤ-103",
-      "daysOfWeek": [4],
-      "startTime": "10:15:00",
-      "endTime": "12:00:00",
-      "color": "#3788d8",
-      "semester": 2,
-      "professor": "ΦΙΛΙΠΠΑΚΗΣ Μ."
-    },
-    {
-      "title": "ΨΣ-002-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ - ΚΕΚΤ-103",
-      "daysOfWeek": [5],
+      "daysOfWeek": [4,5],
       "startTime": "10:15:00",
       "endTime": "12:00:00",
       "color": "#3788d8",
@@ -55,16 +46,7 @@
     },
     {
       "title": "ΨΣ-012-ΣΤΟΧΑΣΤΙΚΕΣ ΑΝΕΛΙΞΕΙΣ - ΚΕΚΤ-103",
-      "daysOfWeek": [1],
-      "startTime": "11:15:00",
-      "endTime": "13:00:00",
-      "color": "#6c757d",
-      "semester": 2,
-      "professor": "ΑΛΕΞΙΟΥ Α"
-    },
-    {
-      "title": "ΨΣ-012-ΣΤΟΧΑΣΤΙΚΕΣ ΑΝΕΛΙΞΕΙΣ - ΚΕΚΤ-103",
-      "daysOfWeek": [2],
+      "daysOfWeek": [1,2],
       "startTime": "11:15:00",
       "endTime": "13:00:00",
       "color": "#6c757d",
