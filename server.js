@@ -54,9 +54,9 @@ app.post("/getSemester", async (req, res) => {
     {
         const {semester} = req.body;
 
-        const schedules = await Calendar.find({ semester: semester }).select('title');
+        const titles = await Calendar.find({ semester: semester }).select('title');
 
-        res.status(200).json({schedules});
+        res.status(200).json({titles});
     }
     catch(err)
     {
