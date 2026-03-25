@@ -176,26 +176,33 @@ buttons.forEach(async (button) => {
 });
 
 function downloadCalendar() {
+    const cal = ics();
     const events = calendar.getEvents();
-    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//My Calendar//\n";
+    if (events.length === 0) return;
+
+    const daysMap = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    const semesterStart = "2026-02-15"; // imerominia arxis examinou
+    const semesterEnd = "2026-06-15";   // imerominia telos examinou
 
     events.forEach(event => {
-        icsContent += "BEGIN:VEVENT\n";
-        icsContent += `SUMMARY:${event.title}\n`;
-        icsContent += `DTSTART:${event.startStr.replace(/[-:]/g, "")}\n`;
-        if (event.endStr) {
-            icsContent += `DTEND:${event.endStr.replace(/[-:]/g, "")}\n`;
-        }
-        icsContent += "END:VEVENT\n";
+        const days = event._def.recurringDef.typeData.daysOfWeek;
+        
+        const rrule = {
+            freq: 'WEEKLY',
+            until: semesterEnd,
+            byday: days.map(d => daysMap[d])
+        };
+
+        
+        cal.addEvent(
+            event.title, 
+            event.extendedProps.professor, 
+            "", 
+            `${semesterStart}T${event.startStr.split('T')[1]}`, 
+            `${semesterStart}T${event.endStr.split('T')[1]}`, 
+            rrule
+        );
     });
 
-    icsContent += "END:VCALENDAR";
-
-    
-    const blob = new Blob([icsContent], { type: "text/calendar" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "my_schedule.ics";
-    link.click();
+    cal.download("university_schedule");
 }
