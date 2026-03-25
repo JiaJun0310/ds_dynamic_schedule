@@ -1,99 +1,57 @@
-#logo
-{
-    height: 100%;
-    width: 23%;
 
+* {
+
+    box-sizing: border-box;
 }
 
-.fc-timegrid-slot {
-    height: 2.5em !important; /*row height */
+/* BODY */
+body {
+    margin: 0;
+    padding-right: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh; /* FIX for mobile */
+    /* background-image: url(../../images/background.jpg); */
 }
 
-
-
-header
-{
+/* HEADER */
+header {
     background-color: #2f385f;
     height: 100px;
-    border: 1px solid #2f385f;
-
-}
-
-main 
-{
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    flex: 1;
-}
-
-#wrapper 
-{
-    display: flex;
-    flex:1
-}
-
-#calendar
-{
-    flex: 0 0 80%;
-    background-color: rgba(255, 255, 255, 0.906);
-    font-family: sans-serif;
-}
-
-#semesters
-{
-    background-color: rgb(107, 6, 6);
-    border: 2px solid rgb(107, 6, 6);
-    flex:0 0 19.75%;
-    display: flex;
-    flex-direction: column;
-}
-
-.semesterButtons
-{
-    display: flex;
-    height: 3.5em;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    background-color: #8c263500;
     width: 100%;
-    height: 100%;
-    color: white;
-    font: 1em sans-serif;
 }
 
-body {
+/* MAIN LAYOUT */
+main {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; 
-    margin: 0;         
-    background-image: url(../images/background.jpg);
-}
-
-
-
-.course
-{
-    display: flex;
-    align-items: center;
     flex: 1;
-    gap: 5px;
-    justify-content: center;
-    color: white;
-    border: 2px solid rgb(86, 3, 3);
-    font: 1em sans-serif
-    
 }
 
-.velaki{
-    height: 50%;
-    width: 50%;
-    justify-content: center;
-
+/* WRAPPER (calendar + sidebar) */
+#wrapper {
+    display: flex;
+    flex: 1;
+    width: 100%;
 }
 
-.buttonDiv{
+/* CALENDAR */
+#calendar {
+    flex: 4;
+    background-color: rgba(255, 255, 255, 0.906);
+}
+
+/* SIDEBAR */
+#semesters {
+    flex: 1; 
+    background-color: rgb(107, 6, 6);
+    border-left: 2px solid rgb(107, 6, 6);
+    display: flex;
+    flex-direction: column;
+}
+
+/* BUTTON CONTAINER */
+.buttonDiv {
     display: flex;
     height: 3.5em;
     cursor: pointer;
@@ -103,15 +61,44 @@ body {
     border: rgb(107, 6, 6) 3px solid;
 }
 
- .buttonDiv:hover
-{
+.buttonDiv:hover {
     color: rgb(176, 166, 166);
-    background-color:  #a22538;
-} 
+    background-color: #a22538;
+}
 
+/* SEMESTER BUTTON */
+.semesterButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    color: white;
+    width: 100%;
+    height: 100%;
+    font-family: sans-serif;
+}
+
+/* COURSE ITEMS */
+.course {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 5px;
+    justify-content: center;
+    color: white;
+    border: 2px solid rgb(86, 3, 3);
+    font-family: sans-serif;
+}
+
+/* IMAGE */
+.velaki {
+    height: 50%;
+    width: 50%;
+}
+
+/* FOOTER */
 footer {
     background-color: hsl(229, 34%, 28%);
-    z-index: 100;
     color: white;
     text-align: center;
     font-family: sans-serif;
@@ -119,19 +106,35 @@ footer {
     width: 100%;
 }
 
-.announcements{
-    color: #bec6ea;
-
-}
-
-.announcements::clicked{
+/* ANNOUNCEMENTS */
+.announcements {
     color: #bec6ea;
 }
 
-/* 
-.checkbox 
-{
-    
-} */
+/* CALENDAR ROW HEIGHT */
+.fc-timegrid-slot {
+    height: 2.5em !important;
+}
 
+/* LOGO */
+#logo {
+    height: 100%;
+    width: auto;
+}
 
+/* 📱 MOBILE FIX */
+@media (max-width: 768px) {
+    #wrapper {
+        flex-direction: column-reverse;
+    }
+
+    #calendar {
+        flex: none;
+        width: 100%;
+    }
+
+    #semesters {
+        flex: none;
+        width: 100%;
+    }
+}
