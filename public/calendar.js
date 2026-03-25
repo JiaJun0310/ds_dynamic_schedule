@@ -4,27 +4,39 @@ document.addEventListener("DOMContentLoaded", function () {
     var calendarEl = document.getElementById("calendar");
 
     calendar = new FullCalendar.Calendar(calendarEl, {
-        themeSystem: "bootstrap5",
+        // themeSystem: "bootstrap5",
         timeZone: "UTC",
-  
-        initialView: "timeGridWeek", 
-        locale: "el",
-        
 
-        firstDay: 1, 
-        
+        initialView: "timeGridWeek",
+        locale: "el",
+
+        firstDay: 1,
+
         slotMinTime: "08:00:00",
         slotMaxTime: "21:00:00",
         allDaySlot: false,
         nowIndicator: true,
         height: "auto",
 
-		headerToolbar: {
-            left: "", 
-            center: "title",
-            right: "today prev,next" 
+        buttonText: {
+            today: "Σήμερα",
         },
-        
+
+        customButtons: {
+            downloadBtn: {
+                text: "Λήψη (ICS)",
+                click: function () {
+                    downloadCalendar();
+                },
+            },
+        },
+
+        headerToolbar: {
+            left: "",
+            center: "title",
+            right: "downloadBtn today prev,next",
+        },
+
         events: "subjects.json",
     });
 
@@ -88,20 +100,23 @@ buttons.forEach(async (button) => {
                 div.appendChild(checkbox);
                 checkbox.className = "checkbox";
 
-				const allEvents = calendar.getEvents();
-				const isAlreadyInCalendar = allEvents.some(event => event.title === titlesArray[i]);
+                const allEvents = calendar.getEvents();
+                const isAlreadyInCalendar = allEvents.some(
+                    (event) => event.title === titlesArray[i],
+                );
 
-				if (isAlreadyInCalendar) {
-					checkbox.checked = true; // This makes the checkbox appear checked
-					console.log(`${titlesArray[i]} is already in the calendar.`);
-				}
+                if (isAlreadyInCalendar) {
+                    checkbox.checked = true; // This makes the checkbox appear checked
+                    console.log(
+                        `${titlesArray[i]} is already in the calendar.`,
+                    );
+                }
 
                 checkbox.onchange = async function () {
                     if (this.checked) {
                         // console.log(`${p.textContent} tick`);
 
                         // id = subjectsFull[i][0]
-						
 
                         const response = await fetch("/getClass", {
                             method: "POST",
@@ -128,14 +143,16 @@ buttons.forEach(async (button) => {
                         });
                     } else {
                         // Force the ID to be a string
-						const targetTitle = titlesArray[i];
-						const allEvents = calendar.getEvents(); 
+                        const targetTitle = titlesArray[i];
+                        const allEvents = calendar.getEvents();
 
-						const eventToRemove = allEvents.find(event => event.title === targetTitle);
-						
-						if (eventToRemove) {
-							eventToRemove.remove();
-						}
+                        const eventToRemove = allEvents.find(
+                            (event) => event.title === targetTitle,
+                        );
+
+                        if (eventToRemove) {
+                            eventToRemove.remove();
+                        }
                     }
                 };
             }
@@ -157,3 +174,28 @@ buttons.forEach(async (button) => {
         }
     };
 });
+
+function downloadCalendar() {
+    const events = calendar.getEvents();
+    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//My Calendar//\n";
+
+    events.forEach(event => {
+        icsContent += "BEGIN:VEVENT\n";
+        icsContent += `SUMMARY:${event.title}\n`;
+        icsContent += `DTSTART:${event.startStr.replace(/[-:]/g, "")}\n`;
+        if (event.endStr) {
+            icsContent += `DTEND:${event.endStr.replace(/[-:]/g, "")}\n`;
+        }
+        icsContent += "END:VEVENT\n";
+    });
+
+    icsContent += "END:VCALENDAR";
+
+    
+    const blob = new Blob([icsContent], { type: "text/calendar" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "my_schedule.ics";
+    link.click();
+}
