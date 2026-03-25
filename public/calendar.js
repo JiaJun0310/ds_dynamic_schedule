@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var calendarEl = document.getElementById("calendar");
 
     calendar = new FullCalendar.Calendar(calendarEl, {
-        // themeSystem: "bootstrap5",
         timeZone: "UTC",
 
         initialView: "timeGridWeek",
@@ -64,20 +63,12 @@ buttons.forEach(async (button) => {
     });
 
     const data = await response.json();
-    //console.log(data);
+    
 
     const titlesArray = data.titles.map((course) => course.title);
 
-    console.log(titlesArray);
 
-    //   const subjectsFull = [
-    // 	["1", "Ανάλυση", [4, 5], "09:15:00","10:00:00","#3788d8", "1"],
-    //     ["2", "Γραμμική", [4, 5], "10:15:00","12:00:00","#1b4d80", "1"],
-    //     ["3", "Λογική", [0, 3], "10:15:0d0","12:00:00","#05203a", "1"],
-    //     ["4", "Ανάλυση 2", [0, 3], "8:15:00","10:00:00","#37d837", "2"],
-    //     ["5", "Java", [1], "13:15:00","15:00:00","#219c21", "2"],
-    //     ["6", "Αρχιτεκτονικές Υπολογιστών", [4], "12:15:00", "15:00:00", "#0b560b", "2"]
-    //   ]
+   
 
     button.onclick = async function kati() {
         pressed = !pressed;
@@ -90,7 +81,6 @@ buttons.forEach(async (button) => {
                 const div = document.createElement("div");
                 const p = document.createElement("p");
                 const checkbox = document.createElement("input");
-                // subjects[sem-1][i]
                 SemesterDiv.appendChild(div);
                 div.className = "course";
 
@@ -106,7 +96,7 @@ buttons.forEach(async (button) => {
                 );
 
                 if (isAlreadyInCalendar) {
-                    checkbox.checked = true; // This makes the checkbox appear checked
+                    checkbox.checked = true; 
                     console.log(
                         `${titlesArray[i]} is already in the calendar.`,
                     );
@@ -114,9 +104,7 @@ buttons.forEach(async (button) => {
 
                 checkbox.onchange = async function () {
                     if (this.checked) {
-                        // console.log(`${p.textContent} tick`);
 
-                        // id = subjectsFull[i][0]
 
                         const response = await fetch("/getClass", {
                             method: "POST",
@@ -129,7 +117,6 @@ buttons.forEach(async (button) => {
                         const data = await response.json();
 
                         const classData = data.schedules[0];
-                        console.log(classData);
 
                         calendar.addEvent({
                             title: classData.title,
@@ -142,7 +129,6 @@ buttons.forEach(async (button) => {
                             },
                         });
                     } else {
-                        // Force the ID to be a string
                         const targetTitle = titlesArray[i];
                         const allEvents = calendar.getEvents();
 
@@ -157,8 +143,7 @@ buttons.forEach(async (button) => {
                 };
             }
 
-            // SemesterDiv.appendChild(div1);
-            // div1.className = "course";
+           
 
             const checkbox2 = document.createElement("checkbox");
             const checkbox3 = document.createElement("checkbox");
