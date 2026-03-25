@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const ScheduleSchema = new mongoose.Schema({
-    title: {type: String, required: true, unique: true},
+    title: {type: String, required: true},
     daysOfWeek: {type: Array, required: true},
     startTime: {type: String, required: true},
     endTime: {type: String, required: true},

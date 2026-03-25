@@ -86,11 +86,20 @@ buttons.forEach(async (button) => {
                 div.appendChild(checkbox);
                 checkbox.className = "checkbox";
 
+				const allEvents = calendar.getEvents();
+				const isAlreadyInCalendar = allEvents.some(event => event.title === titlesArray[i]);
+
+				if (isAlreadyInCalendar) {
+					checkbox.checked = true; // This makes the checkbox appear checked
+					console.log(`${titlesArray[i]} is already in the calendar.`);
+				}
+
                 checkbox.onchange = async function () {
                     if (this.checked) {
                         // console.log(`${p.textContent} tick`);
 
                         // id = subjectsFull[i][0]
+						
 
                         const response = await fetch("/getClass", {
                             method: "POST",
