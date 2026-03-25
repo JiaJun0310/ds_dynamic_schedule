@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var calendarEl = document.getElementById("calendar");
 
     calendar = new FullCalendar.Calendar(calendarEl, {
-        timeZone: "UTC",
+        timeZone: "Europe/Athens",
 
         initialView: "timeGridWeek",
         locale: "el",
