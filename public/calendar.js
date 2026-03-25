@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         views: {
             timeGridFiveDay: {
                 type: "timeGrid",
-                duration: { days: 5 },
+                duration: { days: 7 },
             },
         },
         events: "subjects.json",
