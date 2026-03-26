@@ -11,7 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100dvh; /* FIX for mobile */
-    background-image: url(../../images/background.jpg);
+    /* background-image: url(../../images/background.jpg); */
 }
 
 /* HEADER */
@@ -35,6 +35,7 @@ main {
     width: 100%;
 }
 
+
 /* CALENDAR */
 #calendar {
     flex: 4;
@@ -49,6 +50,8 @@ main {
     border-left: 2px solid rgb(107, 6, 6);
     display: flex;
     flex-direction: column;
+    height: 1129.61px;
+    overflow-y: auto;
 }
 
 /* BUTTON CONTAINER */
@@ -86,7 +89,6 @@ main {
     align-items: center;
     flex: 1;
     gap: 5px;
-    justify-content: center;
     color: white;
     border: 2px solid rgb(86, 3, 3);
     font-family: sans-serif;
@@ -97,6 +99,10 @@ main {
     
     overflow: hidden;
     
+    justify-content: space-between;
+
+    padding-left: 30px;
+    padding-right: 27px;
 }
 
 .course.visible {
