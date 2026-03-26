@@ -36,26 +36,49 @@ document.addEventListener("DOMContentLoaded", function () {
             right: "downloadBtn today prev,next",
         },
 
-         
+        eventClick: function (info) {
+            
+            const popup = document.getElementById("eventPopup");
+            const title = document.getElementById("popTitle");
+            const prof = document.getElementById("popProfessor");
+            const time = document.getElementById("popTime");
+
+            
+            const start = info.event.start.toLocaleTimeString("el-GR", {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+            const end = info.event.end.toLocaleTimeString("el-GR", {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+
+            
+            title.innerText = info.event.title;
+            prof.innerText = info.event.extendedProps.professor || "N/A";
+            time.innerText = `${start} - ${end}`;
+
+            
+            popup.showModal();
+        },
         // events: "subjects.json"
     });
 
     calendar.render();
-    fetch('https://date.nager.at/api/v3/PublicHolidays/2026/GR')
-    .then(response => response.json())
-    .then(data => {
-        
-        data.forEach(holiday => {
-            calendar.addEvent({
-                title: holiday.localName,
-                start: holiday.date,
-                allDay: true,
-                display: 'background',
-                color: '#a244b5' 
+    fetch("https://date.nager.at/api/v3/PublicHolidays/2026/GR")
+        .then((response) => response.json())
+        .then((data) => {
+            data.forEach((holiday) => {
+                calendar.addEvent({
+                    title: holiday.localName,
+                    start: holiday.date,
+                    allDay: true,
+                    display: "background",
+                    color: "#a244b5",
+                });
             });
-        });
-    })
-    .catch(err => console.error("Holiday fetch failed:", err));
+        })
+        .catch((err) => console.error("Holiday fetch failed:", err));
 });
 
 const buttons = document.querySelectorAll(".buttonDiv");
@@ -79,12 +102,8 @@ buttons.forEach(async (button) => {
     });
 
     const data = await response.json();
-    
 
     const titlesArray = data.titles.map((course) => course.title);
-
-
-   
 
     button.onclick = async function kati() {
         pressed = !pressed;
@@ -116,7 +135,7 @@ buttons.forEach(async (button) => {
                 );
 
                 if (isAlreadyInCalendar) {
-                    checkbox.checked = true; 
+                    checkbox.checked = true;
                     console.log(
                         `${titlesArray[i]} is already in the calendar.`,
                     );
@@ -124,8 +143,6 @@ buttons.forEach(async (button) => {
 
                 checkbox.onchange = async function () {
                     if (this.checked) {
-
-
                         const response = await fetch("/getClass", {
                             method: "POST",
                             headers: {
@@ -163,8 +180,6 @@ buttons.forEach(async (button) => {
                 };
             }
 
-           
-
             const checkbox2 = document.createElement("checkbox");
             const checkbox3 = document.createElement("checkbox");
             const checkbox4 = document.createElement("checkbox");
@@ -185,28 +200,27 @@ function downloadCalendar() {
     const events = calendar.getEvents();
     if (events.length === 0) return;
 
-    const daysMap = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    const daysMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
     const timezoneOffset = "+02:00";
     const semesterStart = "2026-02-15"; // imerominia arxis examinou
-    const semesterEnd = "2026-06-15";   // imerominia telos examinou
+    const semesterEnd = "2026-06-15"; // imerominia telos examinou
 
-    events.forEach(event => {
+    events.forEach((event) => {
         const days = event._def.recurringDef.typeData.daysOfWeek;
-        
+
         const rrule = {
-            freq: 'WEEKLY',
+            freq: "WEEKLY",
             until: semesterEnd,
-            byday: days.map(d => daysMap[d])
+            byday: days.map((d) => daysMap[d]),
         };
 
-        
         cal.addEvent(
-            event.title, 
-            event.extendedProps.professor, 
-            "", 
-            `${semesterStart}T${event.startStr.split('T')[1]}`, 
-            `${semesterStart}T${event.endStr.split('T')[1]}`, 
-            rrule
+            event.title,
+            event.extendedProps.professor,
+            "",
+            `${semesterStart}T${event.startStr.split("T")[1]}`,
+            `${semesterStart}T${event.endStr.split("T")[1]}`,
+            rrule,
         );
     });
 
