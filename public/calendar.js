@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
             },
             viewBtn:{
-                text: "Change Display",
+                text: "Αλλαγή Οθόνης",
                 click: function(){
                     hideList();
                 }

@@ -214,7 +214,8 @@ checkbox {
     }
 
     #clearDiv {
-        position: sticky; /* Floats at bottom of the red area while scrolling */
+        font-family: sans-serif;
+        position: sticky; 
         bottom: 0;
         z-index: 100;
         background-color: rgb(107, 6, 6);
@@ -224,18 +225,14 @@ checkbox {
     }
 
     .bottomButtons {
-        flex: 1; /* Both buttons take equal width */
+        font-family: sans-serif;
+        flex: 1; 
         height: 55px;
         margin: 5px;
-        font-size: 0.75em; /* Smaller text for side-by-side */
+         
     }
 
-    .calendar-hidden {
-        position: absolute !important;
-        left: -9999px !important; /* Moves it way off screen */
-        opacity: 0 !important;
-        pointer-events: none !important; /* Can't click it */
-    }
+
 
     #toggleScreen {
         display: block;
