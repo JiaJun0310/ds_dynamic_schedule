@@ -249,7 +249,14 @@ function downloadCalendar() {
 }
 
 function hideList(){
-    const list = document.getElementById("semesters");
+    if (window.innerWidth <= 768) {
+        const mobileBtn = document.getElementById("toggleScreen");
+        if (mobileBtn) {
+            mobileBtn.click(); 
+        }
+        return; 
+    }
+    const list = document.getElementById("calendarWrapper");
     if (list.style.display === "none")
     {
         list.style.display = ""
@@ -263,3 +270,24 @@ function hideList(){
     
 
 }
+
+const toggleScreen = document.getElementById("toggleScreen");
+
+
+
+
+toggleScreen.onclick = function () {
+    const list = document.getElementById("calendarWrapper"); 
+    const calEl = document.getElementById("calendar"); 
+
+    if (calEl.style.display === "block") {
+        calEl.style.setProperty("display", "none", "important");
+        list.style.display = "block";
+    } 
+    else {
+        list.style.display = "none";
+        calEl.style.setProperty("display", "block", "important");
+        
+        calendar.updateSize(); 
+    }
+};

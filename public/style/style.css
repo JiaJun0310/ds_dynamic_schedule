@@ -1,6 +1,4 @@
-
 * {
-
     box-sizing: border-box;
 }
 
@@ -35,7 +33,6 @@ main {
     width: 100%;
 }
 
-
 /* CALENDAR */
 #calendar {
     flex: 4;
@@ -45,7 +42,7 @@ main {
 
 /* SIDEBAR */
 #semesters {
-    flex: 1; 
+    flex: 1;
     background-color: rgb(107, 6, 6);
     border-left: 2px solid rgb(107, 6, 6);
     border-right: 2px solid rgb(107, 6, 6);
@@ -83,7 +80,6 @@ main {
     font-family: sans-serif;
 }
 
-
 /* COURSE ITEMS */
 .course {
     display: flex;
@@ -96,10 +92,12 @@ main {
 
     opacity: 0;
     transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+
     overflow: hidden;
-    
+
     justify-content: space-between;
 
     padding-left: 30px;
@@ -127,9 +125,9 @@ footer {
     width: 100%;
 }
 
-checkbox{
-    height: 10px;
-    width: 10px;
+checkbox {
+    height: 30px;
+    width: 30px;
 }
 
 /* ANNOUNCEMENTS */
@@ -148,19 +146,63 @@ checkbox{
     width: auto;
 }
 
-.fc .fc-button{
+.fc .fc-button {
     margin-top: 10px;
     margin-right: 5px;
 }
 
-.fc .fc-prev-button{
+.fc .fc-prev-button {
     margin-right: 0 !important;
 }
+#clearDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 10px;
+    background-color: rgb(107, 6, 6);
+    width: 100%;
+    margin-top: auto;
+}
+
+#toggleScreen {
+    display: none;
+}
+
+.bottomButtons {
+    background-color: #2f385f;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    width: 90%;
+    max-width: 250px;
+    height: 50px;
+    font-size: 0.85em;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#calendarWrapper {
+    flex: 1;
+    background-color: rgb(107, 6, 6);
+    border-left: 2px solid rgb(107, 6, 6);
+    border-right: 2px solid rgb(107, 6, 6);
+    display: flex;
+    flex-direction: column;
+    height: 1140px;
+    overflow-y: auto;
+}
+
 
 
 /* MOBILE FIX */
 @media (max-width: 768px) {
-
     #wrapper {
         flex-direction: column-reverse;
     }
@@ -171,22 +213,55 @@ checkbox{
         display: none;
     }
 
+    #clearDiv {
+        position: sticky; /* Floats at bottom of the red area while scrolling */
+        bottom: 0;
+        z-index: 100;
+        background-color: rgb(107, 6, 6);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .bottomButtons {
+        flex: 1; /* Both buttons take equal width */
+        height: 55px;
+        margin: 5px;
+        font-size: 0.75em; /* Smaller text for side-by-side */
+    }
+
+    .calendar-hidden {
+        position: absolute !important;
+        left: -9999px !important; /* Moves it way off screen */
+        opacity: 0 !important;
+        pointer-events: none !important; /* Can't click it */
+    }
+
+    #toggleScreen {
+        display: block;
+    }
+
+    
+
     #semesters {
         flex: none;
         width: 100%;
-        height: auto;      
-        max-height: none;  
+        height: auto;
+        max-height: none;
         /* position:fixed; */
         padding-bottom: 5px;
     }
 
-    .fc .fc-toolbar{
+    .fc .fc-toolbar {
         display: flex;
         flex-direction: column;
+        align-items: center;
     }
 
-    .fc #fc-dom-1{
+    .fc #fc-dom-1 {
         margin-top: 10px;
     }
+}
 
+@media (min-width: 768px) {
 }
