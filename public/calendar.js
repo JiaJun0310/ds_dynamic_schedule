@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
             },
             viewBtn:{
-                text: "Αλλαγή Οθόνης",
+                text: "Αλλαγή",
                 click: function(){
                     hideList();
                 }
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     start: holiday.date,
                     allDay: true,
                     display: "background",
-                    color: "#a244b5",
+                    color: "#47538a",
                 });
             });
         })

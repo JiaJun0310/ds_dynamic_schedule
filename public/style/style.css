@@ -188,6 +188,10 @@ checkbox {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
+.bottomButtons:hover{
+    background-color: #202848;
+}
+
 #calendarWrapper {
     flex: 1;
     background-color: rgb(107, 6, 6);
