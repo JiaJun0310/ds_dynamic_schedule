@@ -166,6 +166,7 @@ function downloadCalendar() {
     if (events.length === 0) return;
 
     const daysMap = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    const timezoneOffset = "+02:00";
     const semesterStart = "2026-02-15"; // imerominia arxis examinou
     const semesterEnd = "2026-06-15";   // imerominia telos examinou
 
