@@ -127,6 +127,11 @@ footer {
     width: 100%;
 }
 
+checkbox{
+    height: 10px;
+    width: 10px;
+}
+
 /* ANNOUNCEMENTS */
 .announcements {
     color: #bec6ea;
@@ -153,8 +158,9 @@ footer {
 }
 
 
-/* 📱 MOBILE FIX */
+/* MOBILE FIX */
 @media (max-width: 768px) {
+
     #wrapper {
         flex-direction: column-reverse;
     }
@@ -162,6 +168,7 @@ footer {
     #calendar {
         flex: none;
         width: 100%;
+        display: none;
     }
 
     #semesters {
@@ -169,6 +176,7 @@ footer {
         width: 100%;
         height: auto;      
         max-height: none;  
+        /* position:fixed; */
         padding-bottom: 5px;
     }
 

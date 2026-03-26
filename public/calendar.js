@@ -28,22 +28,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     downloadCalendar();
                 },
             },
+            viewBtn:{
+                text: "Change Display",
+                click: function(){
+                    hideList();
+                }
+            },
         },
 
         headerToolbar: {
             left: "",
             center: "title",
-            right: "downloadBtn today prev,next",
+            right: "downloadBtn today prev,next viewBtn",
         },
 
         eventClick: function (info) {
-            
             const popup = document.getElementById("eventPopup");
             const title = document.getElementById("popTitle");
             const prof = document.getElementById("popProfessor");
             const time = document.getElementById("popTime");
 
-            
             const start = info.event.start.toLocaleTimeString("el-GR", {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -53,12 +57,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 minute: "2-digit",
             });
 
-            
             title.innerText = info.event.title;
             prof.innerText = info.event.extendedProps.professor || "N/A";
             time.innerText = `${start} - ${end}`;
 
-            
+            popup.onclick = function (event) {
+                if (event.target === popup) {
+                    popup.close();
+                }
+            };
+
             popup.showModal();
         },
         // events: "subjects.json"
@@ -119,6 +127,8 @@ buttons.forEach(async (button) => {
                 SemesterDiv.appendChild(div);
                 div.className = "course";
 
+                
+
                 p.textContent = titlesArray[i];
                 div.appendChild(p);
                 checkbox.type = "checkbox";
@@ -140,6 +150,17 @@ buttons.forEach(async (button) => {
                         `${titlesArray[i]} is already in the calendar.`,
                     );
                 }
+
+                div.onclick = function () {
+                    if(event.target === checkbox)
+                    {
+                        return;
+                    }
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event("change"));
+                };
+
+                
 
                 checkbox.onchange = async function () {
                     if (this.checked) {
@@ -225,4 +246,20 @@ function downloadCalendar() {
     });
 
     cal.download("university_schedule");
+}
+
+function hideList(){
+    const list = document.getElementById("semesters");
+    if (list.style.display === "none")
+    {
+        list.style.display = ""
+        calendar.updateSize();
+    }
+    else
+    {
+        list.style.display = "none";
+        calendar.updateSize();
+    }
+    
+
 }
