@@ -90,6 +90,10 @@ buttons.forEach(async (button) => {
                 div.appendChild(checkbox);
                 checkbox.className = "checkbox";
 
+                setTimeout(() => {
+                    div.classList.add("visible");
+                }, i * 50);
+
                 const allEvents = calendar.getEvents();
                 const isAlreadyInCalendar = allEvents.some(
                     (event) => event.title === titlesArray[i],

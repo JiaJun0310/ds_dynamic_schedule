@@ -11,7 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100dvh; /* FIX for mobile */
-    /* background-image: url(../../images/background.jpg); */
+    background-image: url(../../images/background.jpg);
 }
 
 /* HEADER */
@@ -39,6 +39,7 @@ main {
 #calendar {
     flex: 4;
     background-color: rgba(255, 255, 255, 0.906);
+    font-family: sans-serif;
 }
 
 /* SIDEBAR */
@@ -78,6 +79,7 @@ main {
     font-family: sans-serif;
 }
 
+
 /* COURSE ITEMS */
 .course {
     display: flex;
@@ -88,6 +90,18 @@ main {
     color: white;
     border: 2px solid rgb(86, 3, 3);
     font-family: sans-serif;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    
+    overflow: hidden;
+    
+}
+
+.course.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* IMAGE */
