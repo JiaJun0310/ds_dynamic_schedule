@@ -36,10 +36,26 @@ document.addEventListener("DOMContentLoaded", function () {
             right: "downloadBtn today prev,next",
         },
 
-        events: "subjects.json",
+         
+        // events: "subjects.json"
     });
 
     calendar.render();
+    fetch('https://date.nager.at/api/v3/PublicHolidays/2026/GR')
+    .then(response => response.json())
+    .then(data => {
+        
+        data.forEach(holiday => {
+            calendar.addEvent({
+                title: holiday.localName,
+                start: holiday.date,
+                allDay: true,
+                display: 'background',
+                color: '#a244b5' 
+            });
+        });
+    })
+    .catch(err => console.error("Holiday fetch failed:", err));
 });
 
 const buttons = document.querySelectorAll(".buttonDiv");
