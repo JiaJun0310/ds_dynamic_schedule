@@ -135,6 +135,19 @@ buttons.forEach(async (button) => {
                 div.appendChild(checkbox);
                 checkbox.className = "checkbox";
 
+                const colorBtn = document.createElement("span");
+                colorBtn.innerHTML = `<img src="/images/color.svg" style="width: 20px; height: 20px; vertical-align: middle;">`;
+                colorBtn.style.cursor = "pointer";
+                colorBtn.style.display = "none";
+                div.appendChild(colorBtn);
+
+                const hiddenPicker = document.createElement("input");
+                hiddenPicker.type = "color";
+                hiddenPicker.value = "#3788d8"; 
+                hiddenPicker.style.display = "none"; 
+                div.appendChild(hiddenPicker);
+
+
                 setTimeout(() => {
                     div.classList.add("visible");
                 }, i * 50);
@@ -146,6 +159,7 @@ buttons.forEach(async (button) => {
 
                 if (isAlreadyInCalendar) {
                     checkbox.checked = true;
+                    colorBtn.style.display = "inline";
                     console.log(
                         `${titlesArray[i]} is already in the calendar.`,
                     );
@@ -176,6 +190,8 @@ buttons.forEach(async (button) => {
 
                         const classData = data.schedules[0];
 
+                        colorBtn.style.display = "inline";
+
                         calendar.addEvent({
                             title: classData.title,
                             daysOfWeek: classData.daysOfWeek,
@@ -190,6 +206,7 @@ buttons.forEach(async (button) => {
                         const targetTitle = titlesArray[i];
                         const allEvents = calendar.getEvents();
 
+                        colorBtn.style.display = "none";
                         const eventToRemove = allEvents.find(
                             (event) => event.title === targetTitle,
                         );
@@ -198,6 +215,25 @@ buttons.forEach(async (button) => {
                             eventToRemove.remove();
                         }
                     }
+                };
+
+                colorBtn.onclick = function() {
+                    hiddenPicker.click();
+                };
+
+                hiddenPicker.oninput = function() {
+                    
+                    const allEvents = calendar.getEvents();
+
+                    const eventToColor = allEvents.find(
+                        (event) => event.title === titlesArray[i]
+                    )
+
+                    if (eventToColor){
+                        eventToColor.setProp('backgroundColor', this.value)
+                        eventToColor.setProp('borderColor', this.value)
+                    }
+                    
                 };
             }
 
