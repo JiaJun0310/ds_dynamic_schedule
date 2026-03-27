@@ -64,20 +64,25 @@ app.post("/getSemester", async (req, res) => {
     }
 
 })
-
 app.post("/getClass", async (req, res) => {
-    try
-    {
-        const {title} = req.body;
+    try {
+        const { title } = req.body;
+        const scheduleData = await Calendar.findOne({ title: title });
 
-        const schedules = await Calendar.find({ title: title }).select('title daysOfWeek startTime endTime color professor');
+        const mappedSchedules = scheduleData.daysOfWeek.map((day, index) => {
+            return {
+                title: scheduleData.title,
+                day: day,                        
+                start: scheduleData.startTime[index], 
+                end: scheduleData.endTime[index],     
+                color: scheduleData.color,
+                professor: scheduleData.professor,
+                lectureHall: scheduleData.lectureHall
+            };
+        });
 
-        res.status(200).json({schedules});
-    }
-    catch(err)
-    {
+        res.status(200).json({ schedules: mappedSchedules });
+    } catch (err) {
         res.status(400).json({ error: err.message });
     }
-
-})
-
+});

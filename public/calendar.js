@@ -192,32 +192,31 @@ buttons.forEach(async (button) => {
 
                         const data = await response.json();
 
-                        const classData = data.schedules[0];
+                        data.schedules.forEach(item => {
+                            calendar.addEvent({
+                            title: item.title,
+                            daysOfWeek: [item.day], 
+                            startTime: item.start,  
+                            endTime: item.end,      
+                            color: item.color,
+                            extendedProps: {
+                                professor: item.professor,
+                            },
+                            });
+                        });
 
                         colorBtn.style.display = "inline";
 
-                        calendar.addEvent({
-                            title: classData.title,
-                            daysOfWeek: classData.daysOfWeek,
-                            startTime: classData.startTime,
-                            endTime: classData.endTime,
-                            color: classData.color,
-                            extendedProps: {
-                                professor: classData.professor,
-                            },
-                        });
                     } else {
                         const targetTitle = titlesArray[i];
                         const allEvents = calendar.getEvents();
 
                         colorBtn.style.display = "none";
-                        const eventToRemove = allEvents.find(
-                            (event) => event.title === targetTitle,
-                        );
-
-                        if (eventToRemove) {
-                            eventToRemove.remove();
+                        allEvents.forEach(event => {
+                        if (event.title === targetTitle) {
+                            event.remove();
                         }
+                        });
                     }
                 };
 
