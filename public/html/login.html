@@ -13,25 +13,28 @@
             <img id="logo" src="../images/logo_unipi.svg" ></img>
         </a>   
 
-        <!-- <button id="return" class="loginButtons">Επιστροφή</button> -->
     </header>
 
-    <div class = 'loginWrapper'>
-        <div class = 'loginBox'>
-            <h1>Σύνδεση ως Διαχειριστής</h1>
-            <form>
-                <label for="username">
-                    <img src="../images/username.svg" width="18" height="18"></img>
-                    Όνομα Χρήστη:</label><br>
-                <input type="text" id="username" name="username" style="border-radius: 8px; width:310px; height: 50px;"><br><br>
-                <label for="password">
-                    <img src="../images/password.svg" width="18" height="18"></img>
-                    Κωδικός:</label><br>
-                <input type="password" id="password" name="password" style="border-radius: 8px; width: 310px; height: 50px;"><br><br>
-                <input type="submit" value="Συνδεση" class = 'bottomButtons' style="background-color: #8c2635;">
-            </form>
+        <div class = 'loginWrapper'>
+            <div class = 'loginBox'>
+                <h1>Σύνδεση ως Διαχειριστής</h1>
+                <form id="loginForm">
+                    <label for="username">
+                        <img src="../images/username.svg" width="18" height="18">
+                        Όνομα Χρήστη:
+                    </label><br>
+                    <input type="text" id="username" name="username" style="border-radius: 8px; width:310px; height: 50px;" required><br><br>
+
+                    <label for="password">
+                        <img src="../images/password.svg" width="18" height="18">
+                        Κωδικός:
+                    </label><br>
+                    <input type="password" id="password" name="password" style="border-radius: 8px; width: 310px; height: 50px;" required><br><br>
+                    
+                    <input type="submit" value="Σύνδεση" class='bottomButtons' style="background-color: #8c2635; color: white; cursor: pointer;">
+                </form>
         </div>
     </div>
-
+    <script src="../login.js"></script>
 </body>
 </html>
