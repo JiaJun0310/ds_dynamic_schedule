@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
             },
             viewBtn:{
-                text: "Αλλαγή",
+                text: "Εμφάνιση/Απόκρυψη Εξαμήνων",
                 click: function(){
                     hideList();
                 }

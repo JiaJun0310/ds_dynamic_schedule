@@ -293,9 +293,21 @@ checkbox {
     }
 }
 
-/* @media (max-width: 450px){
 
-    .fc .fc-toolbar-chunk{
-        flex-direction: row;
+@media (max-width: 415px){
+
+    .fc-toolbar-chunk:nth-child(3) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "view download"
+            "today next_prev";
+        gap: 8px;
     }
-} */
+
+    .fc-downloadBtn-button { grid-area: download; }
+    .fc-today-button     { grid-area: today; }
+    .fc-button-group      { grid-area: next_prev; }
+    .fc-viewBtn-button  { grid-area: view; }
+
+}
