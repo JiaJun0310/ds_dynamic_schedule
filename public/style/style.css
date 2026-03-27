@@ -204,7 +204,32 @@ checkbox {
     overflow-y: auto;
 }
 
+.loginWrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    min-height: 100vh;       
+    background-image: url(../images/background.jpg);
+    /* border-left: 2px solid #cac7c7;
+    border-right: 2px solid #cac7c7; */
+    overflow-y: auto;
+}
 
+.loginBox {
+    background-color: #2f385f;
+    color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;      
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+    width: 100%;
+    max-width: 400px;        
+    font-family: sans-serif;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 15px;               
+}
 
 /* MOBILE FIX */
 @media (max-width: 768px) {
