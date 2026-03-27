@@ -28,9 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     downloadCalendar();
                 },
             },
-            viewBtn: {
-                text: "Εμφάνιση/Απόκρυψη Εξαμήνων",
-                click: function () {
+            viewBtn:{
+                text: "Εξάμηνα",
+                click: function(){
                     hideList();
                 },
             },
