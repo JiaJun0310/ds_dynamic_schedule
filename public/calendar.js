@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const buttons = document.querySelectorAll(".buttonDiv");
+const clearSelection = document.getElementById("clearSelection")
 
 buttons.forEach(async (button) => {
     let pressed = false;
@@ -100,7 +101,6 @@ buttons.forEach(async (button) => {
     let arrow = button.querySelector(".velaki");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
-    console.log(sem);
     const response = await fetch("http://localhost:8000/getSemester", {
         method: "POST",
         headers: {
@@ -159,10 +159,6 @@ buttons.forEach(async (button) => {
 
                 if (isAlreadyInCalendar) {
                     checkbox.checked = true;
-                    colorBtn.style.display = "inline";
-                    console.log(
-                        `${titlesArray[i]} is already in the calendar.`,
-                    );
                 }
 
                 div.onclick = function () {
@@ -174,7 +170,15 @@ buttons.forEach(async (button) => {
                     checkbox.dispatchEvent(new Event("change"));
                 };
 
-                
+                clearSelection.onclick = function()
+                {
+                    calendar.removeAllEvents();
+
+                    const allCheckboxes = document.querySelectorAll(".checkbox");
+                    allCheckboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                }
 
                 checkbox.onchange = async function () {
                     if (this.checked) {
@@ -316,13 +320,13 @@ toggleScreen.onclick = function () {
     const list = document.getElementById("calendarWrapper"); 
     const calEl = document.getElementById("calendar"); 
 
-    if (calEl.style.display === "block") {
+    if (calEl.style.display === "flex") {
         calEl.style.setProperty("display", "none", "important");
-        list.style.display = "block";
+        list.style.display = "flex";
     } 
     else {
         list.style.display = "none";
-        calEl.style.setProperty("display", "block", "important");
+        calEl.style.setProperty("display", "flex", "important");
         
         calendar.updateSize(); 
     }

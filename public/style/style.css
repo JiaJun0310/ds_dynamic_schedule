@@ -154,6 +154,7 @@ checkbox {
 .fc .fc-prev-button {
     margin-right: 0 !important;
 }
+
 #clearDiv {
     display: flex;
     flex-direction: column;
@@ -217,15 +218,18 @@ checkbox {
         display: none;
     }
 
+
+
+
     #clearDiv {
         font-family: sans-serif;
-        position: sticky; 
         bottom: 0;
         z-index: 100;
         background-color: rgb(107, 6, 6);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         flex-direction: row;
         justify-content: center;
+ 
     }
 
     .bottomButtons {
@@ -245,11 +249,11 @@ checkbox {
     
 
     #semesters {
-        flex: none;
+
         width: 100%;
         height: auto;
         max-height: none;
-        /* position:fixed; */
+  
         padding-bottom: 5px;
     }
 
@@ -264,5 +268,9 @@ checkbox {
     }
 }
 
-@media (min-width: 768px) {
-}
+/* @media (max-width: 450px){
+
+    .fc .fc-toolbar-chunk{
+        flex-direction: row;
+    }
+} */
