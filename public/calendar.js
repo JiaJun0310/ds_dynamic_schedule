@@ -286,13 +286,13 @@ toggleScreen.onclick = function () {
     const list = document.getElementById("calendarWrapper"); 
     const calEl = document.getElementById("calendar"); 
 
-    if (calEl.style.display === "block") {
+    if (calEl.style.display === "flex") {
         calEl.style.setProperty("display", "none", "important");
-        list.style.display = "block";
+        list.style.display = "flex";
     } 
     else {
         list.style.display = "none";
-        calEl.style.setProperty("display", "block", "important");
+        calEl.style.setProperty("display", "flex", "important");
         
         calendar.updateSize(); 
     }
