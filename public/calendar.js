@@ -137,6 +137,7 @@ buttons.forEach(async (button) => {
                 colorBtn.innerHTML = `<img src="/images/color.svg" style="width: 20px; height: 20px; vertical-align: middle;">`;
                 colorBtn.style.cursor = "pointer";
                 colorBtn.style.display = "none";
+                colorBtn.className = "colorBtn"
                 div.appendChild(colorBtn);
 
                 const hiddenPicker = document.createElement("input");
@@ -156,6 +157,7 @@ buttons.forEach(async (button) => {
 
                 if (isAlreadyInCalendar) {
                     checkbox.checked = true;
+                    colorBtn.style.display = "flex";
                 }
 
                 div.onclick = function (event) {
@@ -163,7 +165,7 @@ buttons.forEach(async (button) => {
                         return;
                     }
 
-                    if (event.target === checkbox) {
+                    if (event.target === checkbox || event.target.closest('.colorBtn') || event.target === hiddenPicker) {
                         return;
                     }
 
@@ -179,6 +181,11 @@ buttons.forEach(async (button) => {
                     allCheckboxes.forEach((checkbox) => {
                         checkbox.checked = false;
                     });
+
+                    const allColorPickers = document.querySelectorAll(".colorBtn");
+                    allColorPickers.forEach((colorPicker) => {
+                        colorPicker.style.display = 'none'
+                    })
                 };
 
                 let delayTimer;
@@ -210,7 +217,7 @@ buttons.forEach(async (button) => {
                                 });
                             });
 
-                            colorBtn.style.display = "inline";
+                            colorBtn.style.display = "flex";
                         } else {
                             const targetTitle = titlesArray[i];
                             const allEvents = calendar.getEvents();
@@ -231,21 +238,25 @@ buttons.forEach(async (button) => {
                     }
                 };
 
-                colorBtn.onclick = function () {
+                colorBtn.onclick = function (event) {
+                    event.stopPropagation();
                     hiddenPicker.click();
                 };
 
                 hiddenPicker.oninput = function () {
                     const allEvents = calendar.getEvents();
+                    const newColor = this.value;
 
-                    const eventToColor = allEvents.find(
-                        (event) => event.title === titlesArray[i],
+    
+                    const matchingEvents = allEvents.filter(
+                        (event) => event.title === titlesArray[i]
                     );
 
-                    if (eventToColor) {
-                        eventToColor.setProp("backgroundColor", this.value);
-                        eventToColor.setProp("borderColor", this.value);
-                    }
+    
+                    matchingEvents.forEach((event) => {
+                    event.setProp("backgroundColor", newColor);
+                    event.setProp("borderColor", newColor);
+                    });
                 };
             }
 
