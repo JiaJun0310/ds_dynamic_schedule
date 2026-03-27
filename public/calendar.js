@@ -28,11 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     downloadCalendar();
                 },
             },
-            viewBtn:{
+            viewBtn: {
                 text: "Εμφάνιση/Απόκρυψη Εξαμήνων",
-                click: function(){
+                click: function () {
                     hideList();
-                }
+                },
             },
         },
 
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const buttons = document.querySelectorAll(".buttonDiv");
-const clearSelection = document.getElementById("clearSelection")
+const clearSelection = document.getElementById("clearSelection");
 
 buttons.forEach(async (button) => {
     let pressed = false;
@@ -127,8 +127,6 @@ buttons.forEach(async (button) => {
                 SemesterDiv.appendChild(div);
                 div.className = "course";
 
-                
-
                 p.textContent = titlesArray[i];
                 div.appendChild(p);
                 checkbox.type = "checkbox";
@@ -143,10 +141,9 @@ buttons.forEach(async (button) => {
 
                 const hiddenPicker = document.createElement("input");
                 hiddenPicker.type = "color";
-                hiddenPicker.value = "#3788d8"; 
-                hiddenPicker.style.display = "none"; 
+                hiddenPicker.value = "#3788d8";
+                hiddenPicker.style.display = "none";
                 div.appendChild(hiddenPicker);
-
 
                 setTimeout(() => {
                     div.classList.add("visible");
@@ -161,82 +158,94 @@ buttons.forEach(async (button) => {
                     checkbox.checked = true;
                 }
 
-                div.onclick = function () {
-                    if(event.target === checkbox)
-                    {
+                div.onclick = function (event) {
+                    if (checkbox.disabled) {
                         return;
                     }
+
+                    if (event.target === checkbox) {
+                        return;
+                    }
+
                     checkbox.checked = !checkbox.checked;
                     checkbox.dispatchEvent(new Event("change"));
                 };
 
-                clearSelection.onclick = function()
-                {
+                clearSelection.onclick = function () {
                     calendar.removeAllEvents();
 
-                    const allCheckboxes = document.querySelectorAll(".checkbox");
-                    allCheckboxes.forEach(checkbox => {
+                    const allCheckboxes =
+                        document.querySelectorAll(".checkbox");
+                    allCheckboxes.forEach((checkbox) => {
                         checkbox.checked = false;
                     });
-                }
+                };
+
+                let delayTimer;
 
                 checkbox.onchange = async function () {
-                    if (this.checked) {
-                        const response = await fetch("/getClass", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({ title: titlesArray[i] }),
-                        });
+                    this.disabled = true;
+                    const isChecked = this.checked;
 
-                        const data = await response.json();
-
-                        data.schedules.forEach(item => {
-                            calendar.addEvent({
-                            title: item.title,
-                            daysOfWeek: [item.day], 
-                            startTime: item.start,  
-                            endTime: item.end,      
-                            color: item.color,
-                            extendedProps: {
-                                professor: item.professor,
-                            },
+                    try {
+                        if (isChecked) {
+                            const response = await fetch("/getClass", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ title: titlesArray[i] }),
                             });
-                        });
 
-                        colorBtn.style.display = "inline";
+                            const data = await response.json();
 
-                    } else {
-                        const targetTitle = titlesArray[i];
-                        const allEvents = calendar.getEvents();
+                            data.schedules.forEach((item) => {
+                                calendar.addEvent({
+                                    title: item.title,
+                                    daysOfWeek: [item.day],
+                                    startTime: item.start,
+                                    endTime: item.end,
+                                    color: item.color,
+                                    extendedProps: {
+                                        professor: item.professor,
+                                    },
+                                });
+                            });
 
-                        colorBtn.style.display = "none";
-                        allEvents.forEach(event => {
-                        if (event.title === targetTitle) {
-                            event.remove();
+                            colorBtn.style.display = "inline";
+                        } else {
+                            const targetTitle = titlesArray[i];
+                            const allEvents = calendar.getEvents();
+
+                            colorBtn.style.display = "none";
+                            allEvents.forEach((event) => {
+                                if (event.title === targetTitle) {
+                                    event.remove();
+                                }
+                            });
                         }
-                        });
+                    } catch (error) {
+                        console.error("Error updating schedule:", error);
+                    } finally {
+                        setTimeout(() => {
+                            this.disabled = false;
+                        }, 1000);
                     }
                 };
 
-                colorBtn.onclick = function() {
+                colorBtn.onclick = function () {
                     hiddenPicker.click();
                 };
 
-                hiddenPicker.oninput = function() {
-                    
+                hiddenPicker.oninput = function () {
                     const allEvents = calendar.getEvents();
 
                     const eventToColor = allEvents.find(
-                        (event) => event.title === titlesArray[i]
-                    )
+                        (event) => event.title === titlesArray[i],
+                    );
 
-                    if (eventToColor){
-                        eventToColor.setProp('backgroundColor', this.value)
-                        eventToColor.setProp('borderColor', this.value)
+                    if (eventToColor) {
+                        eventToColor.setProp("backgroundColor", this.value);
+                        eventToColor.setProp("borderColor", this.value);
                     }
-                    
                 };
             }
 
@@ -287,46 +296,37 @@ function downloadCalendar() {
     cal.download("university_schedule");
 }
 
-function hideList(){
+function hideList() {
     if (window.innerWidth <= 768) {
         const mobileBtn = document.getElementById("toggleScreen");
         if (mobileBtn) {
-            mobileBtn.click(); 
+            mobileBtn.click();
         }
-        return; 
+        return;
     }
     const list = document.getElementById("calendarWrapper");
-    if (list.style.display === "none")
-    {
-        list.style.display = ""
+    if (list.style.display === "none") {
+        list.style.display = "";
         calendar.updateSize();
-    }
-    else
-    {
+    } else {
         list.style.display = "none";
         calendar.updateSize();
     }
-    
-
 }
 
 const toggleScreen = document.getElementById("toggleScreen");
 
-
-
-
 toggleScreen.onclick = function () {
-    const list = document.getElementById("calendarWrapper"); 
-    const calEl = document.getElementById("calendar"); 
+    const list = document.getElementById("calendarWrapper");
+    const calEl = document.getElementById("calendar");
 
     if (calEl.style.display === "flex") {
         calEl.style.setProperty("display", "none", "important");
         list.style.display = "flex";
-    } 
-    else {
+    } else {
         list.style.display = "none";
         calEl.style.setProperty("display", "flex", "important");
-        
-        calendar.updateSize(); 
+
+        calendar.updateSize();
     }
 };
