@@ -101,7 +101,33 @@ main {
     justify-content: space-between;
 
     padding-left: 30px;
-    padding-right: 27px;
+    padding-right: 20px;
+}
+
+.course p {
+    flex: 1;              /* Τεντώνει και πιάνει όλο τον ελεύθερο χώρο */
+    margin: 0;
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* padding-right: 10px;  */
+}
+
+/* Το checkbox - ΣΤΑΘΕΡΟ */
+.checkbox {
+    flex: 0 0 20px;       /* Μηδενικό μεγάλωμα/σμίκρυνση, ΠΑΝΤΑ 30px πλάτος */
+   
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Το Color Button - ΣΤΑΘΕΡΟ */
+.colorBtn {
+    flex: 0 0 30px;       /* ΠΑΝΤΑ 30px πλάτος */
+    display: none;        /* Θα γίνει flex από το JS */
+    justify-content: center;
+    align-items: center;
+    margin-left: 2px;
 }
 
 .course.visible {
@@ -128,6 +154,7 @@ footer {
 checkbox {
     height: 30px;
     width: 30px;
+    
 }
 
 /* ANNOUNCEMENTS */
