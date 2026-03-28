@@ -389,8 +389,17 @@ footer {
         justify-self: end;
     }
 
+
+
     #calendarWrapper {
-        height: 1199.50px;
+        height: 1218px;
+        flex: 0 0 30%;
     }
+    
+    /* CALENDAR */
+    #calendar {
+        flex: 0 0 70%;
+    }
+    
  
 }
