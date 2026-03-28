@@ -338,16 +338,7 @@ buttons.forEach(async (button) => {
                     });
                 };
             }
-
-            const checkbox2 = document.createElement("checkbox");
-            const checkbox3 = document.createElement("checkbox");
-            const checkbox4 = document.createElement("checkbox");
-            const checkbox5 = document.createElement("checkbox");
-
-            SemesterDiv.appendChild(checkbox2);
-            SemesterDiv.appendChild(checkbox3);
-            SemesterDiv.appendChild(checkbox4);
-            SemesterDiv.appendChild(checkbox5);
+            
         } else {
             // Close dropdown
             SemesterDiv.innerHTML = ``;
