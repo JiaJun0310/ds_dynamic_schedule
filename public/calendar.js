@@ -98,7 +98,7 @@ buttons.forEach(async (button) => {
     let cleanText = button.textContent.trim();
     let sem = cleanText[cleanText.length - 1];
 
-    let arrow = button.querySelector(".velaki");
+    let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
     const response = await fetch("http://localhost:8000/getSemester", {
@@ -113,11 +113,11 @@ buttons.forEach(async (button) => {
 
     const titlesArray = data.titles.map((course) => course.title);
 
-    button.onclick = async function kati() {
+    button.onclick = async function () {
         pressed = !pressed;
         arrow.src = pressed
-            ? "../images/velaki_katw.svg"
-            : "../images/velaki_deksia.svg";
+            ? "../images/down_pointer.svg"
+            : "../images/right_pointer.svg";
 
         if (pressed) {
             for (let i = 0; i < titlesArray.length; i++) {
@@ -259,16 +259,7 @@ buttons.forEach(async (button) => {
                     });
                 };
             }
-
-            const checkbox2 = document.createElement("checkbox");
-            const checkbox3 = document.createElement("checkbox");
-            const checkbox4 = document.createElement("checkbox");
-            const checkbox5 = document.createElement("checkbox");
-
-            SemesterDiv.appendChild(checkbox2);
-            SemesterDiv.appendChild(checkbox3);
-            SemesterDiv.appendChild(checkbox4);
-            SemesterDiv.appendChild(checkbox5);
+            
         } else {
             SemesterDiv.innerHTML = ``;
         }

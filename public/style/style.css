@@ -136,7 +136,7 @@ main {
 }
 
 /* IMAGE */
-.velaki {
+.pointer {
     height: 50%;
     width: 50%;
 }
@@ -149,12 +149,6 @@ footer {
     font-family: sans-serif;
     padding: 20px 0;
     width: 100%;
-}
-
-checkbox {
-    height: 30px;
-    width: 30px;
-    
 }
 
 /* ANNOUNCEMENTS */
