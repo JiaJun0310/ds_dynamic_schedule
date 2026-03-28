@@ -2,10 +2,12 @@ let calendar;
 
 function updateLocalStorage() {
     const allEvents = calendar.getEvents();
-    const classEvents = allEvents.filter(event => event.display !== "background");
-    
-    const titles = [...new Set(classEvents.map(event => event.title))];
-    localStorage.setItem('userSchedule', JSON.stringify(titles));
+    const classEvents = allEvents.filter(
+        (event) => event.display !== "background",
+    );
+
+    const titles = [...new Set(classEvents.map((event) => event.title))];
+    localStorage.setItem("userSchedule", JSON.stringify(titles));
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -36,9 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     downloadCalendar();
                 },
             },
-            viewBtn:{
+            viewBtn: {
                 text: "Εξάμηνα",
-                click: function(){
+                click: function () {
                     hideList();
                 },
             },
@@ -95,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch((err) => console.error("Holiday fetch failed:", err));
 
-    const savedClasses = JSON.parse(localStorage.getItem('userSchedule')) || [];
+    const savedClasses = JSON.parse(localStorage.getItem("userSchedule")) || [];
     if (savedClasses.length > 0) {
         savedClasses.forEach(async (title) => {
             try {
@@ -105,14 +107,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: JSON.stringify({ title: title }),
                 });
                 const data = await response.json();
-                
+
                 data.schedules.forEach((item) => {
                     calendar.addEvent({
                         title: item.title,
                         daysOfWeek: item.daysOfWeek || [item.day],
                         startTime: item.startTime || item.start,
                         endTime: item.endTime || item.end,
-                        color: item.color, 
+                        color: item.color,
                         extendedProps: {
                             professor: item.professor,
                         },
@@ -149,6 +151,27 @@ buttons.forEach(async (button) => {
 
     const titlesArray = data.titles.map((course) => course.title);
 
+    clearSelection.onclick = function () {
+        const currentEvents = calendar.getEvents();
+        currentEvents.forEach((event) => {
+            if (event.display !== "background") {
+                event.remove();
+            }
+        });
+
+        const allCheckboxes = document.querySelectorAll(".checkbox");
+        allCheckboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+
+        const allColorPickers = document.querySelectorAll(".colorBtn");
+        allColorPickers.forEach((colorPicker) => {
+            colorPicker.style.display = "none";
+        });
+
+        updateLocalStorage();
+    };
+
     button.onclick = async function () {
         pressed = !pressed;
         arrow.src = pressed
@@ -173,7 +196,7 @@ buttons.forEach(async (button) => {
                 colorBtn.innerHTML = `<img src="/images/color.svg" style="width: 20px; height: 20px; vertical-align: middle;">`;
                 colorBtn.style.cursor = "pointer";
                 colorBtn.style.display = "none";
-                colorBtn.className = "colorBtn"
+                colorBtn.className = "colorBtn";
                 div.appendChild(colorBtn);
 
                 const hiddenPicker = document.createElement("input");
@@ -201,33 +224,16 @@ buttons.forEach(async (button) => {
                         return;
                     }
 
-                    if (event.target === checkbox || event.target.closest('.colorBtn') || event.target === hiddenPicker) {
+                    if (
+                        event.target === checkbox ||
+                        event.target.closest(".colorBtn") ||
+                        event.target === hiddenPicker
+                    ) {
                         return;
                     }
 
                     checkbox.checked = !checkbox.checked;
                     checkbox.dispatchEvent(new Event("change"));
-                };
-
-                clearSelection.onclick = function () {
-                    const currentEvents = calendar.getEvents();
-                    currentEvents.forEach(event => {
-                        if (event.display !== "background") {
-                            event.remove();
-                        }
-                    });
-
-                    const allCheckboxes = document.querySelectorAll(".checkbox");
-                    allCheckboxes.forEach((checkbox) => {
-                        checkbox.checked = false;
-                    });
-
-                    const allColorPickers = document.querySelectorAll(".colorBtn");
-                    allColorPickers.forEach((colorPicker) => {
-                        colorPicker.style.display = 'none';
-                    });
-
-                    updateLocalStorage();
                 };
 
                 let delayTimer;
@@ -291,7 +297,7 @@ buttons.forEach(async (button) => {
                     const newColor = this.value;
 
                     const matchingEvents = allEvents.filter(
-                        (event) => event.title === titlesArray[i]
+                        (event) => event.title === titlesArray[i],
                     );
 
                     matchingEvents.forEach((event) => {
