@@ -287,7 +287,7 @@ checkbox {
 }
 
 /* MOBILE FIX */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     #wrapper {
         flex-direction: column-reverse;
     }
@@ -348,7 +348,7 @@ checkbox {
     }
 }
 
-
+/* SMALLER SCREEN */
 @media (max-width: 485px){
 
     .fc-toolbar-chunk:nth-child(3) {
@@ -370,4 +370,33 @@ checkbox {
         justify-self: end;
     }
 
+}
+
+/* TABLET FIX */
+@media (min-width: 768px) and (max-width: 900px) {
+
+    .fc-toolbar-chunk:nth-child(3) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "download view "
+            "today next_prev";
+        gap: 10px;
+        margin-right: 10px;
+    }
+
+    .fc-downloadBtn-button { grid-area: download; }
+    .fc-today-button { grid-area: today; }
+    .fc-button-group { grid-area: next_prev; }
+    .fc-viewBtn-button { grid-area: view; }
+
+    .fc-downloadBtn-button,
+    .fc-button-group {
+        justify-self: end;
+    }
+
+    #calendarWrapper {
+        height: 1199.50px;
+    }
+ 
 }

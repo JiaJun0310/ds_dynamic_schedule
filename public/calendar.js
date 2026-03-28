@@ -308,7 +308,7 @@ function downloadCalendar() {
 }
 
 function hideList() {
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 767) {
         const mobileBtn = document.getElementById("toggleScreen");
         if (mobileBtn) {
             mobileBtn.click();
