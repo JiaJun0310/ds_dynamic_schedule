@@ -155,6 +155,32 @@ checkbox {
     margin-right: 0 !important;
 }
 
+.fc-downloadBtn-button{
+    height: 40px;
+    width: 107px;
+}
+
+.fc-today-button{
+    height: 40px;
+    width: 107px;
+} 
+
+.fc-prev-button{
+    height: 40px;
+    width: 53.5px;
+} 
+
+.fc-next-button{
+    height: 40px;
+    width: 53.5px;
+} 
+
+.fc-viewBtn-button{
+    height: 40px;
+    width: 107px;
+}
+
+
 #clearDiv {
     display: flex;
     flex-direction: column;
@@ -296,7 +322,7 @@ checkbox {
 }
 
 
-@media (max-width: 415px){
+@media (max-width: 485px){
 
     .fc-toolbar-chunk:nth-child(3) {
         display: grid;
@@ -304,12 +330,13 @@ checkbox {
         grid-template-areas:
             "view download"
             "today next_prev";
-        gap: 8px;
+        gap: 10px;
     }
 
     .fc-downloadBtn-button { grid-area: download; }
-    .fc-today-button     { grid-area: today; }
-    .fc-button-group      { grid-area: next_prev; }
-    .fc-viewBtn-button  { grid-area: view; }
+    .fc-today-button { grid-area: today; }
+    .fc-button-group { grid-area: next_prev; }
+    .fc-viewBtn-button { grid-area: view; }
+
 
 }
