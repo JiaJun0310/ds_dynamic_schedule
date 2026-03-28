@@ -338,5 +338,9 @@ checkbox {
     .fc-button-group { grid-area: next_prev; }
     .fc-viewBtn-button { grid-area: view; }
 
+    .fc-downloadBtn-button,
+    .fc-button-group {
+        justify-self: end;
+    }
 
 }
