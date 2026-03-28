@@ -1,26 +1,30 @@
+// Global calendar instance
 let calendar;
 
+// Save current class titles to local storage
 function updateLocalStorage() {
     const allEvents = calendar.getEvents();
+    
+    // Filter out background events like holidays
     const classEvents = allEvents.filter(
         (event) => event.display !== "background",
     );
 
+    // Extract unique titles and save to storage
     const titles = [...new Set(classEvents.map((event) => event.title))];
     localStorage.setItem("userSchedule", JSON.stringify(titles));
 }
 
+// Initialize calendar when the page loads
 document.addEventListener("DOMContentLoaded", function () {
     var calendarEl = document.getElementById("calendar");
 
+    // FullCalendar configuration
     calendar = new FullCalendar.Calendar(calendarEl, {
         timeZone: "Europe/Athens",
-
         initialView: "timeGridWeek",
         locale: "el",
-
-        firstDay: 1,
-
+        firstDay: 1, // Monday
         slotMinTime: "08:00:00",
         slotMaxTime: "21:00:00",
         allDaySlot: false,
@@ -31,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
             today: "Σήμερα",
         },
 
+        // Custom toolbar buttons
         customButtons: {
             downloadBtn: {
                 text: "Λήψη (ICS)",
@@ -52,12 +57,14 @@ document.addEventListener("DOMContentLoaded", function () {
             right: "downloadBtn today prev,next viewBtn",
         },
 
+        // Handle clicking on an event
         eventClick: function (info) {
             const popup = document.getElementById("eventPopup");
             const title = document.getElementById("popTitle");
             const prof = document.getElementById("popProfessor");
             const time = document.getElementById("popTime");
 
+            // Format start and end times
             const start = info.event.start.toLocaleTimeString("el-GR", {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -67,10 +74,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 minute: "2-digit",
             });
 
+            // Populate popup data
             title.innerText = info.event.title;
             prof.innerText = info.event.extendedProps.professor || "N/A";
             time.innerText = `${start} - ${end}`;
 
+            // Close popup when clicking outside
             popup.onclick = function (event) {
                 if (event.target === popup) {
                     popup.close();
@@ -82,6 +91,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     calendar.render();
+
+    // Fetch and display Greek public holidays
     fetch("https://date.nager.at/api/v3/PublicHolidays/2026/GR")
         .then((response) => response.json())
         .then((data) => {
@@ -97,10 +108,13 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch((err) => console.error("Holiday fetch failed:", err));
 
+    // Load saved classes from local storage
     const savedClasses = JSON.parse(localStorage.getItem("userSchedule")) || [];
+    
     if (savedClasses.length > 0) {
         savedClasses.forEach(async (title) => {
             try {
+                // Fetch schedule details for each saved class
                 const response = await fetch("/getClass", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -108,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
                 const data = await response.json();
 
+                // Add fetched classes to the calendar
                 data.schedules.forEach((item) => {
                     calendar.addEvent({
                         title: item.title,
@@ -127,18 +142,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Sidebar semester buttons and clear functionality
 const buttons = document.querySelectorAll(".buttonDiv");
 const clearSelection = document.getElementById("clearSelection");
 
 buttons.forEach(async (button) => {
     let pressed = false;
-
     let cleanText = button.textContent.trim();
-    let sem = cleanText[cleanText.length - 1];
-
+    let sem = cleanText[cleanText.length - 1]; // Extract semester number
+    
     let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
+    // Fetch courses for the specific semester
     const response = await fetch("http://localhost:8000/getSemester", {
         method: "POST",
         headers: {
@@ -148,11 +164,12 @@ buttons.forEach(async (button) => {
     });
 
     const data = await response.json();
-
     const titlesArray = data.titles.map((course) => course.title);
 
+    // Clear all selected courses from calendar
     clearSelection.onclick = function () {
         const currentEvents = calendar.getEvents();
+        
         currentEvents.forEach((event) => {
             if (event.display !== "background") {
                 event.remove();
@@ -172,26 +189,33 @@ buttons.forEach(async (button) => {
         updateLocalStorage();
     };
 
+    // Toggle semester course list dropdown
     button.onclick = async function () {
         pressed = !pressed;
+        
+        // Update arrow icon
         arrow.src = pressed
             ? "../images/down_pointer.svg"
             : "../images/right_pointer.svg";
 
         if (pressed) {
+            // Populate courses for this semester
             for (let i = 0; i < titlesArray.length; i++) {
                 const div = document.createElement("div");
                 const p = document.createElement("p");
                 const checkbox = document.createElement("input");
+                
                 SemesterDiv.appendChild(div);
                 div.className = "course";
 
                 p.textContent = titlesArray[i];
                 div.appendChild(p);
+                
                 checkbox.type = "checkbox";
                 div.appendChild(checkbox);
                 checkbox.className = "checkbox";
 
+                // Setup color picker button
                 const colorBtn = document.createElement("span");
                 colorBtn.innerHTML = `<img src="/images/color.svg" style="width: 20px; height: 20px; vertical-align: middle;">`;
                 colorBtn.style.cursor = "pointer";
@@ -199,16 +223,19 @@ buttons.forEach(async (button) => {
                 colorBtn.className = "colorBtn";
                 div.appendChild(colorBtn);
 
+                // Setup hidden color input
                 const hiddenPicker = document.createElement("input");
                 hiddenPicker.type = "color";
                 hiddenPicker.value = "#3788d8";
                 hiddenPicker.style.display = "none";
                 div.appendChild(hiddenPicker);
 
+                // Animate row entry
                 setTimeout(() => {
                     div.classList.add("visible");
                 }, i * 50);
 
+                // Check if course is already in the calendar
                 const allEvents = calendar.getEvents();
                 const isAlreadyInCalendar = allEvents.some(
                     (event) => event.title === titlesArray[i],
@@ -219,11 +246,13 @@ buttons.forEach(async (button) => {
                     colorBtn.style.display = "flex";
                 }
 
+                // Handle row click to toggle checkbox
                 div.onclick = function (event) {
                     if (checkbox.disabled) {
                         return;
                     }
 
+                    // Prevent double firing when clicking elements directly
                     if (
                         event.target === checkbox ||
                         event.target.closest(".colorBtn") ||
@@ -236,14 +265,14 @@ buttons.forEach(async (button) => {
                     checkbox.dispatchEvent(new Event("change"));
                 };
 
-                let delayTimer;
-
+                // Handle checkbox change (add/remove class)
                 checkbox.onchange = async function () {
                     this.disabled = true;
                     const isChecked = this.checked;
 
                     try {
                         if (isChecked) {
+                            // Fetch and add class to calendar
                             const response = await fetch("/getClass", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
@@ -267,6 +296,7 @@ buttons.forEach(async (button) => {
 
                             colorBtn.style.display = "flex";
                         } else {
+                            // Remove class from calendar
                             const targetTitle = titlesArray[i];
                             const allEvents = calendar.getEvents();
 
@@ -287,11 +317,13 @@ buttons.forEach(async (button) => {
                     }
                 };
 
+                // Trigger hidden color picker on click
                 colorBtn.onclick = function (event) {
                     event.stopPropagation();
                     hiddenPicker.click();
                 };
 
+                // Apply new color to events in real-time
                 hiddenPicker.oninput = function () {
                     const allEvents = calendar.getEvents();
                     const newColor = this.value;
@@ -317,11 +349,13 @@ buttons.forEach(async (button) => {
             SemesterDiv.appendChild(checkbox4);
             SemesterDiv.appendChild(checkbox5);
         } else {
+            // Close dropdown
             SemesterDiv.innerHTML = ``;
         }
     };
 });
 
+// Export schedule as an ICS file
 function downloadCalendar() {
     const cal = ics();
     const events = calendar.getEvents();
@@ -356,6 +390,7 @@ function downloadCalendar() {
     cal.download("university_schedule");
 }
 
+// Toggle between calendar view and list view
 function hideList() {
     if (window.innerWidth <= 767) {
         const mobileBtn = document.getElementById("toggleScreen");
@@ -364,7 +399,9 @@ function hideList() {
         }
         return;
     }
+    
     const list = document.getElementById("calendarWrapper");
+    
     if (list.style.display === "none") {
         list.style.display = "";
         calendar.updateSize();
@@ -374,6 +411,7 @@ function hideList() {
     }
 }
 
+// Mobile toggle button functionality
 const toggleScreen = document.getElementById("toggleScreen");
 
 toggleScreen.onclick = function () {
