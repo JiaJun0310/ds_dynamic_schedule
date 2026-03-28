@@ -1,46 +1,46 @@
+/* Global reset */
 * {
     box-sizing: border-box;
 }
 
-/* BODY */
+/* Body layout */
 body {
     margin: 0;
     padding-right: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100dvh; /* FIX for mobile */
-    /* background-image: url(../../images/background.jpg); */
+    min-height: 100dvh;
 }
 
-/* HEADER */
+/* Header bar */
 header {
     background-color: #2f385f;
     height: 100px;
     width: 100%;
 }
 
-/* MAIN LAYOUT */
+/* Main container */
 main {
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 
-/* WRAPPER (calendar + sidebar) */
+/* Wrapper for calendar + sidebar */
 #wrapper {
     display: flex;
     flex: 1;
     width: 100%;
 }
 
-/* CALENDAR */
+/* Calendar section */
 #calendar {
     flex: 4;
-    background-color: rgba(255, 255, 255);
+    background-color: white;
     font-family: sans-serif;
 }
 
-/* SIDEBAR */
+/* Sidebar (semesters list) */
 #semesters {
     flex: 1;
     background-color: rgb(107, 6, 6);
@@ -52,7 +52,7 @@ main {
     overflow-y: auto;
 }
 
-/* BUTTON CONTAINER */
+/* Semester button container */
 .buttonDiv {
     display: flex;
     height: 3.5em;
@@ -60,15 +60,16 @@ main {
     justify-content: center;
     align-items: center;
     background-color: #8c2635;
-    border: rgb(107, 6, 6) 3px solid;
+    border: 3px solid rgb(107, 6, 6);
 }
 
+/* Hover effect for semester buttons */
 .buttonDiv:hover {
     color: rgb(176, 166, 166);
     background-color: #a22538;
 }
 
-/* SEMESTER BUTTON */
+/* Semester button text */
 .semesterButtons {
     display: flex;
     justify-content: center;
@@ -80,7 +81,7 @@ main {
     font-family: sans-serif;
 }
 
-/* COURSE ITEMS */
+/* Course item container */
 .course {
     display: flex;
     align-items: center;
@@ -92,56 +93,53 @@ main {
 
     opacity: 0;
     transform: translateY(-10px);
-    transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 
     overflow: hidden;
-
     justify-content: space-between;
 
     padding-left: 30px;
     padding-right: 20px;
 }
 
+/* Course text */
 .course p {
-    flex: 1;              /* Τεντώνει και πιάνει όλο τον ελεύθερο χώρο */
+    flex: 1;
     margin: 0;
     text-align: left;
     padding-top: 10px;
     padding-bottom: 10px;
-    /* padding-right: 10px;  */
 }
 
-/* Το checkbox - ΣΤΑΘΕΡΟ */
+/* Course checkbox */
 .checkbox {
-    flex: 0 0 20px;       /* Μηδενικό μεγάλωμα/σμίκρυνση, ΠΑΝΤΑ 30px πλάτος */
-   
+    flex: 0 0 20px;
     margin: 0;
     cursor: pointer;
 }
 
-/* Το Color Button - ΣΤΑΘΕΡΟ */
+/* Color picker button */
 .colorBtn {
-    flex: 0 0 30px;       /* ΠΑΝΤΑ 30px πλάτος */
-    display: none;        /* Θα γίνει flex από το JS */
+    flex: 0 0 30px;
+    display: none;
     justify-content: center;
     align-items: center;
     margin-left: 2px;
 }
 
+/* Visible course (animation state) */
 .course.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* IMAGE */
+/* Generic image sizing */
 .pointer {
     height: 50%;
     width: 50%;
 }
 
-/* FOOTER */
+/* Footer section */
 footer {
     background-color: hsl(229, 34%, 28%);
     color: white;
@@ -151,57 +149,41 @@ footer {
     width: 100%;
 }
 
-/* ANNOUNCEMENTS */
+/* Announcement links */
 .announcements {
     color: #bec6ea;
 }
 
-/* CALENDAR ROW HEIGHT */
+/* Calendar slot height */
 .fc-timegrid-slot {
     height: 2.5em !important;
 }
 
-/* LOGO */
+/* Logo image */
 #logo {
     height: 100%;
     width: auto;
 }
 
+/* Calendar button spacing */
 .fc .fc-button {
     margin-top: 10px;
     margin-right: 5px;
 }
 
+/* Remove extra margin from prev button */
 .fc .fc-prev-button {
     margin-right: 0 !important;
 }
 
-.fc-downloadBtn-button{
-    height: 40px;
-    width: 107px;
-}
+/* Calendar custom button sizes */
+.fc-downloadBtn-button { height: 40px; width: 107px; }
+.fc-today-button { height: 40px; width: 107px; }
+.fc-prev-button { height: 40px; width: 53.5px; }
+.fc-next-button { height: 40px; width: 53.5px; }
+.fc-viewBtn-button { height: 40px; width: 107px; }
 
-.fc-today-button{
-    height: 40px;
-    width: 107px;
-} 
-
-.fc-prev-button{
-    height: 40px;
-    width: 53.5px;
-} 
-
-.fc-next-button{
-    height: 40px;
-    width: 53.5px;
-} 
-
-.fc-viewBtn-button{
-    height: 40px;
-    width: 107px;
-}
-
-
+/* Bottom button container */
 #clearDiv {
     display: flex;
     flex-direction: column;
@@ -213,10 +195,12 @@ footer {
     margin-top: auto;
 }
 
+/* Toggle button (mobile only) */
 #toggleScreen {
     display: none;
 }
 
+/* General button styling */
 .bottomButtons {
     background-color: #2f385f;
     color: white;
@@ -236,10 +220,12 @@ footer {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.bottomButtons:hover{
+/* Button hover effect */
+.bottomButtons:hover {
     background-color: #202848;
 }
 
+/* Sidebar wrapper container */
 #calendarWrapper {
     flex: 1;
     background-color: rgb(107, 6, 6);
@@ -251,7 +237,7 @@ footer {
     overflow-y: auto;
 }
 
-
+/* Login page wrapper */
 .loginWrapper {
     flex: 1;
     display: flex;
@@ -265,6 +251,7 @@ footer {
     overflow-y: auto;
 }
 
+/* Login box */
 .loginBox {
     background-color: #2f385f;
     color: #ffffff;
@@ -280,8 +267,9 @@ footer {
     gap: 15px;               
 }
 
-/* MOBILE FIX */
+/* Mobile layout */
 @media (max-width: 767px) {
+
     #wrapper {
         flex-direction: column-reverse;
     }
@@ -292,42 +280,25 @@ footer {
         display: none;
     }
 
-
-
-
     #clearDiv {
-        font-family: sans-serif;
-        bottom: 0;
-        z-index: 100;
-        background-color: rgb(107, 6, 6);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
         flex-direction: row;
         justify-content: center;
- 
     }
 
     .bottomButtons {
-        font-family: sans-serif;
         flex: 1; 
         height: 55px;
         margin: 5px;
-         
     }
-
-
 
     #toggleScreen {
         display: block;
     }
 
-    
-
     #semesters {
-
         width: 100%;
         height: auto;
         max-height: none;
-  
         padding-bottom: 5px;
     }
 
@@ -342,7 +313,7 @@ footer {
     }
 }
 
-/* SMALLER SCREEN */
+/* Small screens layout */
 @media (max-width: 485px){
 
     .fc-toolbar-chunk:nth-child(3) {
@@ -363,17 +334,16 @@ footer {
     .fc-button-group {
         justify-self: end;
     }
-
 }
 
-/* TABLET FIX */
+/* Tablet layout */
 @media (min-width: 768px) and (max-width: 900px) {
 
     .fc-toolbar-chunk:nth-child(3) {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-areas:
-            "download view "
+            "download view"
             "today next_prev";
         gap: 10px;
         margin-right: 10px;
@@ -389,17 +359,12 @@ footer {
         justify-self: end;
     }
 
-
-
     #calendarWrapper {
         height: 1218px;
         flex: 0 0 30%;
     }
-    
-    /* CALENDAR */
+
     #calendar {
         flex: 0 0 70%;
     }
-    
- 
 }
