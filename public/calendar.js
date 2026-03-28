@@ -1,5 +1,13 @@
 let calendar;
 
+function updateLocalStorage() {
+    const allEvents = calendar.getEvents();
+    const classEvents = allEvents.filter(event => event.display !== "background");
+    
+    const titles = [...new Set(classEvents.map(event => event.title))];
+    localStorage.setItem('userSchedule', JSON.stringify(titles));
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     var calendarEl = document.getElementById("calendar");
 
@@ -69,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             popup.showModal();
         },
-        // events: "subjects.json"
     });
 
     calendar.render();
@@ -87,6 +94,35 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         })
         .catch((err) => console.error("Holiday fetch failed:", err));
+
+    const savedClasses = JSON.parse(localStorage.getItem('userSchedule')) || [];
+    if (savedClasses.length > 0) {
+        savedClasses.forEach(async (title) => {
+            try {
+                const response = await fetch("/getClass", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ title: title }),
+                });
+                const data = await response.json();
+                
+                data.schedules.forEach((item) => {
+                    calendar.addEvent({
+                        title: item.title,
+                        daysOfWeek: item.daysOfWeek || [item.day],
+                        startTime: item.startTime || item.start,
+                        endTime: item.endTime || item.end,
+                        color: item.color, 
+                        extendedProps: {
+                            professor: item.professor,
+                        },
+                    });
+                });
+            } catch (error) {
+                console.error("Error loading saved class:", error);
+            }
+        });
+    }
 });
 
 const buttons = document.querySelectorAll(".buttonDiv");
@@ -174,18 +210,24 @@ buttons.forEach(async (button) => {
                 };
 
                 clearSelection.onclick = function () {
-                    calendar.removeAllEvents();
+                    const currentEvents = calendar.getEvents();
+                    currentEvents.forEach(event => {
+                        if (event.display !== "background") {
+                            event.remove();
+                        }
+                    });
 
-                    const allCheckboxes =
-                        document.querySelectorAll(".checkbox");
+                    const allCheckboxes = document.querySelectorAll(".checkbox");
                     allCheckboxes.forEach((checkbox) => {
                         checkbox.checked = false;
                     });
 
                     const allColorPickers = document.querySelectorAll(".colorBtn");
                     allColorPickers.forEach((colorPicker) => {
-                        colorPicker.style.display = 'none'
-                    })
+                        colorPicker.style.display = 'none';
+                    });
+
+                    updateLocalStorage();
                 };
 
                 let delayTimer;
@@ -207,9 +249,9 @@ buttons.forEach(async (button) => {
                             data.schedules.forEach((item) => {
                                 calendar.addEvent({
                                     title: item.title,
-                                    daysOfWeek: [item.day],
-                                    startTime: item.start,
-                                    endTime: item.end,
+                                    daysOfWeek: item.daysOfWeek || [item.day],
+                                    startTime: item.startTime || item.start,
+                                    endTime: item.endTime || item.end,
                                     color: item.color,
                                     extendedProps: {
                                         professor: item.professor,
@@ -232,6 +274,7 @@ buttons.forEach(async (button) => {
                     } catch (error) {
                         console.error("Error updating schedule:", error);
                     } finally {
+                        updateLocalStorage();
                         setTimeout(() => {
                             this.disabled = false;
                         }, 1000);
@@ -247,19 +290,26 @@ buttons.forEach(async (button) => {
                     const allEvents = calendar.getEvents();
                     const newColor = this.value;
 
-    
                     const matchingEvents = allEvents.filter(
                         (event) => event.title === titlesArray[i]
                     );
 
-    
                     matchingEvents.forEach((event) => {
-                    event.setProp("backgroundColor", newColor);
-                    event.setProp("borderColor", newColor);
+                        event.setProp("backgroundColor", newColor);
+                        event.setProp("borderColor", newColor);
                     });
                 };
             }
-            
+
+            const checkbox2 = document.createElement("checkbox");
+            const checkbox3 = document.createElement("checkbox");
+            const checkbox4 = document.createElement("checkbox");
+            const checkbox5 = document.createElement("checkbox");
+
+            SemesterDiv.appendChild(checkbox2);
+            SemesterDiv.appendChild(checkbox3);
+            SemesterDiv.appendChild(checkbox4);
+            SemesterDiv.appendChild(checkbox5);
         } else {
             SemesterDiv.innerHTML = ``;
         }
@@ -277,6 +327,8 @@ function downloadCalendar() {
     const semesterEnd = "2026-06-15"; // imerominia telos examinou
 
     events.forEach((event) => {
+        if (event.display === "background") return;
+
         const days = event._def.recurringDef.typeData.daysOfWeek;
 
         const rrule = {
