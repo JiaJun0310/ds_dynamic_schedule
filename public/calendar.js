@@ -338,7 +338,7 @@ buttons.forEach(async (button) => {
                     });
                 };
             }
-            
+
         } else {
             // Close dropdown
             SemesterDiv.innerHTML = ``;

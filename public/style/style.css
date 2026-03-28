@@ -267,6 +267,73 @@ footer {
     gap: 15px;               
 }
 
+/* Admin page wrapper */
+.adminWrapper {
+    display: flex;
+    flex-direction: column;   
+    justify-content: flex-start; 
+    align-items: center;    
+    min-height: 100vh;       
+    width: 100%;
+    padding: 20px;
+    background-image: linear-gradient(#353f648e, #2e385d4e), url(../images/background.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+/* file container */
+.fileContainer {
+    display: flex;
+    gap: 50px;       
+    flex-wrap: wrap; 
+    justify-content: center;
+    width: 100%;
+    height: 250px;
+    margin: 200px;
+}
+
+/* file box */
+.fileBox {
+    background-color: #2f385f;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 300px; 
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+/* file box title */
+.fileBox h2 {
+    margin: 0;
+    color: #f0f0f0;
+    font-size: 2.5em;
+}
+
+/* file input */
+.fileBox input[type="file"] {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #ffffff;
+    color: #000;
+}
+
+/* upload button */
+.fileBox button {
+    padding: 10px;
+    background-color: #8c2635;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
 /* Mobile layout */
 @media (max-width: 767px) {
 
@@ -361,10 +428,13 @@ footer {
 
     #calendarWrapper {
         height: 1218px;
-        flex: 0 0 30%;
     }
-
+/* 
     #calendar {
         flex: 0 0 70%;
     }
+
+    #semester{
+        flex: 0 0 30%;
+    } */
 }
