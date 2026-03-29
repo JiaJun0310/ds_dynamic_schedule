@@ -5,14 +5,26 @@ let calendar;
 function updateLocalStorage() {
     const allEvents = calendar.getEvents();
     
-    // Filter out background events like holidays
+    
     const classEvents = allEvents.filter(
-        (event) => event.display !== "background",
+        (event) => event.display !== "background"
     );
 
-    // Extract unique titles and save to storage
-    const titles = [...new Set(classEvents.map((event) => event.title))];
-    localStorage.setItem("userSchedule", JSON.stringify(titles));
+    
+    const scheduleData = {};
+
+    classEvents.forEach((event) => {
+        scheduleData[event.title] = {
+            title: event.title,
+            color: event.backgroundColor || event.color
+        };
+    });
+
+    
+    const finalData = Object.values(scheduleData);
+    
+    
+    localStorage.setItem("userSchedule", JSON.stringify(finalData));
 }
 
 // Initialize calendar when the page loads
@@ -112,34 +124,40 @@ document.addEventListener("DOMContentLoaded", function () {
     const savedClasses = JSON.parse(localStorage.getItem("userSchedule")) || [];
     
     if (savedClasses.length > 0) {
-        savedClasses.forEach(async (title) => {
-            try {
-                // Fetch schedule details for each saved class
-                const response = await fetch("/getClass", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ title: title }),
-                });
-                const data = await response.json();
+    
+    savedClasses.forEach(async (item) => { 
+        try {
+            const response = await fetch("/getClass", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                
+                body: JSON.stringify({ title: item.title }), 
+            });
 
-                // Add fetched classes to the calendar
-                data.schedules.forEach((item) => {
+            if (!response.ok) throw new Error("Server error");
+
+            const data = await response.json();
+
+            if (data.schedules) {
+                data.schedules.forEach((schedule) => {
                     calendar.addEvent({
-                        title: item.title,
-                        daysOfWeek: item.daysOfWeek || [item.day],
-                        startTime: item.startTime || item.start,
-                        endTime: item.endTime || item.end,
-                        color: item.color,
+                        title: schedule.title,
+                        daysOfWeek: schedule.daysOfWeek || [schedule.day],
+                        startTime: schedule.startTime || schedule.start,
+                        endTime: schedule.endTime || schedule.end,
+                       
+                        color: item.color || schedule.color, 
                         extendedProps: {
-                            professor: item.professor,
+                            professor: schedule.professor,
                         },
                     });
                 });
-            } catch (error) {
-                console.error("Error loading saved class:", error);
             }
-        });
-    }
+        } catch (error) {
+            console.error("Error loading saved class:", error);
+        }
+    });
+}
 });
 
 // Sidebar semester buttons and clear functionality
@@ -244,6 +262,11 @@ buttons.forEach(async (button) => {
                 if (isAlreadyInCalendar) {
                     checkbox.checked = true;
                     colorBtn.style.display = "flex";
+
+                    const existingEvent = allEvents.find(event => event.title === titlesArray[i]);
+                    if (existingEvent) {
+                        hiddenPicker.value = existingEvent.backgroundColor || existingEvent.color;
+                    }
                 }
 
                 // Handle row click to toggle checkbox
@@ -336,6 +359,8 @@ buttons.forEach(async (button) => {
                         event.setProp("backgroundColor", newColor);
                         event.setProp("borderColor", newColor);
                     });
+
+                    updateLocalStorage();
                 };
             }
 
