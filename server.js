@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require('multer');
 const connectDB = require("./db");
 const Calendar = require("./models/schema");
 const cors = require('cors');
@@ -11,6 +12,24 @@ const hashedPassword = `$2b$10$.KGaGxxvvV1CaEZLrGbxVOeKa7juuHcFMPyPAbdEaOjLCTYeQ
 
 
 const app = express();
+
+const fs = require('fs');
+if (!fs.existsSync('./uploads')) {
+    fs.mkdirSync('./uploads');
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); 
+    },
+    filename: (req, file, cb) => {
+        
+        const uniqueName = file.originalname;
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 connectDB();
 
@@ -25,10 +44,6 @@ app.get("/", (req, res) => {
 
 
 
-const PORT = 8000;
-app.listen(PORT, () => {
-    console.log(`Server live at http://localhost:${PORT}`);
-});
 
 //function to see the hash
 // async function generateHash() {
@@ -132,4 +147,21 @@ app.post("/login", async (req, res) => {
     catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+app.post('/upload', upload.single('uploadedFile'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    
+    console.log("Αρχείο αποθηκεύτηκε στο: " + req.file.path);
+    res.json({ 
+        message: "Επιτυχία!", 
+        fileName: req.file.filename 
+    });
+});
+
+const PORT = 8000;
+app.listen(PORT, () => {
+    console.log(`Server live at http://localhost:${PORT}`);
 });

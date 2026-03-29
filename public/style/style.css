@@ -283,6 +283,7 @@ footer {
 
 /* file container */
 .fileContainer {
+    font-family: sans-serif;
     display: flex;
     gap: 50px;       
     flex-wrap: wrap; 
@@ -331,6 +332,10 @@ footer {
     color: white;
     cursor: pointer;
     font-weight: bold;
+}
+
+.fileBox button:hover{
+    background-color: #9f2b3d;
 }
 
 
