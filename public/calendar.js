@@ -4,13 +4,13 @@ let calendar;
 // Save current class titles to local storage
 function updateLocalStorage() {
     const allEvents = calendar.getEvents();
-    
-    
+
+
     const classEvents = allEvents.filter(
         (event) => event.display !== "background"
     );
 
-    
+
     const scheduleData = {};
 
     classEvents.forEach((event) => {
@@ -20,10 +20,10 @@ function updateLocalStorage() {
         };
     });
 
-    
+
     const finalData = Object.values(scheduleData);
-    
-    
+
+
     localStorage.setItem("userSchedule", JSON.stringify(finalData));
 }
 
@@ -122,42 +122,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Load saved classes from local storage
     const savedClasses = JSON.parse(localStorage.getItem("userSchedule")) || [];
-    
+
     if (savedClasses.length > 0) {
-    
-    savedClasses.forEach(async (item) => { 
-        try {
-            const response = await fetch("/getClass", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                
-                body: JSON.stringify({ title: item.title }), 
-            });
 
-            if (!response.ok) throw new Error("Server error");
+        savedClasses.forEach(async (item) => {
+            try {
+                const response = await fetch("/getClass", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
 
-            const data = await response.json();
-
-            if (data.schedules) {
-                data.schedules.forEach((schedule) => {
-                    calendar.addEvent({
-                        title: schedule.title,
-                        daysOfWeek: schedule.daysOfWeek || [schedule.day],
-                        startTime: schedule.startTime || schedule.start,
-                        endTime: schedule.endTime || schedule.end,
-                       
-                        color: item.color || schedule.color, 
-                        extendedProps: {
-                            professor: schedule.professor,
-                        },
-                    });
+                    body: JSON.stringify({ title: item.title }),
                 });
+
+                if (!response.ok) throw new Error("Server error");
+
+                const data = await response.json();
+
+                if (data.schedules) {
+                    data.schedules.forEach((schedule) => {
+                        calendar.addEvent({
+                            title: schedule.title,
+                            daysOfWeek: schedule.daysOfWeek || [schedule.day],
+                            startTime: schedule.startTime || schedule.start,
+                            endTime: schedule.endTime || schedule.end,
+
+                            color: item.color || schedule.color,
+                            extendedProps: {
+                                professor: schedule.professor,
+                            },
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error("Error loading saved class:", error);
             }
-        } catch (error) {
-            console.error("Error loading saved class:", error);
-        }
-    });
-}
+        });
+    }
+    resize();
 });
 
 // Sidebar semester buttons and clear functionality
@@ -168,7 +169,7 @@ buttons.forEach(async (button) => {
     let pressed = false;
     let cleanText = button.textContent.trim();
     let sem = cleanText[cleanText.length - 1]; // Extract semester number
-    
+
     let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
@@ -187,7 +188,7 @@ buttons.forEach(async (button) => {
     // Clear all selected courses from calendar
     clearSelection.onclick = function () {
         const currentEvents = calendar.getEvents();
-        
+
         currentEvents.forEach((event) => {
             if (event.display !== "background") {
                 event.remove();
@@ -210,7 +211,7 @@ buttons.forEach(async (button) => {
     // Toggle semester course list dropdown
     button.onclick = async function () {
         pressed = !pressed;
-        
+
         // Update arrow icon
         arrow.src = pressed
             ? "../images/down_pointer.svg"
@@ -222,13 +223,13 @@ buttons.forEach(async (button) => {
                 const div = document.createElement("div");
                 const p = document.createElement("p");
                 const checkbox = document.createElement("input");
-                
+
                 SemesterDiv.appendChild(div);
                 div.className = "course";
 
                 p.textContent = titlesArray[i];
                 div.appendChild(p);
-                
+
                 checkbox.type = "checkbox";
                 div.appendChild(checkbox);
                 checkbox.className = "checkbox";
@@ -415,9 +416,9 @@ function hideList() {
         }
         return;
     }
-    
+
     const list = document.getElementById("calendarWrapper");
-    
+
     if (list.style.display === "none") {
         list.style.display = "";
         calendar.updateSize();
@@ -444,3 +445,17 @@ toggleScreen.onclick = function () {
         calendar.updateSize();
     }
 };
+
+// resize sidebar based on the calendar
+function resize() {
+    const calendar = document.getElementById("calendar");
+    const sidebar = document.getElementById("calendarWrapper");
+    sidebar.style.height = "unset";
+    console.log(getComputedStyle(calendar).height);
+    sidebar.style.height = getComputedStyle(calendar).height;
+}
+
+addEventListener("resize", (_e) => {
+    resize();
+})
+

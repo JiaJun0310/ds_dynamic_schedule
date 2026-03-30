@@ -36,6 +36,7 @@ main {
 /* Calendar section */
 #calendar {
     flex: 4;
+    height: min-content;
     background-color: white;
     font-family: sans-serif;
 }
@@ -48,7 +49,6 @@ main {
     border-right: 2px solid rgb(107, 6, 6);
     display: flex;
     flex-direction: column;
-    height: 1139.61px;
     overflow-y: auto;
 }
 
@@ -431,15 +431,4 @@ footer {
         justify-self: end;
     }
 
-    #calendarWrapper {
-        height: 1218px;
-    }
-/* 
-    #calendar {
-        flex: 0 0 70%;
-    }
-
-    #semester{
-        flex: 0 0 30%;
-    } */
 }
