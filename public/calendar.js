@@ -158,7 +158,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+    appearCalendar();
     resize();
+    
 });
 
 // Sidebar semester buttons and clear functionality
@@ -455,7 +457,27 @@ function resize() {
     sidebar.style.height = getComputedStyle(calendar).height;
 }
 
+function appearCalendar()
+{
+    const calEl = document.getElementById("calendar");
+    if(window.innerWidth > 767)
+    {  
+        calEl.style.setProperty("display", "flex", "important");
+        calendar.updateSize();
+    }
+    else
+    {
+        calEl.style.setProperty("display", "none", "important");
+        list.style.display = "flex";
+    }
+    
+}
+
+
+
+
 addEventListener("resize", (_e) => {
+    appearCalendar();
     resize();
 })
 
