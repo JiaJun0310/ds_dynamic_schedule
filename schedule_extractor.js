@@ -10,7 +10,7 @@ import { number, z } from "zod";
 import { error } from 'console';
 const SubjectSchema = z.object({
     title: z.string().describe("The name of the course (e.g., 'ΨΣ-002-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ', 'ΨΣ-004-ΔΙΑΚΡΙΤΑ ΜΑΘΗΜΑΤΙΚΑ (Φροντιστήριο)')"),
-    lectureHall: z.string().describe("The room number of the class (e.g., 'ΚΕΚΤ-103', 'ΓΛ21-104')"),
+    lectureHall: z.array(z.string()).describe("The room number of the class corresponding to the day(s) (e.g., 'ΚΕΚΤ-103', 'ΓΛ21-104')"),
     daysOfWeek: z.array(z.number()).describe("A list of days the class takes place (e.g., ['Δευτέρα', 'Τετάρτη'] is [1,3], [ΠΕΜΠΤΗ] is [4])"),
     startTime: z.array(z.string()).describe("A list of starting time(s) corresponding to the day(s) (e.g., ['09:15:00'], ['11:15:00', '12:15:00'])"),
     endTime: z.array(z.string()).describe("A list of ending time(s) corresponding to the day(s) (e.g., ['13:00:00', '14:00:00'], ['14:00:00'])"),
