@@ -7,7 +7,7 @@ const ScheduleSchema = new mongoose.Schema({
     daysOfWeek: {type: Array, required: true},
     startTime: {type: Array, required: true},
     endTime: {type: Array, required: true},
-    color: {type: String, required: true},
+    // color: {type: String, required: true},
     semester: {type: Number, required: true},
     professor: {type: Array, required: true}
   });

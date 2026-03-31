@@ -74,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const popup = document.getElementById("eventPopup");
             const title = document.getElementById("popTitle");
             const prof = document.getElementById("popProfessor");
+            const hall = document.getElementById("popHall");
             const time = document.getElementById("popTime");
 
             // Format start and end times
@@ -89,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Populate popup data
             title.innerText = info.event.title;
             prof.innerText = info.event.extendedProps.professor || "N/A";
+            hall.innerText = info.event.extendedProps.lectureHall || "N/A";
             time.innerText = `${start} - ${end}`;
 
             // Close popup when clicking outside
@@ -149,6 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             color: item.color || schedule.color,
                             extendedProps: {
                                 professor: schedule.professor,
+                                lectureHall: schedule.lectureHall,
                             },
                         });
                     });
