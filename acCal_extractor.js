@@ -109,7 +109,7 @@ async function markdownToDictionary(markdownText) {
 
 async function runExtractionPipeline() {
     // file path of the gods
-    const filePath = "../pdfs/AKADHMAIKO.pdf";
+    const filePath = "./uploads/acCal.pdf";
 
     // call llama to convert pdf to markdown
     const rawMarkdown = await visionPdfToMarkdown(llamaAgent, filePath);
