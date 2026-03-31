@@ -453,12 +453,12 @@ function resize() {
     const calendar = document.getElementById("calendar");
     const sidebar = document.getElementById("calendarWrapper");
     sidebar.style.height = "unset";
-    console.log(getComputedStyle(calendar).height);
     sidebar.style.height = getComputedStyle(calendar).height;
 }
 
 function appearCalendar()
 {
+    const list = document.getElementById("calendarWrapper");
     const calEl = document.getElementById("calendar");
     if(window.innerWidth > 767)
     {  
