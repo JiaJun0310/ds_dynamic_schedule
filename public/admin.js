@@ -1,6 +1,9 @@
 document.querySelectorAll('.fileBox').forEach(box => {
     const button = box.querySelector('button');
     const input = box.querySelector('input');
+    const id = input.name;
+
+    console.log(id)
 
     button.onclick = async () => {
         if (input.files.length === 0) {
@@ -8,9 +11,23 @@ document.querySelectorAll('.fileBox').forEach(box => {
             return;
         }
 
+
         const formData = new FormData();
+
+        const ext = input.files[0].name.split('.').pop()
+
+        console.log(ext)
+
+        const newName = id + '.' + ext;
+
+        console.log(newName)
+
+        const finalFile = new File([input.files[0]], newName, {
+            type: input.files[0].type
+        })
       
-        formData.append("uploadedFile", input.files[0]);
+        formData.append("uploadedFile", finalFile);
+
 
         try {
             const response = await fetch("http://localhost:8000/upload", {

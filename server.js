@@ -153,6 +153,10 @@ app.post('/upload', upload.single('uploadedFile'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
+
+    // let ext = req.file.split('.').pop()
+
+    // req.file.filename = req.file.id + '.' + ext;
     
     console.log("Αρχείο αποθηκεύτηκε στο: " + req.file.path);
     res.json({ 
