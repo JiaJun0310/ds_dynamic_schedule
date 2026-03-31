@@ -84,7 +84,7 @@ const verifyToken = (req, res, next) => {
 };
 
 
-app.post("/sendData", verifyToken, async (req, res) => {
+app.post("/sendData",  async (req, res) => {
     try
     {
         const data = req.body; 
@@ -131,12 +131,12 @@ app.post("/getClass", async (req, res) => {
         const mappedSchedules = scheduleData.daysOfWeek.map((day, index) => {
             return {
                 title: scheduleData.title,
-                day: day,                        
+                day: day,
+                lectureHall: scheduleData.lectureHall[index],            
                 start: scheduleData.startTime[index], 
                 end: scheduleData.endTime[index],     
                 color: scheduleData.color,
                 professor: scheduleData.professor,
-                lectureHall: scheduleData.lectureHall
             };
         });
 

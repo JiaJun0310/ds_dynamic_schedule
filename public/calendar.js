@@ -316,6 +316,7 @@ buttons.forEach(async (button) => {
                                     color: item.color,
                                     extendedProps: {
                                         professor: item.professor,
+                                        lectureHall: item.lectureHall 
                                     },
                                 });
                             });
