@@ -1,4 +1,8 @@
 {
+    "name": "ds-dynamic-schedule",
+    "version": "1.0.0",
+    "type": "module", 
+    "main": "server.js",
     "dependencies": {
         "@langchain/core": "^1.1.38",
         "@langchain/google-genai": "^2.1.26",

@@ -1,13 +1,18 @@
-const express = require("express");
-const multer = require('multer');
-const connectDB = require("./db");
-const Calendar = require("./models/schema");
-const cors = require('cors');
-const path = require('path');
-const bcrypt = require('bcrypt');
-const jwt = require(`jsonwebtoken`);
-const cookieParser = require('cookie-parser');
+import express from "express";
+import multer from 'multer';
+import cors from 'cors';
+import path from 'path';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
+import connectDB from "./db.js"; 
+import Calendar from "./models/schema.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const username = "admin"
 const hashedPassword = `$2b$10$.KGaGxxvvV1CaEZLrGbxVOeKa7juuHcFMPyPAbdEaOjLCTYeQ6Qpa`
@@ -16,7 +21,7 @@ const hashedPassword = `$2b$10$.KGaGxxvvV1CaEZLrGbxVOeKa7juuHcFMPyPAbdEaOjLCTYeQ
 const app = express();
 
 
-const fs = require('fs');
+
 if (!fs.existsSync('./uploads')) {
     fs.mkdirSync('./uploads');
 }
@@ -62,8 +67,24 @@ app.get("/loginForAdmin", (req, res) => {
 // }
 // generateHash();
 
+const verifyToken = (req, res, next) => {
+    const token = req.cookies.token; 
 
-app.post("/sendData", async (req, res) => {
+    if (!token) {
+        return res.redirect('/loginForAdmin'); 
+    }
+
+    try {
+        jwt.verify(token, 'mfmfx123');
+        next(); 
+    } catch (err) {
+        res.clearCookie('token'); 
+        res.redirect('/loginForAdmin');
+    }
+};
+
+
+app.post("/sendData", verifyToken, async (req, res) => {
     try
     {
         const data = req.body; 
@@ -162,7 +183,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.post('/upload', upload.single('uploadedFile'), (req, res) => {
+app.post('/upload', verifyToken, upload.single('uploadedFile'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
@@ -179,21 +200,7 @@ app.post('/upload', upload.single('uploadedFile'), (req, res) => {
 });
 
 
-const verifyToken = (req, res, next) => {
-    const token = req.cookies.token; 
 
-    if (!token) {
-        return res.redirect('/loginForAdmin'); 
-    }
-
-    try {
-        jwt.verify(token, 'mfmfx123');
-        next(); 
-    } catch (err) {
-        res.clearCookie('token'); 
-        res.redirect('/loginForAdmin');
-    }
-};
 
 
 app.get("/admin", verifyToken, (req, res) => {

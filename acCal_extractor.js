@@ -128,7 +128,7 @@ if (super_json) {
             const finalJsonString = JSON.stringify(super_json, null, 2);
             
             // path where the json will be saved
-            const outputPath = "./academic_calendar.json";
+            const outputPath = "./jasonData/academic_calendar.json";
             
             // 3. Write it to the hard drive!
             fs.writeFileSync(outputPath, finalJsonString, 'utf-8');

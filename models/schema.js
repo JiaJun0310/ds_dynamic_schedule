@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 
 const ScheduleSchema = new mongoose.Schema({
@@ -12,5 +12,6 @@ const ScheduleSchema = new mongoose.Schema({
     professor: {type: Array, required: true}
   });
   
-module.exports = mongoose.model('schema', ScheduleSchema)
+const Calendar = mongoose.model('schemas', ScheduleSchema);
+export default Calendar;
 

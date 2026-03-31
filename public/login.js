@@ -16,9 +16,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         const result = await response.json();
 
         if (response.ok) {
-            
-            
-            localStorage.setItem('username', result.username); 
             window.location.href = '/admin'; 
         } else {
             alert(result.message || "Σφάλμα σύνδεσης");
