@@ -311,7 +311,7 @@ footer {
 }
 
 /* Tablet layout */
-@media (min-width: 768px) and (max-width: 900px) {
+@media (min-width: 768px) and (max-width: 1000px) {
 
     .fc-toolbar-chunk:nth-child(3) {
         display: grid;
@@ -331,6 +331,14 @@ footer {
     .fc-downloadBtn-button,
     .fc-button-group {
         justify-self: end;
+    }
+
+    #calendar{
+        flex: 0 0 70%;
+    }
+
+    #calendarWrapper{
+        flex: 0 0 30%;
     }
 
 }
