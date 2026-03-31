@@ -1,13 +1,18 @@
 {
     "dependencies": {
+        "@langchain/core": "^1.1.38",
+        "@langchain/google-genai": "^2.1.26",
+        "@llamaindex/llama-cloud": "^1.8.0",
         "bcrypt": "^6.0.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.6",
+        "dotenv": "^17.3.1",
         "express": "^5.2.1",
         "jsonwebtoken": "^9.0.3",
         "mongoose": "^9.3.1",
         "multer": "^2.1.1",
-        "path": "^0.12.7"
+        "path": "^0.12.7",
+        "zod": "^4.3.6"
     },
     "devDependencies": {
         "nodemon": "^3.1.14"
