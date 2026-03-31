@@ -42,6 +42,10 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'));
 });
 
+app.get("/loginForAdmin", (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
+});
+
 
 
 
@@ -143,6 +147,8 @@ app.post("/login", async (req, res) => {
             token: token,
             username: username
         });
+        
+
     }
     catch (err) {
         res.status(500).json({ error: err.message });

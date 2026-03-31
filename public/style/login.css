@@ -1,0 +1,39 @@
+/* Login page wrapper */
+.loginWrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    min-height: 80vh;       
+    background-color: #162045;
+    background-image: linear-gradient(#353f648e, #2e385d4e), url(../images/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-y: auto;
+}
+
+/* Login box */
+.loginBox {
+    background-color: #2f385f;
+    color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;      
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+    width: 100%;
+    max-width: 400px;        
+    font-family: sans-serif;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 15px;               
+}
+
+#username
+{
+    font-size: 18px;
+}
+
+#password
+{
+    font-size: 18px;
+}
