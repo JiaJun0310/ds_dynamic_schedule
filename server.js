@@ -6,12 +6,15 @@ const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require(`jsonwebtoken`);
+const cookieParser = require('cookie-parser');
+
 
 const username = "admin"
 const hashedPassword = `$2b$10$.KGaGxxvvV1CaEZLrGbxVOeKa7juuHcFMPyPAbdEaOjLCTYeQ6Qpa`
 
 
 const app = express();
+
 
 const fs = require('fs');
 if (!fs.existsSync('./uploads')) {
@@ -35,6 +38,7 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -143,10 +147,13 @@ app.post("/login", async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        return res.status(200).json({
-            token: token,
-            username: username
+        res.cookie('token', token, {
+            httpOnly: true,     
+            secure: false,      
+            maxAge: 3600000     
         });
+
+        return res.status(200).json({ message: "Login successful", username: username });
         
 
     }
@@ -170,6 +177,29 @@ app.post('/upload', upload.single('uploadedFile'), (req, res) => {
         fileName: req.file.filename 
     });
 });
+
+
+const verifyToken = (req, res, next) => {
+    const token = req.cookies.token; 
+
+    if (!token) {
+        return res.redirect('/loginForAdmin'); 
+    }
+
+    try {
+        jwt.verify(token, 'mfmfx123');
+        next(); 
+    } catch (err) {
+        res.clearCookie('token'); 
+        res.redirect('/loginForAdmin');
+    }
+};
+
+
+app.get("/admin", verifyToken, (req, res) => {
+    res.sendFile(path.join(__dirname, 'private', 'admin.html'));
+})
+
 
 const PORT = 8000;
 app.listen(PORT, () => {

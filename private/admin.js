@@ -3,7 +3,6 @@ const token = localStorage.getItem('token');
 if (token)
 {
     document.querySelectorAll('.fileBox').forEach(box => {
-        const token = localStorage.getItem('token');
         const button = box.querySelector('button');
         const input = box.querySelector('input');
         const id = input.name;
