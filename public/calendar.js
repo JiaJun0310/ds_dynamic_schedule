@@ -1,7 +1,7 @@
 // Global variables
 let calendar;
 let academicData = null;
-let eventTracker = {}; //This will store exact references to your events
+let eventTracker = {}; // This will store exact references to your events
 
 // Utility to get current schedule from local storage
 function getSavedSchedule() {
@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const popup = document.getElementById("eventPopup");
             const title = document.getElementById("popTitle");
             const prof = document.getElementById("popProfessor");
+            const hall = document.getElementById("popHall");
             const time = document.getElementById("popTime");
 
             const start = info.event.start.toLocaleTimeString("el-GR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
@@ -72,6 +73,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             title.innerText = info.event.title;
             prof.innerText = info.event.extendedProps.professor || "N/A";
+            
+            if(hall) {
+                hall.innerText = info.event.extendedProps.lectureHall || "N/A";
+            }
+            
             time.innerText = `${start} - ${end}`;
 
             popup.onclick = function (event) {
@@ -152,8 +158,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                             endTime: schedule.endTime || schedule.end,
                             startRecur: dates ? dates.start : null, 
                             endRecur: dates ? dates.end : null,     
-                            color: item.color || schedule.color,
-                            extendedProps: { professor: schedule.professor, semester: currentSem },
+                            backgroundColor: item.color || schedule.color || "#3788d8",
+                            borderColor: item.color || schedule.color || "#3788d8",
+                            extendedProps: {
+                                professor: schedule.professor,
+                                lectureHall: schedule.lectureHall,
+                                subjectTitle: item.title,
+                                semester: currentSem
+                            }
                         });
                         eventTracker[item.title].push(addedEvent); // Save exact reference
                     });
@@ -268,6 +280,15 @@ buttons.forEach(async (button) => {
                             const dates = getSemesterDates(sem);
                             eventTracker[targetTitle] = []; // Initialize tracking
 
+                            // Check the Database for the color
+                            let dbColor = data.schedules.length > 0 ? data.schedules[0].color : null;
+                            let saved = getSavedSchedule();
+                            
+                            // If this is a new class AND your database has a color, update the picker
+                            if (!saved.some(c => c.title === targetTitle) && dbColor) {
+                                hiddenPicker.value = dbColor; 
+                            }
+
                             data.schedules.forEach((item) => {
                                 let addedEvent = calendar.addEvent({
                                     title: item.title,
@@ -276,15 +297,20 @@ buttons.forEach(async (button) => {
                                     endTime: item.endTime || item.end,
                                     startRecur: dates ? dates.start : null,
                                     endRecur: dates ? dates.end : null,
-                                    color: item.color || hiddenPicker.value,
-                                    extendedProps: { professor: item.professor, semester: sem },
+                                    backgroundColor: hiddenPicker.value,
+                                    borderColor: hiddenPicker.value,
+                                    extendedProps: {
+                                        professor: item.professor,
+                                        lectureHall: item.lectureHall,
+                                        subjectTitle: targetTitle,
+                                        semester: sem 
+                                    },
                                 });
                                 eventTracker[targetTitle].push(addedEvent); // Save reference
                             });
 
                             colorBtn.style.display = "flex";
 
-                            let saved = getSavedSchedule();
                             if (!saved.some(c => c.title === targetTitle)) {
                                 saved.push({ title: targetTitle, color: hiddenPicker.value, semester: sem });
                                 saveSchedule(saved);
@@ -315,17 +341,34 @@ buttons.forEach(async (button) => {
                     hiddenPicker.click();
                 };
 
-                hiddenPicker.oninput = function () {
+                // Updates the screen instantly while dragging
+                hiddenPicker.addEventListener('input', function() {
                     const newColor = this.value;
                     const targetTitle = titlesArray[i];
 
-                    // Update colors reliably via tracker
+                    // 1. Force update the LIVE calendar screen so you see it instantly
+                    calendar.getEvents().forEach(liveEvent => {
+                        if (liveEvent.extendedProps.subjectTitle === targetTitle) {
+                            liveEvent.setProp("backgroundColor", newColor);
+                            liveEvent.setProp("borderColor", newColor);
+                        }
+                    });
+
+                    // 2. Update the background memory tracker for off-screen events
                     if (eventTracker[targetTitle]) {
                         eventTracker[targetTitle].forEach(eventObj => {
-                            eventObj.setProp("backgroundColor", newColor);
-                            eventObj.setProp("borderColor", newColor);
+                            try {
+                                eventObj.setProp("backgroundColor", newColor);
+                                eventObj.setProp("borderColor", newColor);
+                            } catch(e) {} // Ignore if the reference temporarily detached
                         });
                     }
+                });
+
+                // Saves to database ONLY when you let go of the mouse
+                hiddenPicker.addEventListener('change', function() {
+                    const newColor = this.value;
+                    const targetTitle = titlesArray[i];
 
                     let saved = getSavedSchedule();
                     let course = saved.find(c => c.title === targetTitle);
@@ -333,7 +376,7 @@ buttons.forEach(async (button) => {
                         course.color = newColor;
                         saveSchedule(saved);
                     }
-                };
+                });
             }
         } else {
             SemesterDiv.innerHTML = ``;
@@ -360,7 +403,7 @@ function downloadCalendar() {
             cal.addEvent(
                 event.title,
                 event.extendedProps.professor || "N/A",
-                "",
+                event.extendedProps.lectureHall || "", // Export lecture hall as well
                 `${dates.start}T${event.startStr.split("T")[1]}`,
                 `${dates.start}T${event.endStr.split("T")[1]}`,
                 rrule,
