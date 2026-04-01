@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { exec } from 'child_process';
 
 import connectDB from "./db.js"; 
 import Calendar from "./models/schema.js";
@@ -84,22 +85,28 @@ const verifyToken = (req, res, next) => {
 };
 
 
-app.post("/sendData",  async (req, res) => {
+app.post("/sendData",  async (req, res) => { //TODO: add verifyToken
     try
     {
-        const data = req.body; 
+        const springPath = path.join(__dirname, 'jsonData', 'spring_schedule.json');
+        const winterPath = path.join(__dirname, 'jsonData', 'winter_schedule.json');
 
-        
-        if (!Array.isArray(data)) {
-            return res.status(400).json({ message: "Data must be in an array" });
-        }
+        // 2. Read and parse the files
+        const springData = JSON.parse(fs.readFileSync(springPath, 'utf8'));
+        const winterData = JSON.parse(fs.readFileSync(winterPath, 'utf8'));
+
+        // 3. Combine them into one big array
+        const combinedData = [...springData, ...winterData];
 
         await Calendar.deleteMany({});
 
         
-        const savedSubjects = await Calendar.insertMany(data);
+        const savedSubjects = await Calendar.insertMany(combinedData);
 
-        res.status(201).json({data: savedSubjects});
+        res.status(201).json({
+            message: "Database updated from local JSON files",
+            count: savedSubjects.length
+        });
 
     }
     catch(err)
@@ -200,6 +207,27 @@ app.post('/upload', verifyToken, upload.single('uploadedFile'), (req, res) => {
 });
 
 
+app.post(`/run_schedule_extractor`, (req, res) =>{   //TODO: add verifyToken
+    exec('node schedule_extractor.js', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error: ${error.message}`);
+            return res.status(500).send('Extraction failed');
+        }
+        console.log(`Output: ${stdout}`);
+        res.send('Extractor executed successfully');
+    });
+});
+
+app.post(`/run_acCal_extractor`, (req, res) =>{   //TODO: add verifyToken
+    exec('node acCal_extractor.js', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error: ${error.message}`);
+            return res.status(500).send('Extraction failed');
+        }
+        console.log(`Output: ${stdout}`);
+        res.send('Extractor executed successfully');
+    });
+});
 
 
 

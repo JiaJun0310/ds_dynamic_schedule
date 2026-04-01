@@ -2,22 +2,19 @@ document.querySelectorAll(".fileBox").forEach((box) => {
     const button = box.querySelector("button");
     const input = box.querySelector("input");
     const id = input.name;
-
+    const overlay = document.getElementById("loadingOverlay");
 
     button.onclick = async () => {
+        // 1. Basic check: is a file selected?
         if (input.files.length === 0) {
             alert("Παρακαλώ επιλέξτε ένα αρχείο!");
             return;
         }
 
+        // 2. CREATE the formData (This was the missing part!)
         const formData = new FormData();
-
         const ext = input.files[0].name.split(".").pop();
-
-
         const newName = id + "." + ext;
-
-
         const finalFile = new File([input.files[0]], newName, {
             type: input.files[0].type,
         });
@@ -25,7 +22,11 @@ document.querySelectorAll(".fileBox").forEach((box) => {
         formData.append("uploadedFile", finalFile);
 
         try {
-            const response = await fetch("http://localhost:8000/upload", {
+            // Show the loading screen
+            overlay.style.display = "flex";
+
+            // Upload the file
+            const response = await fetch("/upload", {
                 method: "POST",
                 body: formData,
             });
@@ -33,24 +34,60 @@ document.querySelectorAll(".fileBox").forEach((box) => {
             const result = await response.json();
 
             if (response.ok) {
-                alert("Το αρχείο ανέβηκε επιτυχώς!");
                 input.value = "";
+
+                // console.log(id);
+
+                // If it's a schedule, trigger the extractor
+                if (id === "schedule") {
+                    const extractResponse = await fetch(
+                        "/run_schedule_extractor",
+                        {
+                            method: "POST",
+                        },
+                    );
+                    const extractData = await extractResponse.text();
+
+                    const syncResponse = await fetch("/sendData", {
+                        method: "POST",
+                    });
+                    const syncResult = await syncResponse.json();
+
+                    alert(
+                        "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
+                            extractData +
+                            "\n2. Database: " +
+                            (syncResult.message || "Updated"),
+                    );
+                } else if (id === "acCal") {
+                    const extractResponse = await fetch(
+                        "/run_acCal_extractor",
+                        {
+                            method: "POST",
+                        },
+                    );
+                    const extractData = await extractResponse.text();
+                    alert("Ολοκληρώθηκε: " + extractData);
+                } else {
+                    alert("Το αρχείο ανέβηκε!");
+                }
             } else {
                 alert("Σφάλμα: " + result.message);
             }
         } catch (error) {
-            console.error("Upload error:", error);
-            alert("Αποτυχία σύνδεσης με τον διακομιστή.");
+            console.error("Error:", error);
+            alert("Παρουσιάστηκε σφάλμα.");
+        } finally {
+            // Hide the loading screen
+            overlay.style.display = "none";
         }
     };
 });
-
 
 const editButton = document.getElementById("editButton");
 const adminPage = document.querySelector(".adminWrapper");
 const editSemester = document.getElementById("selectSemester");
 const editCourse = document.getElementById("selectCourse");
-
 
 editButton.onclick = () => {
     adminPage.style.display = "none";
@@ -60,9 +97,8 @@ editButton.onclick = () => {
 
 // backBtn.onclick = () => {
 //     editPage.style.display = "none";
-//     adminPage.style.display = "flex"; 
+//     adminPage.style.display = "flex";
 // };
-
 
 const semesterSelect = document.getElementById("semester");
 const courseSelect = document.getElementById("courses");
@@ -86,14 +122,12 @@ semesterSelect.addEventListener("change", async () => {
 
         courseSelect.innerHTML = "";
 
-        courses.forEach(course => {
-      
+        courses.forEach((course) => {
             const option = document.createElement("option");
             option.value = course;
             option.textContent = course;
             courseSelect.appendChild(option);
         });
-
     } catch (error) {
         console.error(error);
         alert("Could not load courses for this semester.");
