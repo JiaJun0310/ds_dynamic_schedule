@@ -130,7 +130,7 @@ if (super_json) {
     // path where the json will be saved
     const outputPath = "./jsonData/academic_calendar.json";
 
-    // 3. Write it to the hard drive!
+    // save the file to jsonData
     fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
 } else {
     console.log("Pipeline finished, but no output");

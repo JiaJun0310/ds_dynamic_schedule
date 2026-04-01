@@ -40,8 +40,13 @@ async function visionPdfToMarkdown(llamaClient, filePath) {
             version: 'latest',
             expand: ['markdown'],
             agentic_options: {
-                custom_prompt: "Do NOT ignore the text headers at the top of the pages. It is critical that you explicitly extract the text 'ΠΡΟΓΡΑΜΜΑ ΔΙΔΑΣΚΑΛΙΑΣ (ΕΞΑΜΗΝΟ: X)' and place it as a clear Markdown header (e.g., '### ΕΞΑΜΗΝΟ: X') immediately above the HTML table for that page."
-            }
+                custom_prompt: `You are extracting data from a university schedule. It is ABSOLUTELY CRITICAL that semester information is never lost.
+                
+                STRICT RULES FOR EVERY PAGE:
+                1. Look for the exact text "ΠΡΟΓΡΑΜΜΑ ΔΙΔΑΣΚΑΛΙΑΣ (ΕΞΑΜΗΝΟ: [NUMBER])" at the top of the pages.
+                2. When you see it, you MUST output it as a Markdown header: "### ΕΞΑΜΗΝΟ: [NUMBER]" before you draw the HTML table.
+                3. DO NOT hallucinate, guess, or invent semester numbers. NEVER output a semester number that is not explicitly written on that specific page.
+                4. If a table spills over onto a new page and there is no "ΕΞΑΜΗΝΟ" text on that new page, just continue the HTML table normally without adding a new header.`            }
         });
         return result.markdown.pages.map(page => page.markdown).join('\n\n---\n\n'); // returns the markdown as a whole instead of pages
     } catch (error) {
@@ -85,7 +90,7 @@ const promptTemplate = ChatPromptTemplate.fromMessages([
         4. DAY MAPPING: Convert Greek days to their corresponding string numbers (Δευτέρα="1", Τρίτη="2", Τετάρτη="3", Πέμπτη="4", Παρασκευή="5", Σάββατο="6", Κυριακή="7").
         5. TIME FORMAT: Ensure all times are strictly formatted as "HH:MM:SS" (e.g., "09:15:00").
         6. ALIGNMENT: If a class occurs on multiple days, ensure the daysOfWeek, startTime, and endTime arrays align perfectly by index.
-        7. SEMESTER: The semester number of each subject inside a table should be picked according to the header above the table stating ΠΡΟΓΡΑΜΜΑ ΔΙΔΑΣΚΑΛΙΑΣ (ΕΞΑΜΗΝΟ: X)`
+        7. SEMESTER: The semester number of each subject inside a table should be picked according to the header above the table stating ΠΡΟΓΡΑΜΜΑ ΔΙΔΑΣΚΑΛΙΑΣ (ΕΞΑΜΗΝΟ: X).`
     ],
     [
         "human",
@@ -111,12 +116,13 @@ async function markdownToDictionary(markdownText) {
 
 async function runExtractionPipeline() {
     // file path of the gods
-    const filePath = "./uploads/schedule1.pdf";
+    const filePath = "./uploads/schedule.pdf";
 
     // call llama to convert pdf to markdown
     const rawMarkdown = await visionPdfToMarkdown(llamaAgent, filePath);
+    console.log(rawMarkdown)
 
-    // // call gemini to convert markdown to schema
+    // call gemini to convert markdown to schema
     const finalDictionary = await markdownToDictionary(rawMarkdown);
 
     return finalDictionary
@@ -149,7 +155,7 @@ if (super_json) {
         const classColor = semesterColors[singleClass.semester] || "#2bff00";
 
         return {
-            ...singleClass, // ... unpacks the objects inside single class and passes them as attributes to the new class instead of passing single class as a whole
+            ...singleClass, // ... unpacks the objects inside singleClass and passes them as attributes to the new class instead of passing single class as a whole
             color: classColor // adds the color
         };
     });
@@ -158,9 +164,9 @@ if (super_json) {
     const finalJsonString = JSON.stringify(subjectsArray, null, 2);
 
     // path where the json will be saved
-    const outputPath = "./jsonData/schedule1.json";
+    const outputPath = "./jsonData/schedule.json";
 
-    // 3. Write it to the hard drive!
+    // save the file to jsonData
     fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
 } else {
     console.log("Pipeline finished, but no output");
