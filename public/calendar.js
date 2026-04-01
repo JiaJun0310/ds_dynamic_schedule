@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 if (data.schedules) {
                     const currentSem = item.semester;
                     const dates = getSemesterDates(currentSem);
-                    eventTracker[item.title] = []; // Initialize array for this subject
+                    eventTracker[item.title] = [];
 
                     data.schedules.forEach((schedule) => {
                         let addedEvent = calendar.addEvent({
@@ -164,10 +164,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                                 professor: schedule.professor,
                                 lectureHall: schedule.lectureHall,
                                 subjectTitle: item.title,
-                                semester: currentSem
+                                semester: currentSem,
+                                //Save the raw times directly from the database
+                                rawStart: schedule.startTime || schedule.start,
+                                rawEnd: schedule.endTime || schedule.end
                             }
                         });
-                        eventTracker[item.title].push(addedEvent); // Save exact reference
+                        eventTracker[item.title].push(addedEvent);
                     });
                 }
             } catch (error) {
@@ -202,11 +205,10 @@ buttons.forEach(async (button) => {
 
     // Clear all selected courses
     clearSelection.onclick = function () {
-        // Use tracker to definitively delete all subjects
         Object.keys(eventTracker).forEach(subject => {
             eventTracker[subject].forEach(eventObj => eventObj.remove());
         });
-        eventTracker = {}; // Reset tracking
+        eventTracker = {}; 
 
         document.querySelectorAll(".checkbox").forEach(cb => cb.checked = false);
         document.querySelectorAll(".colorBtn").forEach(cp => cp.style.display = "none");
@@ -278,13 +280,11 @@ buttons.forEach(async (button) => {
 
                             const data = await response.json();
                             const dates = getSemesterDates(sem);
-                            eventTracker[targetTitle] = []; // Initialize tracking
+                            eventTracker[targetTitle] = []; 
 
-                            // Check the Database for the color
                             let dbColor = data.schedules.length > 0 ? data.schedules[0].color : null;
                             let saved = getSavedSchedule();
 
-                            // If this is a new class AND your database has a color, update the picker
                             if (!saved.some(c => c.title === targetTitle) && dbColor) {
                                 hiddenPicker.value = dbColor;
                             }
@@ -303,10 +303,13 @@ buttons.forEach(async (button) => {
                                         professor: item.professor,
                                         lectureHall: item.lectureHall,
                                         subjectTitle: targetTitle,
-                                        semester: sem
+                                        semester: sem,
+                                        //Save raw times directly
+                                        rawStart: item.startTime || item.start,
+                                        rawEnd: item.endTime || item.end
                                     },
                                 });
-                                eventTracker[targetTitle].push(addedEvent); // Save reference
+                                eventTracker[targetTitle].push(addedEvent); 
                             });
 
                             colorBtn.style.display = "flex";
@@ -317,7 +320,6 @@ buttons.forEach(async (button) => {
                             }
 
                         } else {
-                            // Definitively delete events via tracker
                             if (eventTracker[targetTitle]) {
                                 eventTracker[targetTitle].forEach(eventObj => eventObj.remove());
                                 delete eventTracker[targetTitle];
@@ -341,12 +343,10 @@ buttons.forEach(async (button) => {
                     hiddenPicker.click();
                 };
 
-                // Updates the screen instantly while dragging
                 hiddenPicker.addEventListener('input', function () {
                     const newColor = this.value;
                     const targetTitle = titlesArray[i];
 
-                    // 1. Force update the LIVE calendar screen so you see it instantly
                     calendar.getEvents().forEach(liveEvent => {
                         if (liveEvent.extendedProps.subjectTitle === targetTitle) {
                             liveEvent.setProp("backgroundColor", newColor);
@@ -354,18 +354,16 @@ buttons.forEach(async (button) => {
                         }
                     });
 
-                    // 2. Update the background memory tracker for off-screen events
                     if (eventTracker[targetTitle]) {
                         eventTracker[targetTitle].forEach(eventObj => {
                             try {
                                 eventObj.setProp("backgroundColor", newColor);
                                 eventObj.setProp("borderColor", newColor);
-                            } catch (e) { } // Ignore if the reference temporarily detached
+                            } catch (e) { } 
                         });
                     }
                 });
 
-                // Saves to database ONLY when you let go of the mouse
                 hiddenPicker.addEventListener('change', function () {
                     const newColor = this.value;
                     const targetTitle = titlesArray[i];
@@ -390,75 +388,91 @@ function downloadCalendar() {
     const events = calendar.getEvents();
     if (events.length === 0) return;
 
+    // 1. Gather all holiday dates safely
     const holidayEvents = events.filter(e => e.groupId === 'holidays');
-    const classEvents = events.filter(e => e.display !== "background");
-
-    const daysMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-
     const excludedDates = [];
+
     holidayEvents.forEach(h => {
         let current = new Date(h.start);
         let end = h.end ? new Date(h.end) : new Date(h.start);
-        while (current <= end) {
-            const dateString = current.toISOString().split('T')[0].replace(/-/g, '');
+        if (!h.end) end.setDate(end.getDate() + 1); 
+
+        while (current < end) {
+            const pad = n => n < 10 ? '0' + n : n;
+            const dateString = `${current.getFullYear()}${pad(current.getMonth() + 1)}${pad(current.getDate())}`;
+            
             if (!excludedDates.includes(dateString)) {
                 excludedDates.push(dateString);
             }
-
             current.setDate(current.getDate() + 1);
         }
     });
 
-    const exdateLine = excludedDates.length > 0
-        ? `EXDATE;VALUE=DATE:${excludedDates.join(',')}\r\n`
-        : "";
+    // 2. Add classes from the tracker
+    const daysMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
-    console.log(exdateLine)
+    Object.values(eventTracker).forEach(subjectEvents => {
+        subjectEvents.forEach(event => {
+            const days = event._def.recurringDef.typeData.daysOfWeek;
+            const sem = event.extendedProps.semester;
+            const dates = getSemesterDates(sem);
 
-    classEvents.forEach((event) => {
-        if (event.display === "background") return;
-        // Use tracker for ICS download so off-screen events are included
-        Object.values(eventTracker).forEach(subjectEvents => {
-            subjectEvents.forEach(event => {
-                const days = event._def.recurringDef.typeData.daysOfWeek;
-                const sem = event.extendedProps.semester;
-                const dates = getSemesterDates(sem);
+            if (!dates) return;
 
-                if (!dates) return;
+            const rrule = { freq: "WEEKLY", until: dates.end, byday: days.map(d => daysMap[d]) };
 
-                const rrule = { freq: "WEEKLY", until: dates.end, byday: days.map(d => daysMap[d]) };
+            // FIX: Parse the time directly from the raw database string we saved in extendedProps
+            const parseTime = (timeInput) => {
+                if (Array.isArray(timeInput)) timeInput = timeInput[0]; // Handles arrays from Schema
+                if (!timeInput) return { h: "00", m: "00" };
+                const parts = String(timeInput).split(':');
+                return {
+                    h: parts[0].padStart(2, '0'),
+                    m: (parts[1] || "00").padStart(2, '0')
+                };
+            };
 
-                cal.addEvent(
-                    event.title,
-                    event.extendedProps.professor || "N/A",
-                    event.extendedProps.lectureHall || "", // Export lecture hall as well
-                    `${dates.start}T${event.startStr.split("T")[1]}`,
-                    `${dates.start}T${event.endStr.split("T")[1]}`,
-                    rrule,)
-            });
+            const startT = parseTime(event.extendedProps.rawStart);
+            const endT = parseTime(event.extendedProps.rawEnd);
+
+            const [year, month, day] = dates.start.split('-');
+            const startDateStr = `${month}/${day}/${year} ${startT.h}:${startT.m}:00`;
+            const endDateStr = `${month}/${day}/${year} ${endT.h}:${endT.m}:00`;
+
+            cal.addEvent(
+                event.title,
+                event.extendedProps.professor || "N/A",
+                event.extendedProps.lectureHall || "", 
+                startDateStr, 
+                endDateStr,
+                rrule
+            );
         });
     });
 
-    // cal.download("university_schedule");
+    // 3. Build the raw ICS string
     let icsString = cal.build();
 
-    console.log(icsString)
+    // 4. Inject EXDATEs cleanly
+    if (excludedDates.length > 0) {
+        icsString = icsString.replace(/BEGIN:VEVENT([\s\S]*?)END:VEVENT/g, (match) => {
+            const startTimeMatch = match.match(/DTSTART(.*?):(\d{8})T(\d{6})(Z?)/);
+            
+            if (startTimeMatch) {
+                const tzInfo = startTimeMatch[1]; 
+                const eventTime = startTimeMatch[3]; 
+                const zFlag = startTimeMatch[4]; 
 
-    icsString = icsString.replace(/BEGIN:VEVENT([\s\S]*?)END:VEVENT/g, (match) => {
+                const formattedExDates = excludedDates.map(date => `${date}T${eventTime}${zFlag}`).join(',');
+                const exdateLine = `EXDATE${tzInfo}:${formattedExDates}\r\n`;
+                
+                return match.replace('END:VEVENT', `${exdateLine}END:VEVENT`);
+            }
+            return match;
+        });
+    }
 
-        const startTimeMatch = match.match(/DTSTART;VALUE=DATE-TIME:\d{8}T(\d{6})/);
-        if (!startTimeMatch) return match;
-
-        const eventTime = startTimeMatch[1];
-
-        const formattedExDates = excludedDates.map(date => `${date}T${eventTime}`).join(',');
-        const exdateLine = `EXDATE;VALUE=DATE-TIME:${formattedExDates}\r\n`;
-
-
-        return match.replace('END:VEVENT', `${exdateLine}END:VEVENT`);
-    });
-    console.log(icsString)
-
+    // 5. Download the file
     const blob = new Blob([icsString], { type: 'text/calendar;charset=utf-8' });
     const link = document.createElement('a');
     const url = window.URL.createObjectURL(blob);
@@ -468,12 +482,9 @@ function downloadCalendar() {
     document.body.appendChild(link);
     link.click();
 
-
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
 }
-
-
 
 function hideList() {
     if (window.innerWidth <= 767) {
