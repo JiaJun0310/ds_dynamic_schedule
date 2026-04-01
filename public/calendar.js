@@ -1,34 +1,50 @@
-// Global calendar instance
+// Global variables
 let calendar;
+let academicData = null;
+
+// Helper to get dates based on semester
+function getSemesterDates(semesterNum) {
+    if (!academicData || !semesterNum) return null;
+    
+    const formatJSONDate = (dateStr) => {
+        const [day, month, year] = dateStr.trim().split('/');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    };
+    
+    // Odd = 1, 3, 5, 7 (Winter), Even = 2, 4, 6, 8 (Spring)
+    const isOdd = parseInt(semesterNum) % 2 !== 0;
+    const semData = isOdd ? academicData.semesters[0] : academicData.semesters[1];
+    
+    return {
+        start: formatJSONDate(semData.classes_start),
+        end: formatJSONDate(semData.classes_end)
+    };
+}
 
 // Save current class titles to local storage
 function updateLocalStorage() {
     const allEvents = calendar.getEvents();
 
-
     const classEvents = allEvents.filter(
         (event) => event.display !== "background"
     );
-
 
     const scheduleData = {};
 
     classEvents.forEach((event) => {
         scheduleData[event.title] = {
             title: event.title,
-            color: event.backgroundColor || event.color
+            color: event.backgroundColor || event.color,
+            semester: event.extendedProps.semester
         };
     });
 
-
     const finalData = Object.values(scheduleData);
-
-
     localStorage.setItem("userSchedule", JSON.stringify(finalData));
 }
 
 // Initialize calendar when the page loads
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     var calendarEl = document.getElementById("calendar");
 
     // FullCalendar configuration
@@ -80,10 +96,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const start = info.event.start.toLocaleTimeString("el-GR", {
                 hour: "2-digit",
                 minute: "2-digit",
+                timeZone: "UTC",
             });
             const end = info.event.end.toLocaleTimeString("el-GR", {
                 hour: "2-digit",
                 minute: "2-digit",
+                timeZone: "UTC",
             });
 
             // Populate popup data
@@ -105,14 +123,12 @@ document.addEventListener("DOMContentLoaded", function () {
             if (info.event.display === 'background') return;
 
             const allEvents = calendar.getEvents();
-   
             const occurrenceStart = info.event.start.getTime();
 
             const isOnHoliday = allEvents.some(holiday => {
                 if (holiday.groupId !== 'holidays') return false;
 
                 const holidayStart = holiday.start.getTime();
-      
                 const holidayEnd = holiday.end 
                     ? holiday.end.getTime() 
                     : holidayStart + (24 * 60 * 60 * 1000); 
@@ -128,69 +144,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calendar.render();
 
-    // Fetch and display Greek public holidays
-    // fetch("https://date.nager.at/api/v3/PublicHolidays/2026/GR")
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //         data.forEach((holiday) => {
-    //             calendar.addEvent({
-    //                 title: holiday.localName,
-    //                 start: holiday.date,
-    //                 allDay: true,
-    //                 display: "background",
-    //                 color: "#47538a",
-    //             });
-    //         });
-    //     })
-    //     .catch((err) => console.error("Holiday fetch failed:", err));
-
-    fetch("/jsonData/academic_calendar.json")
-        .then((response) => {
-            if (!response.ok) throw new Error("File not found");
-            return response.json();
-        })
-        .then((data) => {
+    // Fetch and save JSON globally
+    try {
+        const response = await fetch("/jsonData/academic_calendar.json");
+        if (!response.ok) throw new Error("File not found");
         
-            const formatJSONDate = (dateStr) => {
+        academicData = await response.json();
+        
+        const formatJSONDate = (dateStr) => {
             const [day, month, year] = dateStr.trim().split('/');
-                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        };
+
+        academicData.holidays.forEach((holiday) => {
+            let eventConfig = {
+                title: holiday.name,
+                allDay: true,
+                display: "background",
+                color: "#a95b71",
+                groupId: 'holidays'
             };
+        
+            if (holiday.date.includes(" - ")) {
+                const parts = holiday.date.split(" - ");
+                eventConfig.start = formatJSONDate(parts[0]);
+                eventConfig.end = formatJSONDate(parts[1]); 
+            } else {
+                eventConfig.start = formatJSONDate(holiday.date);
+            }
 
-            data.holidays.forEach((holiday) => {
-                let eventConfig = {
-                    title: holiday.name,
-                    allDay: true,
-                    display: "background",
-                    color: "#a95b71",
-                    groupId: 'holidays'
-                };
-
-            
-                if (holiday.date.includes(" - ")) {
-                    const parts = holiday.date.split(" - ");
-                    eventConfig.start = formatJSONDate(parts[0]);
-             
-                    eventConfig.end = formatJSONDate(parts[1]); 
-                } else {
-                    eventConfig.start = formatJSONDate(holiday.date);
-                }
-
-                calendar.addEvent(eventConfig);
-            });
-    })
-    .catch((err) => console.error("Error loading local JSON:", err));
+            calendar.addEvent(eventConfig);
+        });
+    } catch (err) {
+        console.error("Error loading local JSON:", err);
+    }
 
     // Load saved classes from local storage
     const savedClasses = JSON.parse(localStorage.getItem("userSchedule")) || [];
 
     if (savedClasses.length > 0) {
-
         savedClasses.forEach(async (item) => {
             try {
                 const response = await fetch("/getClass", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-
                     body: JSON.stringify({ title: item.title }),
                 });
 
@@ -199,16 +196,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 const data = await response.json();
 
                 if (data.schedules) {
+                    const currentSem = item.semester;
+                    const dates = getSemesterDates(currentSem);
+
                     data.schedules.forEach((schedule) => {
                         calendar.addEvent({
                             title: schedule.title,
                             daysOfWeek: schedule.daysOfWeek || [schedule.day],
                             startTime: schedule.startTime || schedule.start,
                             endTime: schedule.endTime || schedule.end,
-
+                            startRecur: dates ? dates.start : null, 
+                            endRecur: dates ? dates.end : null,     
                             color: item.color || schedule.color,
                             extendedProps: {
                                 professor: schedule.professor,
+                                semester: currentSem
                             },
                         });
                     });
@@ -220,7 +222,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     appearCalendar();
     resize();
-    
 });
 
 // Sidebar semester buttons and clear functionality
@@ -322,7 +323,6 @@ buttons.forEach(async (button) => {
                     (event) => event.title === titlesArray[i],
                 );
 
-
                 if (isAlreadyInCalendar) {
                     checkbox.checked = true;
                     colorBtn.style.display = "flex";
@@ -367,6 +367,7 @@ buttons.forEach(async (button) => {
                             });
 
                             const data = await response.json();
+                            const dates = getSemesterDates(sem);
 
                             data.schedules.forEach((item) => {
                                 calendar.addEvent({
@@ -374,9 +375,12 @@ buttons.forEach(async (button) => {
                                     daysOfWeek: item.daysOfWeek || [item.day],
                                     startTime: item.startTime || item.start,
                                     endTime: item.endTime || item.end,
+                                    startRecur: dates ? dates.start : null,
+                                    endRecur: dates ? dates.end : null,
                                     color: item.color,
                                     extendedProps: {
                                         professor: item.professor,
+                                        semester: sem
                                     },
                                 });
                             });
@@ -442,27 +446,28 @@ function downloadCalendar() {
     if (events.length === 0) return;
 
     const daysMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-    const timezoneOffset = "+02:00";
-    const semesterStart = "2026-02-15"; // imerominia arxis examinou
-    const semesterEnd = "2026-06-15"; // imerominia telos examinou
 
     events.forEach((event) => {
         if (event.display === "background") return;
 
         const days = event._def.recurringDef.typeData.daysOfWeek;
+        const sem = event.extendedProps.semester;
+        const dates = getSemesterDates(sem);
+
+        if (!dates) return;
 
         const rrule = {
             freq: "WEEKLY",
-            until: semesterEnd,
+            until: dates.end,
             byday: days.map((d) => daysMap[d]),
         };
 
         cal.addEvent(
             event.title,
-            event.extendedProps.professor,
+            event.extendedProps.professor || "N/A",
             "",
-            `${semesterStart}T${event.startStr.split("T")[1]}`,
-            `${semesterStart}T${event.endStr.split("T")[1]}`,
+            `${dates.start}T${event.startStr.split("T")[1]}`,
+            `${dates.start}T${event.endStr.split("T")[1]}`,
             rrule,
         );
     });
@@ -514,7 +519,6 @@ function resize() {
     const calendar = document.getElementById("calendar");
     const sidebar = document.getElementById("semesterWrapper");
     sidebar.style.height = "unset";
-    console.log(getComputedStyle(calendar).height);
     sidebar.style.height = getComputedStyle(calendar).height;
 }
 
@@ -538,4 +542,4 @@ function appearCalendar()
 addEventListener("resize", (_e) => {
     appearCalendar();
     resize();
-})
+});
