@@ -84,21 +84,25 @@ document.querySelectorAll(".fileBox").forEach((box) => {
     };
 });
 
-const editButton = document.getElementById("editButton");
-const adminPage = document.querySelector(".adminWrapper");
-const editSemester = document.getElementById("selectSemester");
-const editCourse = document.getElementById("selectCourse");
-
-editButton.onclick = () => {
-    adminPage.style.display = "none";
-    editSemester.style.display = "block";
-    editCourse.style.display = "block";
-};
 
 // backBtn.onclick = () => {
 //     editPage.style.display = "none";
 //     adminPage.style.display = "flex";
 // };
+
+const editButton = document.getElementById("editButton");
+const adminPage = document.querySelector(".adminWrapper");
+const selectWrapper = document.getElementById("selectWrapper")
+const editWrapper = document.getElementById("editWrapper")
+
+editButton.onclick = () => {
+
+    adminPage.style.display = "none";
+    
+    selectWrapper.style.display = "flex";
+    editWrapper.style.display = "flex"; 
+};
+
 
 const semesterSelect = document.getElementById("semester");
 const courseSelect = document.getElementById("courses");
