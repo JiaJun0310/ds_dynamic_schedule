@@ -15,7 +15,7 @@ const SubjectSchema = z.object({
     startTime: z.array(z.string()).describe("A list of starting time(s) corresponding to the day(s) (e.g., ['09:15:00'], ['11:15:00', '12:15:00'])"),
     endTime: z.array(z.string()).describe("A list of ending time(s) corresponding to the day(s) (e.g., ['13:00:00', '14:00:00'], ['14:00:00'])"),
     semester: z.number().describe("The numerical semester this class belongs to (e.g., 1, 2, 5, 8)"),
-    professor: z.array(z.string()).describe("A list of the professors teaching this course (e.g., ['ΦΙΛΙΠΠΑΚΗΣ Μ.'], ['ΜΗΛΙΩΝΗΣ Α.', 'ΑΝΑΣΤΑΣΟΠΟΥΛΟΣ Α.'])")
+    professor: z.array(z.string()).describe("A list of the professors teaching this course not corresponding to the days (e.g., ['ΦΙΛΙΠΠΑΚΗΣ Μ.'], ['ΜΗΛΙΩΝΗΣ Α.', 'ΑΝΑΣΤΑΣΟΠΟΥΛΟΣ Α.'])")
 });
 
 const ScheduleSchema = z.object({
@@ -30,20 +30,19 @@ const llamaAgent = new LlamaCloud({ apiKey: process.env.LLAMA_CLOUD_API_KEY });
 // create function that uses llama agent to convert the pdf into markdown
 async function visionPdfToMarkdown(llamaClient, filePath) {
     try {
-        console.log("🍞1. markdown function starts")
         const upload = await llamaClient.files.create({ // creates a network connection between the app and the llamaCloud
             file: fs.createReadStream(filePath), // sends the file to the agent
             purpose: 'parse',
         });
-        console.log("🍞2. connection with llama established")
-
         const result = await llamaClient.parsing.parse({
-            file_id: upload.id, // tells the LLM which file to parse
-            tier: 'agentic',  // sets the LLM to vision based parsing
+            file_id: upload.id, 
+            tier: 'agentic',  
             version: 'latest',
-            expand: ['markdown']  // returns the output as markdown
+            expand: ['markdown'],
+            agentic_options: {
+                custom_prompt: "Do NOT ignore the text headers at the top of the pages. It is critical that you explicitly extract the text 'ΠΡΟΓΡΑΜΜΑ ΔΙΔΑΣΚΑΛΙΑΣ (ΕΞΑΜΗΝΟ: X)' and place it as a clear Markdown header (e.g., '### ΕΞΑΜΗΝΟ: X') immediately above the HTML table for that page."
+            }
         });
-        console.log("🍞3. markdown returned")
         return result.markdown.pages.map(page => page.markdown).join('\n\n---\n\n'); // returns the markdown as a whole instead of pages
     } catch (error) {
         console.error("Error message: ", error)
@@ -86,7 +85,7 @@ const promptTemplate = ChatPromptTemplate.fromMessages([
         4. DAY MAPPING: Convert Greek days to their corresponding string numbers (Δευτέρα="1", Τρίτη="2", Τετάρτη="3", Πέμπτη="4", Παρασκευή="5", Σάββατο="6", Κυριακή="7").
         5. TIME FORMAT: Ensure all times are strictly formatted as "HH:MM:SS" (e.g., "09:15:00").
         6. ALIGNMENT: If a class occurs on multiple days, ensure the daysOfWeek, startTime, and endTime arrays align perfectly by index.
-        7. SEMESTER: Every time you see the days of the week that means that the semester changes (it starts from 2 then to 4, from 4 to 6, from 6 to 8 and then it ends)`
+        7. SEMESTER: The semester number of each subject inside a table should be picked according to the header above the table stating ΠΡΟΓΡΑΜΜΑ ΔΙΔΑΣΚΑΛΙΑΣ (ΕΞΑΜΗΝΟ: X)`
     ],
     [
         "human",
@@ -112,11 +111,10 @@ async function markdownToDictionary(markdownText) {
 
 async function runExtractionPipeline() {
     // file path of the gods
-    const filePath = "./uploads/schedule.pdf";
+    const filePath = "./uploads/schedule1.pdf";
 
     // call llama to convert pdf to markdown
     const rawMarkdown = await visionPdfToMarkdown(llamaAgent, filePath);
-    console.log(rawMarkdown)
 
     // // call gemini to convert markdown to schema
     const finalDictionary = await markdownToDictionary(rawMarkdown);
@@ -125,7 +123,6 @@ async function runExtractionPipeline() {
 }
 
 var super_json = await runExtractionPipeline()
-console.log(super_json)
 
 if (super_json) {
     // open the wrapper langchain returns
@@ -161,7 +158,7 @@ if (super_json) {
     const finalJsonString = JSON.stringify(subjectsArray, null, 2);
 
     // path where the json will be saved
-    const outputPath = "./jsonData/schedule.json";
+    const outputPath = "./jsonData/schedule1.json";
 
     // 3. Write it to the hard drive!
     fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
