@@ -56,6 +56,7 @@ main {
 .buttonDiv {
     display: flex;
     height: 3.5em;
+    
     cursor: pointer;
     justify-content: center;
     align-items: center;

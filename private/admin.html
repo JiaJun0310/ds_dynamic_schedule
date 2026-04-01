@@ -10,6 +10,10 @@
 </head>
 
 <body id="bodyAdmin">
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Επεξεργασία δεδομένων, παρακαλώ περιμένετε...</p>
+    </div>
 
     <header>
         <img id="logo" src="../images/logo_unipi.svg"></img>
@@ -77,6 +81,26 @@
 
         </div>
 
+    </div>
+
+    <div id="editWrapper">
+
+        <div id="editCourse">
+
+            <h2>Επεξεργασία Μαθήματος</h2>
+    
+            <form id="courseForm">
+                <label id="title">Title: <input type="text" id="titleInput"></label><br>
+                <label id="lectureHall">Lecture Hall: <input type="text" id="lectureHallInput"></label><br>
+                <label id="daysOfWeek">Days of Week: <input type="text" id="daysOfWeekInput"></label><br>
+                <label id="startTime">Start Time: <input type="time" id="startTimeInput"></label><br>
+                <label id="endTime">End Time: <input type="time" id="endTimeInput"></label><br>
+                <label id="Semesters">Semester: <input type="text" id="semestersInput"></label><br>
+                <label id="professor">Professor: <input type="text" id="professorInput"></label><br>
+                <button type="submit">Save Changes</button>
+            </form>
+    
+        </div>
 
     </div>
 
