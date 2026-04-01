@@ -441,12 +441,35 @@ function downloadCalendar() {
     const events = calendar.getEvents();
     if (events.length === 0) return;
 
+    const holidayEvents = events.filter(e => e.groupId === 'holidays');
+    const classEvents = events.filter(e => e.display !== "background");
+
     const daysMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
     const timezoneOffset = "+02:00";
     const semesterStart = "2026-02-15"; // imerominia arxis examinou
     const semesterEnd = "2026-06-15"; // imerominia telos examinou
 
-    events.forEach((event) => {
+    const excludedDates = [];
+    holidayEvents.forEach(h => {
+        let current = new Date(h.start);
+        let end = h.end ? new Date(h.end) : new Date(h.start);
+        while (current <= end) {
+            const dateString = current.toISOString().split('T')[0].replace(/-/g, '');
+            if (!excludedDates.includes(dateString)) {
+                excludedDates.push(dateString);
+            }
+            
+            current.setDate(current.getDate() + 1);
+        }
+    });
+
+    const exdateLine = excludedDates.length > 0 
+        ? `EXDATE;VALUE=DATE:${excludedDates.join(',')}\r\n` 
+        : "";
+
+    console.log(exdateLine)
+    
+    classEvents.forEach((event) => {
         if (event.display === "background") return;
 
         const days = event._def.recurringDef.typeData.daysOfWeek;
@@ -467,7 +490,38 @@ function downloadCalendar() {
         );
     });
 
-    cal.download("university_schedule");
+    // cal.download("university_schedule");
+    let icsString = cal.build();
+
+    console.log(icsString)
+
+    icsString = icsString.replace(/BEGIN:VEVENT([\s\S]*?)END:VEVENT/g, (match) => {
+    
+        const startTimeMatch = match.match(/DTSTART;VALUE=DATE-TIME:\d{8}T(\d{6})/);
+        if (!startTimeMatch) return match;
+    
+        const eventTime = startTimeMatch[1]; 
+    
+        const formattedExDates = excludedDates.map(date => `${date}T${eventTime}`).join(',');
+        const exdateLine = `EXDATE;VALUE=DATE-TIME:${formattedExDates}\r\n`;
+
+
+        return match.replace('END:VEVENT', `${exdateLine}END:VEVENT`);
+    });
+    console.log(icsString)
+
+    const blob = new Blob([icsString], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    const url = window.URL.createObjectURL(blob);
+    
+    link.href = url;
+    link.setAttribute('download', 'university_schedule.ics');
+    document.body.appendChild(link);
+    link.click();
+    
+    
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
 }
 
 // Toggle between calendar view and list view
