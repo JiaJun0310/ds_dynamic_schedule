@@ -116,7 +116,7 @@ async function markdownToDictionary(markdownText) {
 
 async function runExtractionPipeline() {
     // file path of the gods
-    const filePath = "./uploads/schedule.pdf";
+    const filePath = "./uploads/schedule1.pdf";
 
     // call llama to convert pdf to markdown
     const rawMarkdown = await visionPdfToMarkdown(llamaAgent, filePath);
@@ -163,11 +163,24 @@ if (super_json) {
     // write zod object (final dictionary) to a json file with line breaks and 2 tabs
     const finalJsonString = JSON.stringify(subjectsArray, null, 2);
 
-    // path where the json will be saved
-    const outputPath = "./jsonData/schedule.json";
+    if (subjectsArray.length > 0) { // if there was an output
+        if (subjectsArray[0].semester % 2 === 0) {
+            // path where the json will be saved
+            const outputPath = "./jsonData/spring_schedule.json";
 
-    // save the file to jsonData
-    fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+            // save the file to jsonData
+            fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+        } else {
+            // path where the json will be saved
+            const outputPath = "./jsonData/winter_schedule.json";
+
+            // save the file to jsonData
+            fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+        }
+    } else { // if list was empty
+        console.log("Pipeline finished, but list is empty")
+    }
+
 } else {
     console.log("Pipeline finished, but no output");
 } 
