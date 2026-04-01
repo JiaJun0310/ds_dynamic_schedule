@@ -55,7 +55,7 @@ app.get("/loginForAdmin", (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
 });
 
-
+app.use('/jsonData', express.static(path.join(__dirname, 'jsonData')));
 
 
 //function to see the hash

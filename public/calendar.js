@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const popup = document.getElementById("eventPopup");
             const title = document.getElementById("popTitle");
             const prof = document.getElementById("popProfessor");
-            const hall = document.getElementById("popHall");
             const time = document.getElementById("popTime");
 
             // Format start and end times
@@ -90,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Populate popup data
             title.innerText = info.event.title;
             prof.innerText = info.event.extendedProps.professor || "N/A";
-            hall.innerText = info.event.extendedProps.lectureHall || "N/A";
             time.innerText = `${start} - ${end}`;
 
             // Close popup when clicking outside
@@ -102,25 +100,85 @@ document.addEventListener("DOMContentLoaded", function () {
 
             popup.showModal();
         },
+
+        eventDidMount: function(info) {
+            if (info.event.display === 'background') return;
+
+            const allEvents = calendar.getEvents();
+   
+            const occurrenceStart = info.event.start.getTime();
+
+            const isOnHoliday = allEvents.some(holiday => {
+                if (holiday.groupId !== 'holidays') return false;
+
+                const holidayStart = holiday.start.getTime();
+      
+                const holidayEnd = holiday.end 
+                    ? holiday.end.getTime() 
+                    : holidayStart + (24 * 60 * 60 * 1000); 
+
+                return occurrenceStart >= holidayStart && occurrenceStart < holidayEnd;
+            });
+
+            if (isOnHoliday) {
+                info.el.style.display = 'none';
+            }
+        },
     });
 
     calendar.render();
 
     // Fetch and display Greek public holidays
-    fetch("https://date.nager.at/api/v3/PublicHolidays/2026/GR")
-        .then((response) => response.json())
+    // fetch("https://date.nager.at/api/v3/PublicHolidays/2026/GR")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //         data.forEach((holiday) => {
+    //             calendar.addEvent({
+    //                 title: holiday.localName,
+    //                 start: holiday.date,
+    //                 allDay: true,
+    //                 display: "background",
+    //                 color: "#47538a",
+    //             });
+    //         });
+    //     })
+    //     .catch((err) => console.error("Holiday fetch failed:", err));
+
+    fetch("/jsonData/academic_calendar.json")
+        .then((response) => {
+            if (!response.ok) throw new Error("File not found");
+            return response.json();
+        })
         .then((data) => {
-            data.forEach((holiday) => {
-                calendar.addEvent({
-                    title: holiday.localName,
-                    start: holiday.date,
+        
+            const formatJSONDate = (dateStr) => {
+            const [day, month, year] = dateStr.trim().split('/');
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            };
+
+            data.holidays.forEach((holiday) => {
+                let eventConfig = {
+                    title: holiday.name,
                     allDay: true,
                     display: "background",
-                    color: "#47538a",
-                });
+                    color: "#a95b71",
+                    groupId: 'holidays'
+                };
+
+            
+                if (holiday.date.includes(" - ")) {
+                    const parts = holiday.date.split(" - ");
+                    eventConfig.start = formatJSONDate(parts[0]);
+             
+                    eventConfig.end = formatJSONDate(parts[1]); 
+                } else {
+                    eventConfig.start = formatJSONDate(holiday.date);
+                }
+
+                calendar.addEvent(eventConfig);
             });
-        })
-        .catch((err) => console.error("Holiday fetch failed:", err));
+    })
+    .catch((err) => console.error("Error loading local JSON:", err));
 
     // Load saved classes from local storage
     const savedClasses = JSON.parse(localStorage.getItem("userSchedule")) || [];
@@ -151,7 +209,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             color: item.color || schedule.color,
                             extendedProps: {
                                 professor: schedule.professor,
-                                lectureHall: schedule.lectureHall,
                             },
                         });
                     });
@@ -265,6 +322,7 @@ buttons.forEach(async (button) => {
                     (event) => event.title === titlesArray[i],
                 );
 
+
                 if (isAlreadyInCalendar) {
                     checkbox.checked = true;
                     colorBtn.style.display = "flex";
@@ -319,7 +377,6 @@ buttons.forEach(async (button) => {
                                     color: item.color,
                                     extendedProps: {
                                         professor: item.professor,
-                                        lectureHall: item.lectureHall 
                                     },
                                 });
                             });
@@ -457,12 +514,12 @@ function resize() {
     const calendar = document.getElementById("calendar");
     const sidebar = document.getElementById("calendarWrapper");
     sidebar.style.height = "unset";
+    console.log(getComputedStyle(calendar).height);
     sidebar.style.height = getComputedStyle(calendar).height;
 }
 
 function appearCalendar()
 {
-    const list = document.getElementById("calendarWrapper");
     const calEl = document.getElementById("calendar");
     if(window.innerWidth > 767)
     {  
@@ -476,9 +533,6 @@ function appearCalendar()
     }
     
 }
-
-
-
 
 addEventListener("resize", (_e) => {
     appearCalendar();
