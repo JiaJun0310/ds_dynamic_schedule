@@ -480,7 +480,7 @@ function hideList() {
         return;
     }
 
-    const list = document.getElementById("calendarWrapper");
+    const list = document.getElementById("semesterWrapper");
 
     if (list.style.display === "none") {
         list.style.display = "";
@@ -495,7 +495,7 @@ function hideList() {
 const toggleScreen = document.getElementById("toggleScreen");
 
 toggleScreen.onclick = function () {
-    const list = document.getElementById("calendarWrapper");
+    const list = document.getElementById("semesterWrapper");
     const calEl = document.getElementById("calendar");
 
     if (calEl.style.display === "flex") {
@@ -509,10 +509,10 @@ toggleScreen.onclick = function () {
     }
 };
 
-// resize sidebar based on the calendar
+// resize sidebar height based on the calendar
 function resize() {
     const calendar = document.getElementById("calendar");
-    const sidebar = document.getElementById("calendarWrapper");
+    const sidebar = document.getElementById("semesterWrapper");
     sidebar.style.height = "unset";
     console.log(getComputedStyle(calendar).height);
     sidebar.style.height = getComputedStyle(calendar).height;
@@ -520,6 +520,7 @@ function resize() {
 
 function appearCalendar()
 {
+    const list = document.getElementById("semesterWrapper");
     const calEl = document.getElementById("calendar");
     if(window.innerWidth > 767)
     {  
@@ -538,4 +539,3 @@ addEventListener("resize", (_e) => {
     appearCalendar();
     resize();
 })
-

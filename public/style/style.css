@@ -226,8 +226,8 @@ footer {
 }
 
 /* Sidebar wrapper container */
-#calendarWrapper {
-    flex: 1;
+#semesterWrapper {
+
     background-color: rgb(107, 6, 6);
     border-left: 2px solid rgb(107, 6, 6);
     border-right: 2px solid rgb(107, 6, 6);
@@ -235,6 +235,12 @@ footer {
     flex-direction: column;
     height: 1140px;
     overflow-y: auto;
+
+    width: auto;          
+    min-width: 220px;   
+    max-width: 320px;    
+    flex: 0 0 280px; 
+
 }
 
 
@@ -276,6 +282,15 @@ footer {
         padding-bottom: 5px;
     }
 
+    #semesterWrapper {
+        width: 100% !important;
+        min-width: unset;
+        max-width: unset;
+        flex: 1;             
+        display: flex;
+        flex-direction: column;
+    }
+
     .fc .fc-toolbar {
         display: flex;
         flex-direction: column;
@@ -311,7 +326,7 @@ footer {
 }
 
 /* Tablet layout */
-@media (min-width: 768px) and (max-width: 1000px) {
+@media (min-width: 768px) and (max-width: 1100px) {
 
     .fc-toolbar-chunk:nth-child(3) {
         display: grid;
@@ -331,14 +346,6 @@ footer {
     .fc-downloadBtn-button,
     .fc-button-group {
         justify-self: end;
-    }
-
-    #calendar{
-        flex: 0 0 70%;
-    }
-
-    #calendarWrapper{
-        flex: 0 0 30%;
     }
 
 }
