@@ -212,3 +212,12 @@ const PORT = 8000;
 app.listen(PORT, () => {
     console.log(`Server live at http://localhost:${PORT}`);
 });
+
+
+// app.post("/getCourses", async(req, res) => {
+//     const { semester } = req.body;
+
+//     const courseNames = await Calendar.find({ semester: semester }).select('title');
+
+//     res.json(courseNames);
+// });

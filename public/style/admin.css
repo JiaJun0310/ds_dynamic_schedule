@@ -79,5 +79,39 @@ body{
     background-color: #2f385f;
     color: #f0f0f0;
     box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    border-radius: 10px;   
 }
 
+#selectWrapper {
+    display: flex;           
+    justify-content: center; 
+    align-items: flex-start; 
+    gap: 40px;               
+    margin-top: 20px;
+}
+
+#selectSemester, #selectCourse {
+    text-align: center;
+    margin: 20px 0; 
+    display: flex;            
+    flex-direction: column;
+    align-items: center;
+}
+
+#selectSemester label, #selectCourse label {
+    color: #f0f0f0;
+    margin-bottom: 10px;
+    display: block;
+    font-size: 22px;
+}
+
+#semester, #courses {
+    padding: 18px 50px;
+    background-color: #2f385f;
+    color: white;
+    border: none;
+    border-radius: 10px;     
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}

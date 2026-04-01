@@ -44,3 +44,58 @@ document.querySelectorAll(".fileBox").forEach((box) => {
         }
     };
 });
+
+
+const editButton = document.getElementById("editButton");
+const adminPage = document.querySelector(".adminWrapper");
+const editSemester = document.getElementById("selectSemester");
+const editCourse = document.getElementById("selectCourse");
+
+
+editButton.onclick = () => {
+    adminPage.style.display = "none";
+    editSemester.style.display = "block";
+    editCourse.style.display = "block";
+};
+
+// backBtn.onclick = () => {
+//     editPage.style.display = "none";
+//     adminPage.style.display = "flex"; 
+// };
+
+
+const semesterSelect = document.getElementById("semester");
+const courseSelect = document.getElementById("courses");
+
+semesterSelect.addEventListener("change", async () => {
+    const semester = semesterSelect.value[semesterSelect.value.length - 1];
+
+    try {
+        const response = await fetch("/getSemester", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ semester: semester }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch courses");
+        }
+
+        const data = await response.json();
+        const courses = data.titles.map((course) => course.title);
+
+        courseSelect.innerHTML = "";
+
+        courses.forEach(course => {
+      
+            const option = document.createElement("option");
+            option.value = course;
+            option.textContent = course;
+            courseSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error(error);
+        alert("Could not load courses for this semester.");
+    }
+});

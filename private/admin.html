@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,11 @@
     <link rel="stylesheet" href="../style/style.css">
     <link rel="stylesheet" href="../style/admin.css">
 </head>
-<body id = "bodyAdmin">
 
-    <header>  
-        <img id="logo" src="../images/logo_unipi.svg" ></img>
+<body id="bodyAdmin">
+
+    <header>
+        <img id="logo" src="../images/logo_unipi.svg"></img>
 
     </header>
 
@@ -27,23 +29,59 @@
             <div class="fileBox">
                 <h2>Πρόγραμμα Εξαμήνου</h2>
                 <input type="file" name="schedule" required>
-                <button type="submit" >Ανέβασμα</button>
+                <button type="submit">Ανέβασμα</button>
             </div>
 
             <div class="fileBox">
                 <h2>Πρόγραμμα Εργαστηρίων</h2>
                 <input type="file" name="labs" required>
-                <button type="submit" >Ανέβασμα</button>
+                <button type="submit">Ανέβασμα</button>
             </div>
         </div>
 
         <div class="editBox">
-            <button type="button" id="editButton"> <h3>Επεξεργασία Ωρολόγιου Προγράμματος</h3> </button>
+            <button type="button" id="editButton">
+                <h3>Επεξεργασία Ωρολόγιου Προγράμματος</h3>
+            </button>
         </div>
 
     </div>
-    
+
+
+    <div id="selectWrapper">
+
+        <div id="selectSemester">
+
+            <label for="semester"> <h1>Επέλεξε Εξάμηνο:</h1> </label>
+
+            <select name="semesters" id="semester">
+                <option disabled selected>Επέλεξε Εξάμηνο:</option> 
+                <option>Εξάμηνο 1</option>
+                <option>Εξάμηνο 2</option>
+                <option>Εξάμηνο 3</option>
+                <option>Εξάμηνο 4</option>
+                <option>Εξάμηνο 5</option>
+                <option>Εξάμηνο 6</option>
+                <option>Εξάμηνο 7</option>
+                <option>Εξάμηνο 8</option>
+            </select>
+
+        </div>
+
+        <div id="selectCourse">
+
+            <label for="courses"> <h1>Επέλεξε Μάθημα:</h1> </label>
+
+            <select id="courses">     
+            </select>
+
+        </div>
+
+
+    </div>
+
     <script src="admin.js"></script>
 
 </body>
+
 </html>
