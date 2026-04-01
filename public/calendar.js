@@ -1,216 +1,173 @@
-// Global calendar instance
+// Global variables
 let calendar;
+let academicData = null;
+let eventTracker = {}; // This will store exact references to your events
 
-// Save current class titles to local storage
-function updateLocalStorage() {
-    const allEvents = calendar.getEvents();
+// Utility to get current schedule from local storage
+function getSavedSchedule() {
+    return JSON.parse(localStorage.getItem("userSchedule")) || [];
+}
 
+// Utility to save to local storage
+function saveSchedule(scheduleArray) {
+    localStorage.setItem("userSchedule", JSON.stringify(scheduleArray));
+}
 
-    const classEvents = allEvents.filter(
-        (event) => event.display !== "background"
-    );
+// Helper to get dates based on semester
+function getSemesterDates(semesterNum) {
+    if (!academicData || !semesterNum) return null;
 
+    const formatJSONDate = (dateStr) => {
+        const [day, month, year] = dateStr.trim().split('/');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    };
 
-    const scheduleData = {};
+    const isOdd = parseInt(semesterNum) % 2 !== 0;
+    const semData = isOdd ? academicData.semesters[0] : academicData.semesters[1];
 
-    classEvents.forEach((event) => {
-        scheduleData[event.title] = {
-            title: event.title,
-            color: event.backgroundColor || event.color
-        };
-    });
-
-
-    const finalData = Object.values(scheduleData);
-
-
-    localStorage.setItem("userSchedule", JSON.stringify(finalData));
+    return {
+        start: formatJSONDate(semData.classes_start),
+        end: formatJSONDate(semData.classes_end)
+    };
 }
 
 // Initialize calendar when the page loads
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     var calendarEl = document.getElementById("calendar");
 
-    // FullCalendar configuration
     calendar = new FullCalendar.Calendar(calendarEl, {
         timeZone: "Europe/Athens",
         initialView: "timeGridWeek",
         locale: "el",
-        firstDay: 1, // Monday
+        firstDay: 1,
         slotMinTime: "08:00:00",
         slotMaxTime: "21:00:00",
         allDaySlot: false,
         nowIndicator: true,
         height: "auto",
-
-        buttonText: {
-            today: "Σήμερα",
-        },
-
-        // Custom toolbar buttons
+        buttonText: { today: "Σήμερα" },
         customButtons: {
             downloadBtn: {
                 text: "Λήψη (ICS)",
-                click: function () {
-                    downloadCalendar();
-                },
+                click: function () { downloadCalendar(); },
             },
             viewBtn: {
                 text: "Εξάμηνα",
-                click: function () {
-                    hideList();
-                },
+                click: function () { hideList(); },
             },
         },
-
         headerToolbar: {
             left: "",
             center: "title",
             right: "downloadBtn today prev,next viewBtn",
         },
-
-        // Handle clicking on an event
         eventClick: function (info) {
             const popup = document.getElementById("eventPopup");
             const title = document.getElementById("popTitle");
             const prof = document.getElementById("popProfessor");
+            const hall = document.getElementById("popHall");
             const time = document.getElementById("popTime");
 
-            // Format start and end times
-            const start = info.event.start.toLocaleTimeString("el-GR", {
-                hour: "2-digit",
-                minute: "2-digit",
-            });
-            const end = info.event.end.toLocaleTimeString("el-GR", {
-                hour: "2-digit",
-                minute: "2-digit",
-            });
+            const start = info.event.start.toLocaleTimeString("el-GR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+            const end = info.event.end.toLocaleTimeString("el-GR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
 
-            // Populate popup data
             title.innerText = info.event.title;
             prof.innerText = info.event.extendedProps.professor || "N/A";
+
+            if (hall) {
+                hall.innerText = info.event.extendedProps.lectureHall || "N/A";
+            }
+
             time.innerText = `${start} - ${end}`;
 
-            // Close popup when clicking outside
             popup.onclick = function (event) {
-                if (event.target === popup) {
-                    popup.close();
-                }
+                if (event.target === popup) popup.close();
             };
-
             popup.showModal();
         },
-
-        eventDidMount: function(info) {
+        eventDidMount: function (info) {
             if (info.event.display === 'background') return;
-
             const allEvents = calendar.getEvents();
-   
             const occurrenceStart = info.event.start.getTime();
 
             const isOnHoliday = allEvents.some(holiday => {
                 if (holiday.groupId !== 'holidays') return false;
-
                 const holidayStart = holiday.start.getTime();
-      
-                const holidayEnd = holiday.end 
-                    ? holiday.end.getTime() 
-                    : holidayStart + (24 * 60 * 60 * 1000); 
-
+                const holidayEnd = holiday.end ? holiday.end.getTime() : holidayStart + (24 * 60 * 60 * 1000);
                 return occurrenceStart >= holidayStart && occurrenceStart < holidayEnd;
             });
 
-            if (isOnHoliday) {
-                info.el.style.display = 'none';
-            }
+            if (isOnHoliday) info.el.style.display = 'none';
         },
     });
 
     calendar.render();
 
-    // Fetch and display Greek public holidays
-    // fetch("https://date.nager.at/api/v3/PublicHolidays/2026/GR")
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //         data.forEach((holiday) => {
-    //             calendar.addEvent({
-    //                 title: holiday.localName,
-    //                 start: holiday.date,
-    //                 allDay: true,
-    //                 display: "background",
-    //                 color: "#47538a",
-    //             });
-    //         });
-    //     })
-    //     .catch((err) => console.error("Holiday fetch failed:", err));
+    // Fetch and save JSON globally
+    try {
+        const response = await fetch("/jsonData/academic_calendar.json");
+        if (!response.ok) throw new Error("File not found");
 
-    fetch("/jsonData/academic_calendar.json")
-        .then((response) => {
-            if (!response.ok) throw new Error("File not found");
-            return response.json();
-        })
-        .then((data) => {
-        
-            const formatJSONDate = (dateStr) => {
+        academicData = await response.json();
+
+        const formatJSONDate = (dateStr) => {
             const [day, month, year] = dateStr.trim().split('/');
-                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-            };
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        };
 
-            data.holidays.forEach((holiday) => {
-                let eventConfig = {
-                    title: holiday.name,
-                    allDay: true,
-                    display: "background",
-                    color: "#a95b71",
-                    groupId: 'holidays'
-                };
-
-            
-                if (holiday.date.includes(" - ")) {
-                    const parts = holiday.date.split(" - ");
-                    eventConfig.start = formatJSONDate(parts[0]);
-             
-                    eventConfig.end = formatJSONDate(parts[1]); 
-                } else {
-                    eventConfig.start = formatJSONDate(holiday.date);
-                }
-
-                calendar.addEvent(eventConfig);
-            });
-    })
-    .catch((err) => console.error("Error loading local JSON:", err));
+        academicData.holidays.forEach((holiday) => {
+            let eventConfig = { title: holiday.name, allDay: true, display: "background", color: "#a95b71", groupId: 'holidays' };
+            if (holiday.date.includes(" - ")) {
+                const parts = holiday.date.split(" - ");
+                eventConfig.start = formatJSONDate(parts[0]);
+                eventConfig.end = formatJSONDate(parts[1]);
+            } else {
+                eventConfig.start = formatJSONDate(holiday.date);
+            }
+            calendar.addEvent(eventConfig);
+        });
+    } catch (err) {
+        console.error("Error loading local JSON:", err);
+    }
 
     // Load saved classes from local storage
-    const savedClasses = JSON.parse(localStorage.getItem("userSchedule")) || [];
+    const savedClasses = getSavedSchedule();
 
     if (savedClasses.length > 0) {
-
         savedClasses.forEach(async (item) => {
             try {
                 const response = await fetch("/getClass", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-
                     body: JSON.stringify({ title: item.title }),
                 });
 
                 if (!response.ok) throw new Error("Server error");
-
                 const data = await response.json();
 
                 if (data.schedules) {
+                    const currentSem = item.semester;
+                    const dates = getSemesterDates(currentSem);
+                    eventTracker[item.title] = []; // Initialize array for this subject
+
                     data.schedules.forEach((schedule) => {
-                        calendar.addEvent({
+                        let addedEvent = calendar.addEvent({
                             title: schedule.title,
                             daysOfWeek: schedule.daysOfWeek || [schedule.day],
                             startTime: schedule.startTime || schedule.start,
                             endTime: schedule.endTime || schedule.end,
-
-                            color: item.color || schedule.color,
+                            startRecur: dates ? dates.start : null,
+                            endRecur: dates ? dates.end : null,
+                            backgroundColor: item.color || schedule.color || "#3788d8",
+                            borderColor: item.color || schedule.color || "#3788d8",
                             extendedProps: {
                                 professor: schedule.professor,
-                            },
+                                lectureHall: schedule.lectureHall,
+                                subjectTitle: item.title,
+                                semester: currentSem
+                            }
                         });
+                        eventTracker[item.title].push(addedEvent); // Save exact reference
                     });
                 }
             } catch (error) {
@@ -220,67 +177,47 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     appearCalendar();
     resize();
-    
 });
 
-// Sidebar semester buttons and clear functionality
+// Sidebar buttons and clear functionality
 const buttons = document.querySelectorAll(".buttonDiv");
 const clearSelection = document.getElementById("clearSelection");
 
 buttons.forEach(async (button) => {
     let pressed = false;
     let cleanText = button.textContent.trim();
-    let sem = cleanText[cleanText.length - 1]; // Extract semester number
+    let sem = cleanText[cleanText.length - 1];
 
     let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
-    // Fetch courses for the specific semester
     const response = await fetch("http://localhost:8000/getSemester", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ semester: sem }),
     });
 
     const data = await response.json();
     const titlesArray = data.titles.map((course) => course.title);
 
-    // Clear all selected courses from calendar
+    // Clear all selected courses
     clearSelection.onclick = function () {
-        const currentEvents = calendar.getEvents();
-
-        currentEvents.forEach((event) => {
-            if (event.display !== "background") {
-                event.remove();
-            }
+        // Use tracker to definitively delete all subjects
+        Object.keys(eventTracker).forEach(subject => {
+            eventTracker[subject].forEach(eventObj => eventObj.remove());
         });
+        eventTracker = {}; // Reset tracking
 
-        const allCheckboxes = document.querySelectorAll(".checkbox");
-        allCheckboxes.forEach((checkbox) => {
-            checkbox.checked = false;
-        });
-
-        const allColorPickers = document.querySelectorAll(".colorBtn");
-        allColorPickers.forEach((colorPicker) => {
-            colorPicker.style.display = "none";
-        });
-
-        updateLocalStorage();
+        document.querySelectorAll(".checkbox").forEach(cb => cb.checked = false);
+        document.querySelectorAll(".colorBtn").forEach(cp => cp.style.display = "none");
+        localStorage.removeItem("userSchedule");
     };
 
-    // Toggle semester course list dropdown
     button.onclick = async function () {
         pressed = !pressed;
-
-        // Update arrow icon
-        arrow.src = pressed
-            ? "../images/down_pointer.svg"
-            : "../images/right_pointer.svg";
+        arrow.src = pressed ? "../images/down_pointer.svg" : "../images/right_pointer.svg";
 
         if (pressed) {
-            // Populate courses for this semester
             for (let i = 0; i < titlesArray.length; i++) {
                 const div = document.createElement("div");
                 const p = document.createElement("p");
@@ -296,7 +233,6 @@ buttons.forEach(async (button) => {
                 div.appendChild(checkbox);
                 checkbox.className = "checkbox";
 
-                // Setup color picker button
                 const colorBtn = document.createElement("span");
                 colorBtn.innerHTML = `<img src="/images/color.svg" style="width: 20px; height: 20px; vertical-align: middle;">`;
                 colorBtn.style.cursor = "pointer";
@@ -304,138 +240,151 @@ buttons.forEach(async (button) => {
                 colorBtn.className = "colorBtn";
                 div.appendChild(colorBtn);
 
-                // Setup hidden color input
                 const hiddenPicker = document.createElement("input");
                 hiddenPicker.type = "color";
                 hiddenPicker.value = "#3788d8";
                 hiddenPicker.style.display = "none";
                 div.appendChild(hiddenPicker);
 
-                // Animate row entry
-                setTimeout(() => {
-                    div.classList.add("visible");
-                }, i * 50);
+                setTimeout(() => div.classList.add("visible"), i * 50);
 
-                // Check if course is already in the calendar
-                const allEvents = calendar.getEvents();
-                const isAlreadyInCalendar = allEvents.some(
-                    (event) => event.title === titlesArray[i],
-                );
-
+                const savedClasses = getSavedSchedule();
+                const isAlreadyInCalendar = savedClasses.some(saved => saved.title === titlesArray[i]);
 
                 if (isAlreadyInCalendar) {
                     checkbox.checked = true;
                     colorBtn.style.display = "flex";
-
-                    const existingEvent = allEvents.find(event => event.title === titlesArray[i]);
-                    if (existingEvent) {
-                        hiddenPicker.value = existingEvent.backgroundColor || existingEvent.color;
-                    }
+                    const existingCourse = savedClasses.find(c => c.title === titlesArray[i]);
+                    if (existingCourse && existingCourse.color) hiddenPicker.value = existingCourse.color;
                 }
 
-                // Handle row click to toggle checkbox
                 div.onclick = function (event) {
-                    if (checkbox.disabled) {
-                        return;
-                    }
-
-                    // Prevent double firing when clicking elements directly
-                    if (
-                        event.target === checkbox ||
-                        event.target.closest(".colorBtn") ||
-                        event.target === hiddenPicker
-                    ) {
-                        return;
-                    }
-
+                    if (checkbox.disabled || event.target === checkbox || event.target.closest(".colorBtn") || event.target === hiddenPicker) return;
                     checkbox.checked = !checkbox.checked;
                     checkbox.dispatchEvent(new Event("change"));
                 };
 
-                // Handle checkbox change (add/remove class)
                 checkbox.onchange = async function () {
                     this.disabled = true;
-                    const isChecked = this.checked;
+                    const targetTitle = titlesArray[i];
 
                     try {
-                        if (isChecked) {
-                            // Fetch and add class to calendar
+                        if (this.checked) {
                             const response = await fetch("/getClass", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ title: titlesArray[i] }),
+                                body: JSON.stringify({ title: targetTitle }),
                             });
 
                             const data = await response.json();
+                            const dates = getSemesterDates(sem);
+                            eventTracker[targetTitle] = []; // Initialize tracking
+
+                            // Check the Database for the color
+                            let dbColor = data.schedules.length > 0 ? data.schedules[0].color : null;
+                            let saved = getSavedSchedule();
+
+                            // If this is a new class AND your database has a color, update the picker
+                            if (!saved.some(c => c.title === targetTitle) && dbColor) {
+                                hiddenPicker.value = dbColor;
+                            }
 
                             data.schedules.forEach((item) => {
-                                calendar.addEvent({
+                                let addedEvent = calendar.addEvent({
                                     title: item.title,
                                     daysOfWeek: item.daysOfWeek || [item.day],
                                     startTime: item.startTime || item.start,
                                     endTime: item.endTime || item.end,
-                                    color: item.color,
+                                    startRecur: dates ? dates.start : null,
+                                    endRecur: dates ? dates.end : null,
+                                    backgroundColor: hiddenPicker.value,
+                                    borderColor: hiddenPicker.value,
                                     extendedProps: {
                                         professor: item.professor,
+                                        lectureHall: item.lectureHall,
+                                        subjectTitle: targetTitle,
+                                        semester: sem
                                     },
                                 });
+                                eventTracker[targetTitle].push(addedEvent); // Save reference
                             });
 
                             colorBtn.style.display = "flex";
+
+                            if (!saved.some(c => c.title === targetTitle)) {
+                                saved.push({ title: targetTitle, color: hiddenPicker.value, semester: sem });
+                                saveSchedule(saved);
+                            }
+
                         } else {
-                            // Remove class from calendar
-                            const targetTitle = titlesArray[i];
-                            const allEvents = calendar.getEvents();
+                            // Definitively delete events via tracker
+                            if (eventTracker[targetTitle]) {
+                                eventTracker[targetTitle].forEach(eventObj => eventObj.remove());
+                                delete eventTracker[targetTitle];
+                            }
 
                             colorBtn.style.display = "none";
-                            allEvents.forEach((event) => {
-                                if (event.title === targetTitle) {
-                                    event.remove();
-                                }
-                            });
+
+                            let saved = getSavedSchedule();
+                            saved = saved.filter(c => c.title !== targetTitle);
+                            saveSchedule(saved);
                         }
                     } catch (error) {
                         console.error("Error updating schedule:", error);
                     } finally {
-                        updateLocalStorage();
-                        setTimeout(() => {
-                            this.disabled = false;
-                        }, 1000);
+                        setTimeout(() => this.disabled = false, 1000);
                     }
                 };
 
-                // Trigger hidden color picker on click
                 colorBtn.onclick = function (event) {
                     event.stopPropagation();
                     hiddenPicker.click();
                 };
 
-                // Apply new color to events in real-time
-                hiddenPicker.oninput = function () {
-                    const allEvents = calendar.getEvents();
+                // Updates the screen instantly while dragging
+                hiddenPicker.addEventListener('input', function () {
                     const newColor = this.value;
+                    const targetTitle = titlesArray[i];
 
-                    const matchingEvents = allEvents.filter(
-                        (event) => event.title === titlesArray[i],
-                    );
-
-                    matchingEvents.forEach((event) => {
-                        event.setProp("backgroundColor", newColor);
-                        event.setProp("borderColor", newColor);
+                    // 1. Force update the LIVE calendar screen so you see it instantly
+                    calendar.getEvents().forEach(liveEvent => {
+                        if (liveEvent.extendedProps.subjectTitle === targetTitle) {
+                            liveEvent.setProp("backgroundColor", newColor);
+                            liveEvent.setProp("borderColor", newColor);
+                        }
                     });
 
-                    updateLocalStorage();
-                };
-            }
+                    // 2. Update the background memory tracker for off-screen events
+                    if (eventTracker[targetTitle]) {
+                        eventTracker[targetTitle].forEach(eventObj => {
+                            try {
+                                eventObj.setProp("backgroundColor", newColor);
+                                eventObj.setProp("borderColor", newColor);
+                            } catch (e) { } // Ignore if the reference temporarily detached
+                        });
+                    }
+                });
 
+                // Saves to database ONLY when you let go of the mouse
+                hiddenPicker.addEventListener('change', function () {
+                    const newColor = this.value;
+                    const targetTitle = titlesArray[i];
+
+                    let saved = getSavedSchedule();
+                    let course = saved.find(c => c.title === targetTitle);
+                    if (course) {
+                        course.color = newColor;
+                        saveSchedule(saved);
+                    }
+                });
+            }
         } else {
-            // Close dropdown
             SemesterDiv.innerHTML = ``;
         }
     };
 });
 
-// Export schedule as an ICS file
+// ICS Download
 function downloadCalendar() {
     const cal = ics();
     const events = calendar.getEvents();
@@ -445,9 +394,6 @@ function downloadCalendar() {
     const classEvents = events.filter(e => e.display !== "background");
 
     const daysMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-    const timezoneOffset = "+02:00";
-    const semesterStart = "2026-02-15"; // imerominia arxis examinou
-    const semesterEnd = "2026-06-15"; // imerominia telos examinou
 
     const excludedDates = [];
     holidayEvents.forEach(h => {
@@ -458,36 +404,39 @@ function downloadCalendar() {
             if (!excludedDates.includes(dateString)) {
                 excludedDates.push(dateString);
             }
-            
+
             current.setDate(current.getDate() + 1);
         }
     });
 
-    const exdateLine = excludedDates.length > 0 
-        ? `EXDATE;VALUE=DATE:${excludedDates.join(',')}\r\n` 
+    const exdateLine = excludedDates.length > 0
+        ? `EXDATE;VALUE=DATE:${excludedDates.join(',')}\r\n`
         : "";
 
     console.log(exdateLine)
-    
+
     classEvents.forEach((event) => {
         if (event.display === "background") return;
+        // Use tracker for ICS download so off-screen events are included
+        Object.values(eventTracker).forEach(subjectEvents => {
+            subjectEvents.forEach(event => {
+                const days = event._def.recurringDef.typeData.daysOfWeek;
+                const sem = event.extendedProps.semester;
+                const dates = getSemesterDates(sem);
 
-        const days = event._def.recurringDef.typeData.daysOfWeek;
+                if (!dates) return;
 
-        const rrule = {
-            freq: "WEEKLY",
-            until: semesterEnd,
-            byday: days.map((d) => daysMap[d]),
-        };
+                const rrule = { freq: "WEEKLY", until: dates.end, byday: days.map(d => daysMap[d]) };
 
-        cal.addEvent(
-            event.title,
-            event.extendedProps.professor,
-            "",
-            `${semesterStart}T${event.startStr.split("T")[1]}`,
-            `${semesterStart}T${event.endStr.split("T")[1]}`,
-            rrule,
-        );
+                cal.addEvent(
+                    event.title,
+                    event.extendedProps.professor || "N/A",
+                    event.extendedProps.lectureHall || "", // Export lecture hall as well
+                    `${dates.start}T${event.startStr.split("T")[1]}`,
+                    `${dates.start}T${event.endStr.split("T")[1]}`,
+                    rrule,)
+            });
+        });
     });
 
     // cal.download("university_schedule");
@@ -496,12 +445,12 @@ function downloadCalendar() {
     console.log(icsString)
 
     icsString = icsString.replace(/BEGIN:VEVENT([\s\S]*?)END:VEVENT/g, (match) => {
-    
+
         const startTimeMatch = match.match(/DTSTART;VALUE=DATE-TIME:\d{8}T(\d{6})/);
         if (!startTimeMatch) return match;
-    
-        const eventTime = startTimeMatch[1]; 
-    
+
+        const eventTime = startTimeMatch[1];
+
         const formattedExDates = excludedDates.map(date => `${date}T${eventTime}`).join(',');
         const exdateLine = `EXDATE;VALUE=DATE-TIME:${formattedExDates}\r\n`;
 
@@ -513,41 +462,31 @@ function downloadCalendar() {
     const blob = new Blob([icsString], { type: 'text/calendar;charset=utf-8' });
     const link = document.createElement('a');
     const url = window.URL.createObjectURL(blob);
-    
+
     link.href = url;
     link.setAttribute('download', 'university_schedule.ics');
     document.body.appendChild(link);
     link.click();
-    
-    
+
+
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
 }
 
-// Toggle between calendar view and list view
+
+
 function hideList() {
     if (window.innerWidth <= 767) {
         const mobileBtn = document.getElementById("toggleScreen");
-        if (mobileBtn) {
-            mobileBtn.click();
-        }
+        if (mobileBtn) mobileBtn.click();
         return;
     }
-
     const list = document.getElementById("semesterWrapper");
+    list.style.display = list.style.display === "none" ? "" : "none";
+    calendar.updateSize();
+};
 
-    if (list.style.display === "none") {
-        list.style.display = "";
-        calendar.updateSize();
-    } else {
-        list.style.display = "none";
-        calendar.updateSize();
-    }
-}
-
-// Mobile toggle button functionality
 const toggleScreen = document.getElementById("toggleScreen");
-
 toggleScreen.onclick = function () {
     const list = document.getElementById("semesterWrapper");
     const calEl = document.getElementById("calendar");
@@ -558,38 +497,30 @@ toggleScreen.onclick = function () {
     } else {
         list.style.display = "none";
         calEl.style.setProperty("display", "flex", "important");
-
         calendar.updateSize();
     }
 };
 
-// resize sidebar height based on the calendar
 function resize() {
     const calendar = document.getElementById("calendar");
     const sidebar = document.getElementById("semesterWrapper");
     sidebar.style.height = "unset";
-    console.log(getComputedStyle(calendar).height);
     sidebar.style.height = getComputedStyle(calendar).height;
 }
 
-function appearCalendar()
-{
+function appearCalendar() {
     const list = document.getElementById("semesterWrapper");
     const calEl = document.getElementById("calendar");
-    if(window.innerWidth > 767)
-    {  
+    if (window.innerWidth > 767) {
         calEl.style.setProperty("display", "flex", "important");
         calendar.updateSize();
-    }
-    else
-    {
+    } else {
         calEl.style.setProperty("display", "none", "important");
         list.style.display = "flex";
     }
-    
 }
 
-addEventListener("resize", (_e) => {
+addEventListener("resize", () => {
     appearCalendar();
     resize();
-})
+});
