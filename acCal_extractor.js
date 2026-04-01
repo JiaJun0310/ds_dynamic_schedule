@@ -6,7 +6,7 @@ import { ChatPromptTemplate } from '@langchain/core/prompts'; // used for forcin
 
 // CREATES SCHEMA FOR HOLIDAYS AND SEMSTERS
 
-import {number, z} from "zod";
+import { number, z } from "zod";
 import { error } from 'console';
 // Single holiday schema
 const HolidaySchema = z.object({
@@ -55,7 +55,7 @@ async function visionPdfToMarkdown(llamaClient, filePath) {
         });
 
         return result.markdown.pages.map(page => page.markdown).join('\n\n---\n\n'); // returns the markdown as a whole instead of pages
-    } catch (error){
+    } catch (error) {
         console.error("Error message: ", error)
         if (error.status) {
             console.error("Status Code:", error.status);
@@ -75,7 +75,7 @@ const geminiAgent = new ChatGoogleGenerativeAI({
 const structuredLlmResponse = geminiAgent.withStructuredOutput(AcademicCalendarSchema);
 const promptTemplate = ChatPromptTemplate.fromMessages([
     [
-        "system", 
+        "system",
         `You are a data extraction expert.
         Your task is to extract the holidays (Αργίες - Διακοπές), the semesters (ΧΕΙΜΕΡΙΝΟ ΕΞΑΜΗΝΟ, ΕΑΡΙΝΟ ΕΞΑΜΗΝΟ) and the exam periods (ΕΞΕΤΑΣΤΙΚΗ ΠΕΡΙΟΔΟΣ, Επαναληπτική Εξεταστική).
         
@@ -85,7 +85,7 @@ const promptTemplate = ChatPromptTemplate.fromMessages([
         3. ALL requested fields exist in the document. You must locate and extract every single piece of information required by the schema.`
     ],
     [
-        "human", 
+        "human",
         "DOCUMENT TEXT TO PROCESS:\n{markdownData}"
     ]
 ]);
@@ -123,15 +123,15 @@ async function runExtractionPipeline() {
 var super_json = await runExtractionPipeline()
 console.log(super_json)
 
-if (super_json) { 
-            // write zod object (final dictionary) to a json file with line breaks and 2 tabs
-            const finalJsonString = JSON.stringify(super_json, null, 2);
-            
-            // path where the json will be saved
-            const outputPath = "./jsonData/academic_calendar.json";
-            
-            // 3. Write it to the hard drive!
-            fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
-        } else {
-            console.log("Pipeline finished, but no output");
-        }
+if (super_json) {
+    // write zod object (final dictionary) to a json file with line breaks and 2 tabs
+    const finalJsonString = JSON.stringify(super_json, null, 2);
+
+    // path where the json will be saved
+    const outputPath = "./jsonData/academic_calendar.json";
+
+    // 3. Write it to the hard drive!
+    fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+} else {
+    console.log("Pipeline finished, but no output");
+}

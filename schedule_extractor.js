@@ -68,7 +68,7 @@ const geminiAgent = new ChatGoogleGenerativeAI({
 const structuredLlmResponse = geminiAgent.withStructuredOutput(ScheduleSchema);
 const promptTemplate = ChatPromptTemplate.fromMessages([
     [
-        "system", 
+        "system",
         `You are a strict data extraction algorithm specializing in university course schedules.
         Your task is to extract every single class/subject and its details from the provided document into a structured array.
         
@@ -89,7 +89,7 @@ const promptTemplate = ChatPromptTemplate.fromMessages([
         7. SEMESTER: Every time you see the days of the week that means that the semester changes (it starts from 2 then to 4, from 4 to 6, from 6 to 8 and then it ends)`
     ],
     [
-        "human", 
+        "human",
         "DOCUMENT TEXT TO PROCESS:\n{markdownData}"
     ]
 ]);
@@ -128,8 +128,37 @@ var super_json = await runExtractionPipeline()
 console.log(super_json)
 
 if (super_json) {
+    // open the wrapper langchain returns
+    let subjectsArray = super_json.subjects || super_json; // || super_json is a saftey net in case super_json is already an array
+
+    // dictionary mapping semesters to colors
+    const semesterColors = {
+        1: "#a22323", // semester 1 = dark red
+        2: "#a22323", // semester 2 = dark red
+        3: "#10436e", // semester 3 = dark blue
+        4: "#10436e", // semester 4 = dark blue
+        5: "#4e4e4d", // semester 5 = gray
+        6: "#4e4e4d", // semester 6 = gray
+        7: "#5e226e",  // semester 7 = nice purple
+        8: "#5e226e"  // semester 8 = nice purple
+    };
+
+    // maps each subject to itself with a color attribute
+    subjectsArray = subjectsArray.map(singleClass => {
+         
+        // for each subject, classColor gets a value depending on the semester of the class
+        // if the semester number is not in the dictionary above it gets neon green
+        // neon green means gemini hallucinated a value. neon green is bad. we don't want neon green in any case!!!
+        const classColor = semesterColors[singleClass.semester] || "#2bff00";
+
+        return {
+            ...singleClass, // ... unpacks the objects inside single class and passes them as attributes to the new class instead of passing single class as a whole
+            color: classColor // adds the color
+        };
+    });
+
     // write zod object (final dictionary) to a json file with line breaks and 2 tabs
-    const finalJsonString = JSON.stringify(super_json, null, 2);
+    const finalJsonString = JSON.stringify(subjectsArray, null, 2);
 
     // path where the json will be saved
     const outputPath = "./jsonData/schedule.json";
@@ -138,4 +167,4 @@ if (super_json) {
     fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
 } else {
     console.log("Pipeline finished, but no output");
-}
+} 
