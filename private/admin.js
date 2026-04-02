@@ -128,6 +128,13 @@ semesterSelect.addEventListener("change", async () => {
 
         courseSelect.innerHTML = "";
 
+        const defaultOption = document.createElement("option");
+        defaultOption.textContent = "Επέλεξε Μάθημα:";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+
+        courseSelect.appendChild(defaultOption);
+
         courses.forEach((course) => {
             const option = document.createElement("option");
             option.value = course;
@@ -139,3 +146,40 @@ semesterSelect.addEventListener("change", async () => {
         alert("Could not load courses for this semester.");
     }
 });
+
+
+courseSelect.addEventListener("change", async () => {
+
+    const course = courseSelect.value;
+
+    try {
+        
+        const response = await fetch("/getClass", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: course }),
+        });
+    
+        if (!response.ok) {
+            throw new Error("Failed to fetch course information");
+        }
+
+        const data = await response.json();
+        console.log(data)
+    
+        document.getElementById("titleInput").value = data.schedules[0].title;
+        document.getElementById("lectureHallInput").value = data.schedules[0].lectureHall;
+        document.getElementById("daysOfWeekInput").value = data.schedules[0].day;
+        document.getElementById("startTimeInput").value = data.schedules[0].start ? data.schedules[0].start.slice(0, 5):"";
+        document.getElementById("endTimeInput").value = data.schedules[0].end ? data.schedules[0].end.slice(0, 5):"";
+        document.getElementById("semestersInput").value = semesterSelect.value[semesterSelect.value.length - 1];
+        document.getElementById("professorInput").value = data.schedules[0].professor;
+
+    } catch (error) {
+        console.error(error);
+        alert("Could not load courses for this semester.");
+    }
+    
+
+});
+
