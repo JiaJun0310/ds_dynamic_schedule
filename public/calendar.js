@@ -63,6 +63,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         },
         eventClick: function (info) {
             const popup = document.getElementById("eventPopup");
+
+            popup.showModal();
+
             const title = document.getElementById("popTitle");
             const prof = document.getElementById("popProfessor");
             const hall = document.getElementById("popHall");
@@ -116,11 +119,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 hiddenPicker.click();
 
-            };
+            };       
 
 
-            popup.showModal();
-
+            
         },
         eventDidMount: function (info) {
             if (info.event.display === 'background') return;
