@@ -231,7 +231,7 @@ buttons.forEach(async (button) => {
     let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
-    const response = await fetch("http://localhost:8000/getSemester", {
+    const response = await fetch("/getSemester", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ semester: sem }),

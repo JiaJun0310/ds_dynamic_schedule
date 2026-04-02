@@ -1,32 +1,33 @@
-import express from "express";
-import multer from 'multer';
-import cors from 'cors';
-import path from 'path';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import cookieParser from 'cookie-parser';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { exec } from 'child_process';
+import express from "express"; //Import for server
+import multer from 'multer'; //Middlewere for handling files
+import cors from 'cors'; //Middlewere for requests
+import path from 'path'; 
+import bcrypt from 'bcrypt'; //For Hashing admin password
+import jwt from 'jsonwebtoken'; //For saving tokens
+import cookieParser from 'cookie-parser'; //HTTP only cookie
+import fs from 'fs'; //File system
+import { fileURLToPath } from 'url'; 
+import { exec } from 'child_process'; //For running JS scripts in this case acCal, schedule extractors
+import connectDB from "./db.js"; //Dependency for db.js on our file system
+import Calendar from "./models/schema.js"; //imporst schema.js to server
 
-import connectDB from "./db.js"; 
-import Calendar from "./models/schema.js";
-
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);  //default filePaths
 const __dirname = path.dirname(__filename);
 
-const username = "admin"
+//Hardcoded credencials
+const username = "admin" 
 const hashedPassword = `$2b$10$.KGaGxxvvV1CaEZLrGbxVOeKa7juuHcFMPyPAbdEaOjLCTYeQ6Qpa`
 
-
+//create app with express
 const app = express();
 
 
-
+//If /uploads doesn't exist, create it
 if (!fs.existsSync('./uploads')) {
     fs.mkdirSync('./uploads');
 }
 
+//Gets info for uploading file to /uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/'); 
@@ -38,26 +39,30 @@ const storage = multer.diskStorage({
     }
 });
 
+//saves the file to /upload
 const upload = multer({ storage: storage });
 
-connectDB();
+connectDB(); //connect to db through db.js
 
-app.use(cors());
-app.use(express.json());
-app.use(cookieParser());
+app.use(cors()); //use the middlewere 
+app.use(express.json()); //use json option with express
+app.use(cookieParser()); //use http cookie
 
-app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(express.static(path.join(__dirname, 'public'))); //express will use the public folder as public domain
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'html', 'index.html')); // localhost::xxxx/ is index.html
 });
 
 app.get("/loginForAdmin", (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
+    res.sendFile(path.join(__dirname, 'public', 'html', 'login.html')); // localhost::xxxx/loginForAdmin takes you to login.admin
 });
 
-app.use('/jsonData', express.static(path.join(__dirname, 'jsonData')));
+app.use('/jsonData', express.static(path.join(__dirname, 'jsonData'))); // Possible vaulnerabily may need fixing, makes /jsonData static public domain
 
+
+//function to generate passowrd hash
 
 //function to see the hash
 // async function generateHash() {
@@ -68,6 +73,8 @@ app.use('/jsonData', express.static(path.join(__dirname, 'jsonData')));
 // }
 // generateHash();
 
+
+//verifies that user has a token (AKA is logged in)
 const verifyToken = (req, res, next) => {
     const token = req.cookies.token; 
 
@@ -85,7 +92,8 @@ const verifyToken = (req, res, next) => {
 };
 
 
-app.post("/sendData",  async (req, res) => { //TODO: add verifyToken
+//request to send data to the database, only executable through admin screen after uploading a new scedule 
+app.post("/sendData", verifyToken,  async (req, res) => { 
     try
     {
         const springPath = path.join(__dirname, 'jsonData', 'spring_schedule.json');
@@ -96,12 +104,12 @@ app.post("/sendData",  async (req, res) => { //TODO: add verifyToken
         const winterData = JSON.parse(fs.readFileSync(winterPath, 'utf8'));
 
         // 3. Combine them into one big array
-        const combinedData = [...springData, ...winterData];
+        const combinedData = [...springData, ...winterData]; //merges springData and winterData through their json files
 
-        await Calendar.deleteMany({});
+        await Calendar.deleteMany({}); //deletes previous database
 
         
-        const savedSubjects = await Calendar.insertMany(combinedData);
+        const savedSubjects = await Calendar.insertMany(combinedData); //inserts into database the combined data
 
         res.status(201).json({
             message: "Database updated from local JSON files",
@@ -115,14 +123,16 @@ app.post("/sendData",  async (req, res) => { //TODO: add verifyToken
     }
 });
 
+
+//used in calendar.js and admin.js to get all the title names of courses based on the given semester
 app.post("/getSemester", async (req, res) => {
     try
     {
-        const {semester} = req.body;
+        const {semester} = req.body; //req = semester (e.g 1, 2, 6)
 
-        const titles = await Calendar.find({ semester: semester }).select('title');
+        const titles = await Calendar.find({ semester: semester }).select('title'); //finds all titles
 
-        res.status(200).json({titles});
+        res.status(200).json({titles}); //res = json of titles
     }
     catch(err)
     {
@@ -130,12 +140,14 @@ app.post("/getSemester", async (req, res) => {
     }
 
 })
+
+//used in calendar.js and admin.js to get all the data of a spesific course/class 
 app.post("/getClass", async (req, res) => {
     try {
-        const { title } = req.body;
-        const scheduleData = await Calendar.findOne({ title: title });
+        const { title } = req.body; //req = title of course
+        const scheduleData = await Calendar.findOne({ title: title }); //finds an entry with the same title
 
-        const mappedSchedules = scheduleData.daysOfWeek.map((day, index) => {
+        const mappedSchedules = scheduleData.daysOfWeek.map((day, index) => { //maps data to mappedSchedules
             return {
                 title: scheduleData.title,
                 day: day,
@@ -147,35 +159,35 @@ app.post("/getClass", async (req, res) => {
             };
         });
 
-        res.status(200).json({ schedules: mappedSchedules });
+        res.status(200).json({ schedules: mappedSchedules }); //responds with all data of course
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 });
 
-
+//request used in login.js to 
 app.post("/login", async (req, res) => {
     try {
-        const { username: incomingUsername, password } = req.body;
+        const { username: incomingUsername, password } = req.body; //req = usermana and password from user
 
-        if (incomingUsername !== username) {
+        if (incomingUsername !== username) {  //validates username with hardcoded username
             return res.status(400).json({ message: "Username not found!" });
         }
         
-        const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
+        const isPasswordCorrect = await bcrypt.compare(password, hashedPassword); //bcrypts compares the hash of the password with the hardcoded hash
 
         if (!isPasswordCorrect) {
             return res.status(400).json({ message: "Wrong password!" });
         }
 
 
-        const token = jwt.sign(
+        const token = jwt.sign( //creates a token that expires in 1 hour (for security)
             { userId: "static_admin_id", username: username },
             'mfmfx123',
             { expiresIn: '1h' }
         );
 
-        res.cookie('token', token, {
+        res.cookie('token', token, {    //saves token in http only cookie so token doesn't get stored in local history and storage (better for security)
             httpOnly: true,     
             secure: false,      
             maxAge: 3600000     
@@ -190,14 +202,13 @@ app.post("/login", async (req, res) => {
     }
 });
 
+//Calls multer with upload.single() to get info to upload the file
 app.post('/upload', verifyToken, upload.single('uploadedFile'), (req, res) => {
+
+    //req and res used for messages to user, no saving is done here
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
-
-    // let ext = req.file.split('.').pop()
-
-    // req.file.filename = req.file.id + '.' + ext;
     
     console.log("Αρχείο αποθηκεύτηκε στο: " + req.file.path);
     res.json({ 
@@ -207,7 +218,9 @@ app.post('/upload', verifyToken, upload.single('uploadedFile'), (req, res) => {
 });
 
 
-app.post(`/run_schedule_extractor`, (req, res) =>{   //TODO: add verifyToken
+
+//request used in admin.js to run extractor afte uploading a schedule
+app.post(`/run_schedule_extractor`, verifyToken, (req, res) =>{   
     exec('node schedule_extractor.js', (error, stdout, stderr) => {
         if (error) {
             console.error(`Error: ${error.message}`);
@@ -218,7 +231,8 @@ app.post(`/run_schedule_extractor`, (req, res) =>{   //TODO: add verifyToken
     });
 });
 
-app.post(`/run_acCal_extractor`, (req, res) =>{   //TODO: add verifyToken
+//request used in admin.js to run extractor afte uploading an academic calendari
+app.post(`/run_acCal_extractor`, verifyToken, (req, res) =>{   
     exec('node acCal_extractor.js', (error, stdout, stderr) => {
         if (error) {
             console.error(`Error: ${error.message}`);
@@ -230,22 +244,20 @@ app.post(`/run_acCal_extractor`, (req, res) =>{   //TODO: add verifyToken
 });
 
 
-
+//admin.html made private using verifyToken only accesable after login in
 app.get("/admin", verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'private', 'admin.html'));
 })
 
+//admin.js made private using verifyToken only accesable after login in
+app.get("/secure-admin-script.js", verifyToken, (req, res) => {
+    res.sendFile(path.join(__dirname, 'private', 'admin.js'));
+});
 
+
+//eniciates app listening on port 8000
 const PORT = 8000;
 app.listen(PORT, () => {
     console.log(`Server live at http://localhost:${PORT}`);
 });
 
-
-// app.post("/getCourses", async(req, res) => {
-//     const { semester } = req.body;
-
-//     const courseNames = await Calendar.find({ semester: semester }).select('title');
-
-//     res.json(courseNames);
-// });

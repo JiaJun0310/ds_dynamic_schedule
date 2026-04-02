@@ -5,27 +5,27 @@ document.querySelectorAll(".fileBox").forEach((box) => {
     const overlay = document.getElementById("loadingOverlay");
 
     button.onclick = async () => {
-        // 1. Basic check: is a file selected?
+        //Basic check: is a file selected?
         if (input.files.length === 0) {
             alert("Παρακαλώ επιλέξτε ένα αρχείο!");
             return;
         }
 
-        // 2. CREATE the formData (This was the missing part!)
+        //CREATE the formData 
         const formData = new FormData();
         const ext = input.files[0].name.split(".").pop();
-        const newName = id + "." + ext;
+        const newName = id + "." + ext; //Creates name for file (e.g. acCal.pdf)
         const finalFile = new File([input.files[0]], newName, {
             type: input.files[0].type,
         });
 
-        formData.append("uploadedFile", finalFile);
+        formData.append("uploadedFile", finalFile); //adds uploaded file into form
 
-        try {
+        try { //start the uploading and pipeline process
             // Show the loading screen
             overlay.style.display = "flex";
 
-            // Upload the file
+            // Upload the file with API
             const response = await fetch("/upload", {
                 method: "POST",
                 body: formData,
@@ -33,33 +33,32 @@ document.querySelectorAll(".fileBox").forEach((box) => {
 
             const result = await response.json();
 
-            if (response.ok) {
-                input.value = "";
+            if (response.ok) { //if file was uploaded correctly 
+                input.value = ""; //reset the value
 
-                // console.log(id);
 
-                // If it's a schedule, trigger the extractor
+                // If it's a schedule, trigger the schedule_extractor.js
                 if (id === "schedule") {
-                    const extractResponse = await fetch(
+                    const extractResponse = await fetch( //API to run schedule_extractor.js
                         "/run_schedule_extractor",
                         {
                             method: "POST",
                         },
                     );
-                    const extractData = await extractResponse.text();
+                    const extractData = await extractResponse.text(); //the response in text of the API
 
-                    const syncResponse = await fetch("/sendData", {
+                    const syncResponse = await fetch("/sendData", { //After creating the .json in jsonData imediatly send it to the database with /sendData
                         method: "POST",
                     });
                     const syncResult = await syncResponse.json();
 
-                    alert(
+                    alert( //If everything goes correct (which it will because it's an amazing pipeline) this alert will apear 
                         "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
                             extractData +
                             "\n2. Database: " +
                             (syncResult.message || "Updated"),
                     );
-                } else if (id === "acCal") {
+                } else if (id === "acCal") { //If the document uploaded was in the accademic calendar field 
                     const extractResponse = await fetch(
                         "/run_acCal_extractor",
                         {
@@ -67,18 +66,18 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                         },
                     );
                     const extractData = await extractResponse.text();
-                    alert("Ολοκληρώθηκε: " + extractData);
+                    alert("Ολοκληρώθηκε: " + extractData); //Extraction complite and file saved as academic_calendar.json
                 } else {
                     alert("Το αρχείο ανέβηκε!");
                 }
             } else {
-                alert("Σφάλμα: " + result.message);
+                alert("Σφάλμα: " + result.message); //Something went wrong when uploading file
             }
-        } catch (error) {
+        } catch (error) { //exeption error, could be exprided Token TODO: Alert user that token may be expired.
             console.error("Error:", error);
             alert("Παρουσιάστηκε σφάλμα.");
         } finally {
-            // Hide the loading screen
+            //After everything executes hide the loading screen
             overlay.style.display = "none";
         }
     };
@@ -89,6 +88,9 @@ document.querySelectorAll(".fileBox").forEach((box) => {
 //     editPage.style.display = "none";
 //     adminPage.style.display = "flex";
 // };
+
+
+//CHEN VALE COMMENTS EDW
 
 const editButton = document.getElementById("editButton");
 const adminPage = document.querySelector(".adminWrapper");
