@@ -33,14 +33,16 @@
                     <p><strong>Καθηγητής:</strong> <span id="popProfessor"></span></p>
                     <p><strong>Αίθουσα:</strong> <span id="popHall"></span></p>
                     <p><strong>Ώρα:</strong> <span id="popTime"></span></p>
-                    <div style = "display: flex;">
+                    <div style="display: flex;">
                         <button onclick="document.getElementById('eventPopup').close()"
                             style="font: sans-serif; cursor: pointer; background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px;">Κλείσιμο</button>
 
-                        <button id="colorBtn"
-                            style="background: none;outline: none; box-shadow: none; border:none; cursor: pointer; display:flex">
+                        <button onclick="document.getElementById('eventPopup').close()" id="colorBtn" style="background: none; border: none; cursor: pointer; 
+                   display: flex; align-items: center; justify-content: center; 
+                   width: 35px; height: 35px; min-width: 35px; min-height: 35px; 
+                   flex-shrink: 0; padding: 0;">
                             <img src="../images/color.svg" alt="icon"
-                                style="width: 20px; height: 20px; vertical-align: middle; ">
+                                style="width: 22px; height: 22px; display: block; pointer-events: none;">
                         </button>
                         <input type="color" id="hiddenPicker" style="display: none;">
                     </div>

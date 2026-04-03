@@ -107,6 +107,7 @@ main {
 .course p {
     flex: 1;
     margin: 0;
+    justify-content: space-between;
     text-align: left;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -114,19 +115,55 @@ main {
 
 /* Course checkbox */
 .checkbox {
-    flex: 0 0 20px;
-    margin: 0;
-    cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #2f385f; 
+  background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  outline: none;
+  border-radius: 2px; 
 }
 
-/* Color picker button */
-.colorBtn {
-    flex: 0 0 30px;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    margin-left: 2px;
+.checkbox::before {
+  content: "";
+  width: 10px; 
+  height: 10px;
+  background-color: #b73c4f; 
+  opacity: 0;
+  transform: scale(0.5); 
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+.checkbox:checked {
+  border-color: #b73c4f;
+}
+
+.checkbox:checked::before {
+  opacity: 1;
+  transform: scale(1); 
+}
+
+.checkbox:hover {
+  border-color: #a95b71;
+
+}
+
+.checkbox:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.checkbox:active {
+  transform: scale(0.95);
+}
+
 
 /* Visible course (animation state) */
 .course.visible {

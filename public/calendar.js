@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             };       
 
 
-            
+
         },
         eventDidMount: function (info) {
             if (info.event.display === 'background') return;
@@ -348,7 +348,7 @@ buttons.forEach(async (button) => {
                                 delete eventTracker[targetTitle];
                             }
 
-                            colorBtn.style.display = "none";
+                          
 
                             let saved = getSavedSchedule();
                             saved = saved.filter(c => c.title !== targetTitle);
