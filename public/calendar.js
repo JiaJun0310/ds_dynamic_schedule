@@ -357,7 +357,7 @@ buttons.forEach(async (button) => {
                     } catch (error) {
                         console.error("Error updating schedule:", error);
                     } finally {
-                        setTimeout(() => this.disabled = false, 1000);
+                        setTimeout(() => this.disabled = false, 250);
                     }
                 };
            
