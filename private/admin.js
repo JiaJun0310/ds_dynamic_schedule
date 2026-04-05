@@ -156,6 +156,7 @@ semesterSelect.addEventListener("change", async () => {
 
 courseSelect.addEventListener("change", async () => {
 
+    //getting the value of the selected course
     const course = courseSelect.value;
 
     try {
@@ -170,20 +171,20 @@ courseSelect.addEventListener("change", async () => {
         }
 
         const data = await response.json();
-        const schedule = data.schedules[0];
 
         const editWrapper = document.getElementById("editWrapper");
 
+        //clears the previous data
         editWrapper.innerHTML = "";
 
-        days = data.schedules.map(course => course.day);
-
+        //loop for each lecture of the course
         data.schedules.forEach((lecture, i) => {
 
             const div = document.createElement("div");
         
             div.classList.add("editCourse");
         
+            //create form dynamically for each lecture
             div.innerHTML = `
                 <form>
                     <h2>Επεξεργασία Μαθήματος</h2>
@@ -222,10 +223,10 @@ courseSelect.addEventListener("change", async () => {
 
         });
 
+        //create save button
         const button = document.createElement('button');
         button.textContent = 'Αποθήκευση';
         button.id = "saveButton";   
-        // button.type = "submit"; 
         editWrapper.appendChild(button);
 
     } catch (error) {
