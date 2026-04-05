@@ -266,3 +266,39 @@ app.listen(PORT, () => {
     console.log(`Server live at http://localhost:${PORT}`);
 });
 
+
+
+//gets the new data of the course and updates the database
+app.post("/updateCourse", async (req, res) => {
+    try {
+        const {
+            title,
+            daysOfWeek,
+            startTime,
+            endTime,
+            lectureHall,
+            semester,
+            professor
+        } = req.body;
+
+        await Calendar.updateOne(
+            { title },
+            {
+                $set: {
+                    daysOfWeek,
+                    startTime,
+                    endTime,
+                    lectureHall,
+                    semester,
+                    professor
+                }
+            }
+        );
+
+        res.json({ message: "Course updated successfully!" });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
+    }
+});
