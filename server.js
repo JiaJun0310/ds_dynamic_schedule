@@ -267,8 +267,7 @@ app.listen(PORT, () => {
 });
 
 
-
-//gets the new data of the course and updates the database
+//gets the new data of the course and updates the json file
 app.post("/updateCourse", async (req, res) => {
     try {
         const {
@@ -281,19 +280,30 @@ app.post("/updateCourse", async (req, res) => {
             professor
         } = req.body;
 
-        await Calendar.updateOne(
-            { title },
-            {
-                $set: {
-                    daysOfWeek,
-                    startTime,
-                    endTime,
-                    lectureHall,
-                    semester,
-                    professor
-                }
-            }
-        );
+        const mergedPath = path.join(__dirname, 'jsonData', 'merged_schedule.json');
+
+        const data = JSON.parse(fs.readFileSync(mergedPath, 'utf8'));
+
+        //find the specific course 
+        const courseIndex = data.findIndex(course => course.title === title);
+
+        if (courseIndex === -1) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        //replace course data 
+        data[courseIndex] = {
+            ...data[courseIndex], 
+            title,
+            daysOfWeek,
+            startTime,
+            endTime,
+            lectureHall,
+            semester,
+            professor
+        };
+
+        fs.writeFileSync(mergedPath, JSON.stringify(data, null, 2), 'utf8');
 
         res.json({ message: "Course updated successfully!" });
 

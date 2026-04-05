@@ -94,11 +94,13 @@ const editButton = document.getElementById("editButton");
 const adminPage = document.querySelector(".adminWrapper");
 const selectWrapper = document.getElementById("selectWrapper")
 const editWrapper = document.getElementById("editWrapper")
+const editBox = document.querySelector(".editBox");
 
 //When the edit button is clicked it over writes the admin page and loads the edit page
 editButton.onclick = () => {
 
     adminPage.style.display = "none";
+    editBox.style.display = "none";
     
     selectWrapper.style.display = "flex";
     editWrapper.style.display = "flex"; 
@@ -152,8 +154,7 @@ semesterSelect.addEventListener("change", async () => {
     }
 });
 
-
-
+ 
 courseSelect.addEventListener("change", async () => {
 
     //getting the value of the selected course
@@ -172,61 +173,69 @@ courseSelect.addEventListener("change", async () => {
 
         const data = await response.json();
 
-        const editWrapper = document.getElementById("editWrapper");
-
-        //clears the previous data
+        //clear the previous content 
         editWrapper.innerHTML = "";
 
-        //loop for each lecture of the course
+        const generalDiv = document.createElement("div");
+        generalDiv.classList.add("editCourse");
+
+        //generate the general info dynamically
+        generalDiv.innerHTML = `
+            <form id="generalForm">
+                <h2>Γενικά Στοιχεία</h2>
+
+                <label class="title">Όνομα Μαθήματος:
+                    <input type="text" name="title" value="${data.schedules[0].title}" readonly>
+                </label><br>
+
+                <label class="Semesters">Εξάμηνο:
+                    <input type="text" name="semester" value="${semesterSelect.value[semesterSelect.value.length - 1]}">
+                </label><br>
+
+                <label class="professor">Καθηγητές:
+                    <input type="text" name="professor" value="${data.schedules[0].professor}">
+                </label><br>
+            </form>
+        `;
+
+        editWrapper.appendChild(generalDiv);
+
+        //generate the lecture info dynamically
         data.schedules.forEach((lecture, i) => {
 
             const div = document.createElement("div");
-        
             div.classList.add("editCourse");
-        
-            //create form dynamically for each lecture
+
             div.innerHTML = `
-                <form>
-                    <h2>Επεξεργασία Μαθήματος</h2>
-            
-                    <label class="title">Όνομα Μαθήματος:
-                        <input type="text" name="title" value="${lecture.title}" readonly>
-                    </label><br>
-            
+                <form class="lectureForm">
+                    <h3>Διάλεξη ${i + 1}</h3>
+
                     <label class="lectureHall">Αμφιθέατρο:
                         <input type="text" name="lectureHall" value="${lecture.lectureHall}">
                     </label><br>
-            
+
                     <label class="daysOfWeek">Ημέρα:
                         <input type="text" name="day" value="${lecture.day}">
                     </label><br>
-            
-                    <label class="Semesters">Εξάμηνο:
-                        <input type="text" name="semester" value="${semesterSelect.value[semesterSelect.value.length - 1]}">
-                    </label><br>
-            
+
                     <label class="startTime">Ώρα Έναρξης:
                         <input type="time" name="start" value="${lecture.start ? lecture.start.slice(0,5) : ""}">
                     </label><br>
-            
+
                     <label class="endTime">Ώρα Λήξης:
                         <input type="time" name="end" value="${lecture.end ? lecture.end.slice(0,5) : ""}">
                     </label><br>
-            
-                    <label class="professor">Καθηγητές:
-                        <input type="text" name="professor" value="${lecture.professor}">
-                    </label><br>
                 </form>
             `;
-        
-            editWrapper.appendChild(div);
 
+            editWrapper.appendChild(div);
         });
 
-        //create save button
-        const button = document.createElement('button');
-        button.textContent = 'Αποθήκευση';
-        button.id = "saveButton";   
+        //create the save button dynamically
+        const button = document.createElement("button");
+        button.textContent = "Αποθήκευση";
+        button.id = "saveButton";
+
         editWrapper.appendChild(button);
 
     } catch (error) {
@@ -238,32 +247,29 @@ courseSelect.addEventListener("change", async () => {
 
 editWrapper.addEventListener("click", async (e) => {
 
-    //checks if the save button was pressed
+    //Only run if save button was pressed
     if (e.target.id !== "saveButton") return;
 
-    const forms = editWrapper.querySelectorAll(".editCourse form");
+    const generalForm = document.getElementById("generalForm");
+    const lectureForms = editWrapper.querySelectorAll(".lectureForm");
 
+    const generalData = new FormData(generalForm);
+
+    //final object sent to backend
     const updatedCourse = {
-        title: "",
+        title: generalData.get("title"),
+        semester: parseInt(generalData.get("semester")),
+        professor: generalData.get("professor"),
         daysOfWeek: [],
         startTime: [],
         endTime: [],
-        lectureHall: [],
-        semester: "",
-        professor: ""
+        lectureHall: []
     };
 
-    forms.forEach((form, index) => {
+    //collect lecture data into arrays
+    lectureForms.forEach(form => {
         const formData = new FormData(form);
 
-        //set the values that are not array
-        if (index === 0) {
-            updatedCourse.title = formData.get("title");
-            updatedCourse.semester = formData.get("semester");
-            updatedCourse.professor = formData.get("professor");
-        }
-
-        //push values into arrays
         updatedCourse.daysOfWeek.push(parseInt(formData.get("day")));
         updatedCourse.startTime.push(formData.get("start"));
         updatedCourse.endTime.push(formData.get("end"));
@@ -271,10 +277,10 @@ editWrapper.addEventListener("click", async (e) => {
     });
 
     try {
-        const response = await fetch("/updateCourse", { 
+        const response = await fetch("/updateCourse", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedCourse), 
+            body: JSON.stringify(updatedCourse),
         });
 
         if (!response.ok) throw new Error("Failed");
@@ -287,4 +293,3 @@ editWrapper.addEventListener("click", async (e) => {
         alert("Failed to update course.");
     }
 });
-

@@ -39,11 +39,12 @@ body{
     flex-direction: column;   
     justify-content: flex-start; 
     align-items: center;    
-    min-height: 80vh;       
+    /* min-height: 80vh;        */
     width: 100%;
     padding: 20px;
     background-size: cover;
     background-position: center;
+    height: auto;
 }
 
 /* file container */
@@ -54,8 +55,8 @@ body{
     flex-wrap: wrap; 
     justify-content: center;
     width: 100%;
-    height: 250px;
-    margin: 150px;
+    /* height: 250px; */
+    margin: 50px;
 }
 
 /* file box */
@@ -103,6 +104,15 @@ body{
     background-color: #9f2b3d;
 }
 
+.editBox{
+
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+    align-items: center;
+    margin-bottom: 100px;
+}
+
 /* edit button */
 #editButton {
     padding: 10px 20px;
@@ -111,6 +121,7 @@ body{
     color: #f0f0f0;
     box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     border-radius: 10px;   
+    
 }
 
 #selectWrapper,
@@ -152,6 +163,9 @@ body{
     transition: 0.2s ease;
 }
 
+#courses{
+    max-width: 700px;
+}
 
 #editWrapper {          
     justify-content: center; 
@@ -187,7 +201,6 @@ body{
     width: 100%;            
 }
 
-/* Make inputs take full width of label */
 .editCourse input {
     width: 100%;
     padding: 8px;
@@ -200,33 +213,33 @@ body{
 }
 
 .lectureHall {
-    grid-column: 3 / 5; 
+    grid-column: 1 / 3; 
     grid-row: 2;
 }
 
 .daysOfWeek {
-    grid-column: 1 / 3;
-    grid-row: 3;
+    grid-column: 3 / 5;
+    grid-row: 2;
 }
 
 .Semesters {
-    grid-column: 3 / 5;
+    grid-column: 1 / 3;
     grid-row: 3;
 }
 
 .startTime {
     grid-column: 1 / 3;
-    grid-row: 4;
+    grid-row: 3;
 }
 
 .endTime {
     grid-column: 3 / 5;
-    grid-row: 4;
+    grid-row: 3;
 }
 
 .professor {
     grid-column: 1 / 3;
-    grid-row: 5;
+    grid-row: 4;
 }
 
 /* Submit button */
