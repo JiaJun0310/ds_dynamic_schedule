@@ -316,3 +316,18 @@ input{
 #editWrapper button:hover {
     background-color: #9f2b3d;
 }
+
+/* back button */
+#backButton {
+
+    /* need to make it so that the button appears at the top left of the page, below the header */
+    /* margin-left: 5px;  */
+
+    padding: 6px 25px;
+    background-color: #2f385f;
+    color: #fff;
+
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}

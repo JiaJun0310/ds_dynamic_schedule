@@ -83,18 +83,15 @@ document.querySelectorAll(".fileBox").forEach((box) => {
     };
 });
 
-
-// backBtn.onclick = () => {
-//     editPage.style.display = "none";
-//     adminPage.style.display = "flex";
-// };
-
-
 const editButton = document.getElementById("editButton");
 const adminPage = document.querySelector(".adminWrapper");
 const selectWrapper = document.getElementById("selectWrapper")
 const editWrapper = document.getElementById("editWrapper")
 const editBox = document.querySelector(".editBox");
+const backButton = document.getElementById("backButton")
+const courses = document.getElementById("courses")
+const semester = document.getElementById("semester")
+
 
 //When the edit button is clicked it over writes the admin page and loads the edit page
 editButton.onclick = () => {
@@ -104,7 +101,24 @@ editButton.onclick = () => {
     
     selectWrapper.style.display = "flex";
     editWrapper.style.display = "flex"; 
+
 };
+
+backButton.onclick = () => {
+
+    editWrapper.innerHTML = "";
+
+    //need to make it so that when the back button is clicked to clear the drop boxes value
+    // courses.innerHTML = "";
+    // semester.innerHTML = "";
+
+
+    adminPage.style.display = "flex";
+    editBox.style.display = "flex";
+    
+    selectWrapper.style.display = "none";
+    editWrapper.style.display = "none"; 
+}
 
 
 const semesterSelect = document.getElementById("semester");
