@@ -1,39 +1,209 @@
-// Global variables
+//GLOBAL VARIABLES
 let calendar;
 let academicData = null;
-let eventTracker = {}; // This will store exact references to your events
+let eventTracker = {}; 
 
-// Utility to get current schedule from local storage
-function getSavedSchedule() {
-    return JSON.parse(localStorage.getItem("userSchedule")) || [];
-}
+//DOM ELEMENTS 
+const popup = document.getElementById("eventPopup");  //pop up for when you click on an event
+const titleEl = document.getElementById("popTitle"); 
+const profEl = document.getElementById("popProfessor");
+const hallEl = document.getElementById("popHall");
+const timeEl = document.getElementById("popTime"); //until here it's pop up stuff
+const colorBtn = document.getElementById("colorBtn"); //the picker
+const hiddenPicker = document.getElementById("hiddenPicker");
+const clearSelectionBtn = document.getElementById("clearSelection");
+const toggleScreenBtn = document.getElementById("toggleScreen");
 
-// Utility to save to local storage
-function saveSchedule(scheduleArray) {
-    localStorage.setItem("userSchedule", JSON.stringify(scheduleArray));
-}
+//UTILITIES
+const getSavedSchedule = () => JSON.parse(localStorage.getItem("userSchedule")) || [];  //returns everything saved on local storage or null if it's empty
+const saveSchedule = (scheduleArray) => localStorage.setItem("userSchedule", JSON.stringify(scheduleArray));
 
-// Helper to get dates based on semester
-function getSemesterDates(semesterNum) {
+const formatJSONDate = (dateStr) => {  //this takes a date from 5/9/2023 to 2023-09-05
+    const [day, month, year] = dateStr.trim().split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+};
+
+const getSemesterDates = (semesterNum) => {  //finds start and end of semster based on if semester is odd or even
     if (!academicData || !semesterNum) return null;
-
-    const formatJSONDate = (dateStr) => {
-        const [day, month, year] = dateStr.trim().split('/');
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    };
-
     const isOdd = parseInt(semesterNum) % 2 !== 0;
-    const semData = isOdd ? academicData.semesters[0] : academicData.semesters[1];
+    const semData = academicData.semesters[isOdd ? 0 : 1];
+    return { start: formatJSONDate(semData.classes_start), end: formatJSONDate(semData.classes_end) };
+};
 
-    return {
-        start: formatJSONDate(semData.classes_start),
-        end: formatJSONDate(semData.classes_end)
-    };
+//API FETCHERS
+async function fetchAcademicData() { //gets data from academic_calendar.json
+    try {
+        const response = await fetch("/jsonData/academic_calendar.json");
+        if (!response.ok) throw new Error("File not found");
+        academicData = await response.json();
+    } catch (err) {
+        console.error("Error loading local JSON:", err);
+    }
 }
 
-// Initialize calendar when the page loads
+//get's data of class based on title
+async function fetchCourseData(title) {
+    const res = await fetch("/getClass", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title }),
+    });
+    return res.ok ? res.json() : { schedules: [] };
+}
+
+//get's exam data
+async function fetchExamData(title) {
+    try {
+        const res = await fetch("/getExam", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title })
+        });
+        if (res.ok) {
+            const data = await res.json();
+            return data.exam;
+        }
+    } catch (e) {
+        console.warn(`No exam found for: ${title}`);
+    }
+    return null;
+}
+
+//EVENT HANDLERS
+function handleEventClick(info) {  //handles clicking on an event and dialog apearing
+    popup.showModal();
+    const event = info.event;
+    const props = event.extendedProps;
+    const start = event.start.toLocaleTimeString("el-GR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+    const end = event.end.toLocaleTimeString("el-GR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+
+    titleEl.innerText = event.title;
+    profEl.innerText = props.professor || "N/A";
+    if (hallEl) hallEl.innerText = props.lectureHall || "N/A";
+    timeEl.innerText = `${start} - ${end}`;
+
+    const targetSubject = props.subjectTitle || event.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();    //something to do with exams and dialog (I dont think it does anything)
+
+    hiddenPicker.oninput = () => updateCourseColor(targetSubject, hiddenPicker.value);
+}
+
+function updateCourseColor(subjectTitle, newColor) {    //updates courses color after clicking with color picker
+    let currentSchedule = getSavedSchedule();
+    let courseIndex = currentSchedule.findIndex(c => c.title === subjectTitle);
+    if (courseIndex !== -1) {
+        currentSchedule[courseIndex].color = newColor;
+        saveSchedule(currentSchedule);
+    }
+
+    calendar.getEvents().forEach(e => {
+        const eventSubject = e.extendedProps.subjectTitle || e.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();   //I think this is supposed to change the colors of courses as well as the exam course but 
+        if (eventSubject === subjectTitle) {                                                            // I dont think it works corectly because it uses forEach .getEvent that only takes events currently on screen
+            e.setProp("backgroundColor", newColor);
+            e.setProp("borderColor", newColor);
+        }                                                                                                
+        
+    });
+}
+
+async function handleCourseToggle(checkbox, targetTitle, sem) {     //new fucntion to clear up callback hell, just does the toggling for the checkboxes
+    checkbox.disabled = true;
+    try {
+        if (checkbox.checked) {
+            await addCourseToCalendar(targetTitle, sem);
+        } else {
+            removeCourseFromCalendar(targetTitle);
+        }
+    } catch (error) {
+        console.error("Error updating schedule:", error);
+    } finally {
+        setTimeout(() => checkbox.disabled = false, 250);
+    }
+}
+
+async function addCourseToCalendar(targetTitle, sem) {  //new function, again, does the whole adding stuff to the calendar just made cleaner with a function
+    const [courseData, examData] = await Promise.all([  //gets course data and exam data from functions created earlier
+        fetchCourseData(targetTitle),
+        fetchExamData(targetTitle)
+    ]);
+
+    const dates = getSemesterDates(sem);
+    if (!eventTracker[targetTitle]) eventTracker[targetTitle] = [];
+
+    let dbColor = courseData.schedules.length > 0 ? courseData.schedules[0].color : "#3788d8";  //color logic if user has picked a color, use that else use db color, if no db color use blue
+    let saved = getSavedSchedule();
+    const isAlreadySaved = saved.some(c => c.title === targetTitle);
+    const eventColor = isAlreadySaved ? saved.find(c => c.title === targetTitle).color : dbColor;
+
+    if (!isAlreadySaved) { //if not aleady saved, saves it to local storage with the necessary data  
+        hiddenPicker.value = eventColor;
+        saved.push({ title: targetTitle, color: eventColor, semester: sem });
+        saveSchedule(saved);
+    }
+
+    courseData.schedules.forEach((item) => {    //add's all courses (per index) to the calendar
+        let addedEvent = calendar.addEvent({
+            title: item.title,
+            daysOfWeek: item.daysOfWeek || [item.day],
+            startTime: item.startTime || item.start,
+            endTime: item.endTime || item.end,
+            startRecur: dates ? dates.start : null,
+            endRecur: dates ? dates.end : null,
+            backgroundColor: eventColor,
+            borderColor: eventColor,
+            extendedProps: {    //extended props just saves some extra data to be used later, mostly at the download calendar button
+                professor: item.professor,
+                lectureHall: item.lectureHall,
+                subjectTitle: targetTitle,
+                semester: sem,
+                rawStart: item.startTime || item.start,
+                rawEnd: item.endTime || item.end
+            },
+        });
+        eventTracker[targetTitle].push(addedEvent); //push event to eventTracker
+    });
+
+    if (examData) addExamToCalendar(examData, targetTitle, eventColor); //if we have exam data for the course, call the fanction addExamToCalendar
+}
+
+function addExamToCalendar(examData, targetTitle, color) {  //adds exam to calendar
+    const examTitle = "ΕΞΕΤΑΣΗ: " + examData.title;
+    let existingExamEvent = calendar.getEvents().find(e => e.title === examTitle);
+
+    if (!existingExamEvent) {   //if it doesn't already exist in the calendar, push it
+        let addedExam = calendar.addEvent({
+            title: examTitle,
+            start: examData.start,
+            end: examData.end,
+            color: color,
+            extendedProps: {
+                subjectTitle: targetTitle,
+                lectureHall: examData.location,
+                description: examData.description,
+                isExam: true
+            }
+        });
+        eventTracker[targetTitle].push(addedExam);  //add it to event tracker
+    } else {
+        existingExamEvent.setProp("backgroundColor", color);
+        existingExamEvent.setProp("borderColor", color);
+        if (!eventTracker[targetTitle].includes(existingExamEvent)) {
+            eventTracker[targetTitle].push(existingExamEvent);
+        }
+    }
+}
+
+function removeCourseFromCalendar(targetTitle) {        //removes and event from the calendar
+    if (eventTracker[targetTitle]) {
+        eventTracker[targetTitle].forEach(eventObj => eventObj.remove());
+        delete eventTracker[targetTitle];
+    }
+    let saved = getSavedSchedule();
+    saveSchedule(saved.filter(c => c.title !== targetTitle));
+}
+
+//INITIALIZATION of calendar
 document.addEventListener("DOMContentLoaded", async function () {
-    var calendarEl = document.getElementById("calendar");
+    const calendarEl = document.getElementById("calendar");
 
     calendar = new FullCalendar.Calendar(calendarEl, {
         timeZone: "Europe/Athens",
@@ -47,581 +217,250 @@ document.addEventListener("DOMContentLoaded", async function () {
         height: "auto",
         buttonText: { today: "Σήμερα" },
         customButtons: {
-            downloadBtn: {
-                text: "Λήψη (ICS)",
-                click: function () { downloadCalendar(); },
-            },
-            viewBtn: {
-                text: "Εξάμηνα",
-                click: function () { hideList(); },
-            },
+            downloadBtn: { text: "Λήψη (ICS)", click: downloadCalendar },
+            viewBtn: { text: "Εξάμηνα", click: hideList },
         },
-        headerToolbar: {
-            left: "",
-            center: "title",
-            right: "downloadBtn today prev,next viewBtn",
-        },
-        eventClick: function (info) {
-            const popup = document.getElementById("eventPopup");
-
-            popup.showModal();
-
-            const title = document.getElementById("popTitle");
-            const prof = document.getElementById("popProfessor");
-            const hall = document.getElementById("popHall");
-            const time = document.getElementById("popTime");
-            const colorBtn = document.getElementById("colorBtn");
-            const hiddenPicker = document.getElementById("hiddenPicker")
-
-            const start = info.event.start.toLocaleTimeString("el-GR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
-            const end = info.event.end.toLocaleTimeString("el-GR", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
-
-            title.innerText = info.event.title;
-            prof.innerText = info.event.extendedProps.professor || "N/A";
-
-            if (hall) {
-                hall.innerText = info.event.extendedProps.lectureHall || "N/A";
-            }
-
-            time.innerText = `${start} - ${end}`;
-
-            popup.onclick = function (event) {
-                if (event.target === popup) popup.close();
-            };
-
-            hiddenPicker.oninput = function () {
-                const newColor = hiddenPicker.value;
-
-
-                // Using the subject title from the extended props property
-                const targetSubject = info.event.extendedProps.subjectTitle || info.event.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();
-
-                // Updating the local storage with the new color
-                let currentSchedule = getSavedSchedule();
-                let courseIndex = currentSchedule.findIndex(c => c.title === targetSubject);
-                if (courseIndex !== -1) {
-                    currentSchedule[courseIndex].color = newColor;
-                    saveSchedule(currentSchedule);
-                }
-
-                // TODO: Fix exam not changing the color of the actual class bug while the class also changes the exam like wtf ta nevra mou
-                // Get all events from the calendar
-                const allEvents = calendar.getEvents();
-
-                allEvents.forEach(e => {
-                    // Checking if the event belongs to the specific subject
-                    const eventSubject = e.extendedProps.subjectTitle || e.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();
-
-                    if (eventSubject === targetSubject) {
-                        // Changing the event's color
-                        e.setProp("backgroundColor", newColor);
-                        e.setProp("borderColor", newColor);
-                    }
-                });
-
-            };
-            colorBtn.onclick = function () {
-
-                hiddenPicker.click();
-
-            };
-
-
-
-        },
-        eventDidMount: function (info) {
-            if (info.event.display === 'background') return;
-            const allEvents = calendar.getEvents();
-            const occurrenceStart = info.event.start.getTime();
-
-            const isOnHoliday = allEvents.some(holiday => {
-                if (holiday.groupId !== 'holidays') return false;
-                const holidayStart = holiday.start.getTime();
-                const holidayEnd = holiday.end ? holiday.end.getTime() : holidayStart + (24 * 60 * 60 * 1000);
-                return occurrenceStart >= holidayStart && occurrenceStart < holidayEnd;
+        headerToolbar: { left: "", center: "title", right: "downloadBtn today prev,next viewBtn" },
+        eventClick: handleEventClick,
+        eventDidMount: function (info) {        //this here handles holidays
+            if (info.event.display === 'background') return;    //this draws the holidays in the calendar
+            const occurrenceStart = info.event.start.getTime(); 
+            const isOnHoliday = calendar.getEvents().some(h => {        //in this function we check if events lands on a holiday if it does we do not make it apear
+                if (h.groupId !== 'holidays') return false; 
+                const hStart = h.start.getTime();
+                const hEnd = h.end ? h.end.getTime() : hStart + 86400000;
+                return occurrenceStart >= hStart && occurrenceStart < hEnd;
             });
-
             if (isOnHoliday) info.el.style.display = 'none';
         },
     });
 
-    calendar.render();
+    calendar.render(); //Makes calendar visible
+    await fetchAcademicData();
 
-    // Fetch and save JSON globally
-    try {
-        const response = await fetch("/jsonData/academic_calendar.json");
-        if (!response.ok) throw new Error("File not found");
-
-        academicData = await response.json();
-
-        const formatJSONDate = (dateStr) => {
-            const [day, month, year] = dateStr.trim().split('/');
-            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-        };
-
+    // Populate Holidays, this code gives names, dates and data to the holidays
+    if (academicData?.holidays) {
         academicData.holidays.forEach((holiday) => {
-            let eventConfig = { title: holiday.name, allDay: true, display: "background", color: "#a95b71", groupId: 'holidays' };
+            let start = holiday.date, end = null;
             if (holiday.date.includes(" - ")) {
-                const parts = holiday.date.split(" - ");
-                eventConfig.start = formatJSONDate(parts[0]);
-                eventConfig.end = formatJSONDate(parts[1]);
-            } else {
-                eventConfig.start = formatJSONDate(holiday.date);
+                [start, end] = holiday.date.split(" - ");
             }
-            calendar.addEvent(eventConfig);
+            calendar.addEvent({
+                title: holiday.name,
+                allDay: true,
+                display: "background",
+                color: "#a95b71",
+                groupId: 'holidays',
+                start: formatJSONDate(start),
+                end: end ? formatJSONDate(end) : undefined
+            });
         });
-    } catch (err) {
-        console.error("Error loading local JSON:", err);
     }
 
-    // Load saved classes from local storage
+    // Load saved classes
+    //everything saved in local storage get's displayed here
     const savedClasses = getSavedSchedule();
-
-    if (savedClasses.length > 0) {
-        for (const item of savedClasses) {
-            try {
-                const response = await fetch("/getClass", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ title: item.title }),
-                });
-
-                if (!response.ok) throw new Error("Server error");
-                const data = await response.json();
-
-                if (data.schedules) {
-                    const currentSem = item.semester;
-                    const dates = getSemesterDates(currentSem);
-                    eventTracker[item.title] = [];
-
-                    data.schedules.forEach((schedule) => {
-                        let addedEvent = calendar.addEvent({
-                            title: schedule.title,
-                            daysOfWeek: schedule.daysOfWeek || [schedule.day],
-                            startTime: schedule.startTime || schedule.start,
-                            endTime: schedule.endTime || schedule.end,
-                            startRecur: dates ? dates.start : null,
-                            endRecur: dates ? dates.end : null,
-                            backgroundColor: item.color || schedule.color || "#3788d8",
-                            borderColor: item.color || schedule.color || "#3788d8",
-                            extendedProps: {
-                                professor: schedule.professor,
-                                lectureHall: schedule.lectureHall,
-                                subjectTitle: item.title,
-                                semester: currentSem,
-                                //Save the raw times directly from the database
-                                rawStart: schedule.startTime || schedule.start,
-                                rawEnd: schedule.endTime || schedule.end
-                            }
-                        });
-                        eventTracker[item.title].push(addedEvent);
-                    });
-
-
-                    // Attempting to fetch examdata for the specific title
-                    let examData = null;
-                    try {
-                        const examResponse = await fetch("/getExam", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ title: item.title })
-                        });
-
-                        if (examResponse.ok) {
-                            const examJson = await examResponse.json();
-                            examData = examJson.exam;
-                        } else {
-                            console.warn(`No exam found for: ${item.title}`);
-                        }
-                    } catch (e) {
-                        console.warn("No exam for " + item.title);
-                    }
-
-                    // Addind the exam as an event to the calendar if the exam exists in the json
-                    if (examData) {
-
-                        const examTitle = "ΕΞΕΤΑΣΗ: " + examData.title;
-
-                        let existingExamEvent = null;
-                        Object.values(eventTracker).forEach(events => {
-                            const found = events.find(e => e && e.title === examTitle);
-                            if (found) existingExamEvent = found;
-
-                        });
-                        // Adding the exam to the calendar if it is not already there
-                        if (!existingExamEvent) {
-                            let addedExam = calendar.addEvent({
-                                title: examTitle,
-                                start: examData.start,
-                                end: examData.end,
-                                color: item.color,
-                                extendedProps: {
-                                    subjectTitle: item.title,
-                                    lectureHall: examData.location,
-                                    description: examData.description
-                                }
-                            })
-                            eventTracker[item.title].push(addedExam)
-                        } else {
-                            //also saving it to the event tracker
-                            eventTracker[item.title].push(existingExamEvent)
-                        }
-
-                    }
-
-                }
-            } catch (error) {
-                console.error("Error loading saved class:", error);
-            }
-        };
+    for (const item of savedClasses) {
+        await addCourseToCalendar(item.title, item.semester);
+        updateCourseColor(item.title, item.color); // Ensure custom colors persist
     }
-    appearCalendar();
+
+    appearCalendar(); //refresh calendar to show events
     resize();
 });
 
-// Sidebar buttons and clear functionality
-const buttons = document.querySelectorAll(".buttonDiv");
-const clearSelection = document.getElementById("clearSelection");
+//UI EVENT LISTENERS
+popup.onclick = (e) => { if (e.target === popup) popup.close(); };
+colorBtn.onclick = () => hiddenPicker.click();
 
-buttons.forEach(async (button) => {
-    let pressed = false;
+clearSelectionBtn.onclick = () => {         //button that clears all selections 
+    Object.values(eventTracker).forEach(events => events.forEach(e => e.remove()));
+    eventTracker = {};
+    document.querySelectorAll(".checkbox").forEach(cb => cb.checked = false);
+    document.querySelectorAll(".colorBtn").forEach(cp => cp.style.display = "none");
+    localStorage.removeItem("userSchedule");
+};
+
+document.querySelectorAll(".buttonDiv").forEach(async (button) => { //loops through all "buttons" (divs in reality)
+    //We extract all data from all the divs
+    let pressed = false;        
     let cleanText = button.textContent.trim();
     let sem = cleanText[cleanText.length - 1];
-
     let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
-    const response = await fetch("/getSemester", {
+    //here we get all the data for each Semester
+    const res = await fetch("/getSemester", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ semester: sem }),
     });
+    const data = await res.json();  //we save the data here
+    const titlesArray = data.titles.map((course) => course.title); //and the titles in an array
 
-    const data = await response.json();
-    const titlesArray = data.titles.map((course) => course.title);
+    button.onclick = function () { //now we go spesific, not for each button but the the button pressed right now
+        pressed = !pressed; //we change it's status 
+        arrow.src = pressed ? "../images/down_pointer.svg" : "../images/right_pointer.svg"; //flip the arrow next to it
 
-    // Clear all selected courses
-    clearSelection.onclick = function () {
-        Object.keys(eventTracker).forEach(subject => {
-            eventTracker[subject].forEach(eventObj => eventObj.remove());
-        });
-        eventTracker = {};
-
-        document.querySelectorAll(".checkbox").forEach(cb => cb.checked = false);
-        document.querySelectorAll(".colorBtn").forEach(cp => cp.style.display = "none");
-        localStorage.removeItem("userSchedule");
-    };
-
-    button.onclick = async function () {
-        pressed = !pressed;
-        arrow.src = pressed ? "../images/down_pointer.svg" : "../images/right_pointer.svg";
-
-        if (pressed) {
-            for (let i = 0; i < titlesArray.length; i++) {
-                const div = document.createElement("div");
-                const p = document.createElement("p");
-                const checkbox = document.createElement("input");
-
-                SemesterDiv.appendChild(div);
-                div.className = "course";
-
-                p.textContent = titlesArray[i];
-                div.appendChild(p);
-
-                checkbox.type = "checkbox";
-                div.appendChild(checkbox);
-                checkbox.className = "checkbox";
-
-                setTimeout(() => div.classList.add("visible"), i * 50);
-
-                const savedClasses = getSavedSchedule();
-                const isAlreadyInCalendar = savedClasses.some(saved => saved.title === titlesArray[i]);
-
-                if (isAlreadyInCalendar) {
-                    checkbox.checked = true;
-                }
-
-                div.onclick = function (event) {
-                    if (checkbox.disabled || event.target === checkbox) return;
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event("change"));
-                };
-
-                checkbox.onchange = async function () {
-                    this.disabled = true;
-                    const targetTitle = titlesArray[i];
-
-                    try {
-                        if (this.checked) {
-                            const response = await fetch("/getClass", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ title: targetTitle }),
-                            });
-
-
-                            const data = await response.json();
-
-                            // Attempting to fetch examdata for the specific title
-                            let examData = null;
-                            try {
-                                const examResponse = await fetch("/getExam", {
-                                    method: "POST",
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ title: targetTitle })
-                                });
-
-                                if (examResponse.ok) {
-                                    const examJson = await examResponse.json();
-                                    examData = examJson.exam;
-                                } else {
-                                    console.warn(`No exam found for: ${targetTitle}`);
-                                }
-                            } catch (e) {
-                                console.error("Exam fetch failed:", e);
-                            }
-
-                            const dates = getSemesterDates(sem);
-                            eventTracker[targetTitle] = [];
-
-                            let dbColor = data.schedules.length > 0 ? data.schedules[0].color : null;
-                            let saved = getSavedSchedule();
-
-                            if (!saved.some(c => c.title === targetTitle) && dbColor) {
-                                hiddenPicker.value = dbColor;
-                            }
-
-                            data.schedules.forEach((item) => {
-                                let addedEvent = calendar.addEvent({
-                                    title: item.title,
-                                    daysOfWeek: item.daysOfWeek || [item.day],
-                                    startTime: item.startTime || item.start,
-                                    endTime: item.endTime || item.end,
-                                    startRecur: dates ? dates.start : null,
-                                    endRecur: dates ? dates.end : null,
-                                    backgroundColor: hiddenPicker.value,
-                                    borderColor: hiddenPicker.value,
-                                    extendedProps: {
-                                        professor: item.professor,
-                                        lectureHall: item.lectureHall,
-                                        subjectTitle: targetTitle,
-                                        semester: sem,
-                                        //Save raw times directly
-                                        rawStart: item.startTime || item.start,
-                                        rawEnd: item.endTime || item.end
-                                    },
-                                });
-                                eventTracker[targetTitle].push(addedEvent);
-                            });
-
-                            if (examData) {
-                                const examTitle = "ΕΞΕΤΑΣΗ: " + examData.title;
-
-                                // Checking if the exam already exists in the calendar
-                                let existingExamEvent = calendar.getEvents().find(e => e.title === examTitle);
-
-                                if (!existingExamEvent) {
-                                    // If it doesn't exist, add it
-                                    let addedExam = calendar.addEvent({
-                                        title: examTitle,
-                                        start: examData.start,
-                                        end: examData.end,
-                                        color: hiddenPicker.value,
-                                        extendedProps: {
-                                            subjectTitle: targetTitle,
-                                            lectureHall: examData.location,
-                                            description: examData.description,
-                                            isExam: true
-                                        }
-                                    });
-
-                                    // Adding the exam to the event tracker
-                                    if (!eventTracker[targetTitle]) eventTracker[targetTitle] = [];
-                                    eventTracker[targetTitle].push(addedExam);
-                                } else {
-                                    // If it already exists we just update the color to match the subject
-                                    existingExamEvent.setProp("backgroundColor", hiddenPicker.value);
-                                    existingExamEvent.setProp("borderColor", hiddenPicker.value);
-
-                                    if (!eventTracker[targetTitle].includes(existingExamEvent)) {
-                                        eventTracker[targetTitle].push(existingExamEvent);
-                                    }
-                                }
-                            }
-                            if (!saved.some(c => c.title === targetTitle)) {
-                                saved.push({ title: targetTitle, color: hiddenPicker.value, semester: sem });
-                                saveSchedule(saved);
-                            }
-
-                        } else {
-                            if (eventTracker[targetTitle]) {
-                                eventTracker[targetTitle].forEach(eventObj => eventObj.remove());
-                                delete eventTracker[targetTitle];
-                            }
-
-
-                            let saved = getSavedSchedule();
-                            saved = saved.filter(c => c.title !== targetTitle);
-                            saveSchedule(saved);
-                        }
-                    } catch (error) {
-                        console.error("Error updating schedule:", error);
-                    } finally {
-                        setTimeout(() => this.disabled = false, 250);
-                    }
-                };
-
-            }
-        } else {
+        if (!pressed) {
             SemesterDiv.innerHTML = ``;
-        }
+            return;
+        } //if it gets un-pressed we just clear it's html (we delete the div below it)
+
+        //but if it was just pressed
+        const savedClasses = getSavedSchedule(); //we get the data from the saved json
+        titlesArray.forEach((title, i) => { //for each title of a course we create it's own div with a checkbox (what adds the course to the calendar)
+            const div = document.createElement("div");
+            div.className = "course";
+            
+            const p = document.createElement("p");
+            p.textContent = title;
+            
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "checkbox";
+            checkbox.checked = savedClasses.some(saved => saved.title === title);
+
+            div.append(p, checkbox);
+            SemesterDiv.appendChild(div);
+
+            setTimeout(() => div.classList.add("visible"), i * 50);
+
+            div.onclick = (e) => {
+                if (checkbox.disabled || e.target === checkbox) return;
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event("change"));    //if that div is clicked we triger the checkbox that on it's own triggers the function to add the course
+            };
+
+            checkbox.onchange = () => handleCourseToggle(checkbox, title, sem);
+        });
     };
 });
 
-// ICS Download
+//ICS EXPORT 
+//this is the dark side of our code, we dont know exacty how it works but it uses the library https://github.com/nwcell/ics.js/ to make a ics file 
+//for the rest of this function gemini added the comments because I dont understand it
 function downloadCalendar() {
+    // 1. Initialize the ICS generator and get all current calendar events
     const cal = ics();
     const events = calendar.getEvents();
-    if (events.length === 0) return;
+    if (events.length === 0) return; // Stop if the calendar is empty
 
-    // 1. Gather all holiday dates safely
-    const holidayEvents = events.filter(e => e.groupId === 'holidays');
+    // 2. Find all holidays and list every single day they cover so we can skip classes on those dates
     const excludedDates = [];
-
-    holidayEvents.forEach(h => {
+    events.filter(e => e.groupId === 'holidays').forEach(h => {
         let current = new Date(h.start);
         let end = h.end ? new Date(h.end) : new Date(h.start);
-        if (!h.end) end.setDate(end.getDate() + 1);
+        if (!h.end) end.setDate(end.getDate() + 1); // If holiday is 1 day, make sure the loop runs once
 
         while (current < end) {
-            const pad = n => n < 10 ? '0' + n : n;
-            const dateString = `${current.getFullYear()}${pad(current.getMonth() + 1)}${pad(current.getDate())}`;
-
-            if (!excludedDates.includes(dateString)) {
-                excludedDates.push(dateString);
-            }
-            current.setDate(current.getDate() + 1);
+            const pad = n => n < 10 ? '0' + n : n; // Adds a leading zero (e.g., 9 becomes "09")
+            const dateStr = `${current.getFullYear()}${pad(current.getMonth() + 1)}${pad(current.getDate())}`;
+            
+            if (!excludedDates.includes(dateStr)) excludedDates.push(dateStr); // Save the formatted date
+            current.setDate(current.getDate() + 1); // Move to the next day
         }
     });
 
-    // 2. Add classes from the tracker
+    // 3. Loop through saved classes and add them as repeating weekly events
     const daysMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-
     Object.values(eventTracker).forEach(subjectEvents => {
         subjectEvents.forEach(event => {
-            // Only adding class events here, not exams 
-            if (event._def.recurringDef) {
+            if (event._def.recurringDef) { // Check if it's a repeating class
                 const days = event._def.recurringDef.typeData.daysOfWeek;
                 const sem = event.extendedProps.semester;
                 const dates = getSemesterDates(sem);
-
                 if (!dates) return;
 
+                // Setup the weekly repeat rule until the end of the semester
                 const rrule = { freq: "WEEKLY", until: dates.end, byday: days.map(d => daysMap[d]) };
-
-                // FIX: Parse the time directly from the raw database string we saved in extendedProps
-                const parseTime = (timeInput) => {
-                    if (Array.isArray(timeInput)) timeInput = timeInput[0]; // Handles arrays from Schema
-                    if (!timeInput) return { h: "00", m: "00" };
-                    const parts = String(timeInput).split(':');
-                    return {
-                        h: parts[0].padStart(2, '0'),
-                        m: (parts[1] || "00").padStart(2, '0')
-                    };
+                
+                // Helper to clean up database times into pure HH:MM formats
+                const parseTime = (t) => {
+                    if (Array.isArray(t)) t = t[0];
+                    if (!t) return { h: "00", m: "00" };
+                    const p = String(t).split(':');
+                    return { h: p[0].padStart(2, '0'), m: (p[1] || "00").padStart(2, '0') };
                 };
 
                 const startT = parseTime(event.extendedProps.rawStart);
                 const endT = parseTime(event.extendedProps.rawEnd);
-
                 const [year, month, day] = dates.start.split('-');
-                const startDateStr = `${month}/${day}/${year} ${startT.h}:${startT.m}:00`;
-                const endDateStr = `${month}/${day}/${year} ${endT.h}:${endT.m}:00`;
 
+                // Add the class to the ICS file
                 cal.addEvent(
                     event.title,
                     event.extendedProps.professor || "N/A",
                     event.extendedProps.lectureHall || "",
-                    startDateStr,
-                    endDateStr,
+                    `${month}/${day}/${year} ${startT.h}:${startT.m}:00`,
+                    `${month}/${day}/${year} ${endT.h}:${endT.m}:00`,
                     rrule
                 );
             }
         });
     });
 
-    // This helps to only add each exam once (because sometimes it is linked with two events in the tracker e.g. "Φροντιστηριο" )
+    // 4. Add exams to the calendar (using a Set to prevent drawing the same exam twice)
     const uniqueExams = new Set();
     events.forEach(event => {
-        // Filtering so we only get the exams
         if (event.title.startsWith("ΕΞΕΤΑΣΗ:") && !uniqueExams.has(event.title)) {
-            // Adding the exam to the cal
             cal.addEvent(
                 event.title,
                 event.extendedProps.description || "Exam",
                 event.extendedProps.lectureHall || "",
                 event.start.toISOString(),
-                (event.end || new Date(event.start.getTime() + 7200000)).toISOString() // Either using the endtime or addinf two hours to the start time
+                (event.end || new Date(event.start.getTime() + 7200000)).toISOString() // Default to 2 hours if no end time
             );
-            // Adding the title to the unique exams set so it is not added twice if it is found again
-            uniqueExams.add(event.title);
+            uniqueExams.add(event.title); // Mark this exam as processed
         }
     });
 
-    // 3. Build the raw ICS string
+    // 5. Generate the raw text for the .ics file
     let icsString = cal.build();
-
-    // 4. Inject EXDATEs cleanly
+    
+    // 6. Inject the holiday exclusion dates into the raw ICS text using Regex
     if (excludedDates.length > 0) {
         icsString = icsString.replace(/BEGIN:VEVENT([\s\S]*?)END:VEVENT/g, (match) => {
-            // Only adding exdates to the recurring events, not the exams
+            // Only apply exclusions to repeating events (classes), not one-off events (exams)
             if (match.includes("RRULE") || match.includes("rrule")) {
-                const startTimeMatch = match.match(/DTSTART(.*?):(\d{8})T(\d{6})(Z?)/);
-
-                if (startTimeMatch) {
-                    const tzInfo = startTimeMatch[1];
-                    const eventTime = startTimeMatch[3];
-                    const zFlag = startTimeMatch[4];
-
-                    const formattedExDates = excludedDates.map(date => `${date}T${eventTime}${zFlag}`).join(',');
-                    const exdateLine = `EXDATE${tzInfo}:${formattedExDates}\r\n`;
-
-                    return match.replace('END:VEVENT', `${exdateLine}END:VEVENT`);
+                const startMatch = match.match(/DTSTART(.*?):(\d{8})T(\d{6})(Z?)/); // Find the exact start time of the class
+                if (startMatch) {
+                    // Attach the class's start time to every holiday date, so the calendar knows exactly what time slot to cancel
+                    const exDatesFormatted = excludedDates.map(d => `${d}T${startMatch[3]}${startMatch[4]}`).join(',');
+                    return match.replace('END:VEVENT', `EXDATE${startMatch[1]}:${exDatesFormatted}\r\nEND:VEVENT`);
                 }
             }
             return match;
         });
     }
 
-    // 5. Download the file
+    // 7. Create a virtual file (Blob) in the browser and force a download
     const blob = new Blob([icsString], { type: 'text/calendar;charset=utf-8' });
     const link = document.createElement('a');
-    const url = window.URL.createObjectURL(blob);
-
-    link.href = url;
-    link.setAttribute('download', 'university_schedule.ics');
-    document.body.appendChild(link);
-    link.click();
-
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'university_schedule.ics'; // Name of the downloaded file
+    
+    document.body.appendChild(link); // Temporarily attach the link to the screen
+    link.click(); // Automatically click it
+    document.body.removeChild(link); // Clean up the link afterward
 }
 
+//now back to human comments :)
+
+
+//this is the visual (the gay part) of our js code
+//this function hides the list of semesters on the right hand side
 function hideList() {
-    if (window.innerWidth <= 767) {
-        const mobileBtn = document.getElementById("toggleScreen");
-        if (mobileBtn) mobileBtn.click();
-        return;
-    }
+    if (window.innerWidth <= 767) return toggleScreenBtn?.click();
     const list = document.getElementById("semesterWrapper");
     list.style.display = list.style.display === "none" ? "" : "none";
     calendar.updateSize();
-};
+}
 
-const toggleScreen = document.getElementById("toggleScreen");
-toggleScreen.onclick = function () {
+//this function get's called when we click the button on the calendar has 2 diffrent functions depending on your screen 
+toggleScreenBtn.onclick = function () {
     const list = document.getElementById("semesterWrapper");
     const calEl = document.getElementById("calendar");
-
     if (calEl.style.display === "flex") {
         calEl.style.setProperty("display", "none", "important");
         list.style.display = "flex";
@@ -632,13 +471,14 @@ toggleScreen.onclick = function () {
     }
 };
 
+//this just resizes the calendar (refresh's it)
 function resize() {
-    const calendar = document.getElementById("calendar");
     const sidebar = document.getElementById("semesterWrapper");
     sidebar.style.height = "unset";
-    sidebar.style.height = getComputedStyle(calendar).height;
+    sidebar.style.height = getComputedStyle(document.getElementById("calendar")).height;
 }
 
+//this makes the calendar apear if we click it from mobile
 function appearCalendar() {
     const list = document.getElementById("semesterWrapper");
     const calEl = document.getElementById("calendar");
@@ -651,7 +491,4 @@ function appearCalendar() {
     }
 }
 
-addEventListener("resize", () => {
-    appearCalendar();
-    resize();
-});
+addEventListener("resize", () => { appearCalendar(); resize(); });
