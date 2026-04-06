@@ -1,5 +1,19 @@
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5); 
+  }
+  70% {
+    transform: scale(1.05); 
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1); 
+  }
+}
+
 body{
-    background-image: linear-gradient(#353f648e, #2e385d4e), url(../images/background.jpg);
+    background: radial-gradient(#3c516f, #0a0f29);
 }
 
 #loadingOverlay {
@@ -35,6 +49,7 @@ body{
 
 /* Admin page wrapper */
 .adminWrapper {
+    font-family: sans-serif;
     display: flex;
     flex-direction: column;   
     justify-content: flex-start; 
@@ -49,6 +64,7 @@ body{
 
 /* file container */
 .fileContainer {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     font-family: sans-serif;
     display: flex;
     gap: 50px;       
@@ -91,6 +107,7 @@ body{
 
 /* upload button */
 .fileBox button {
+    
     padding: 10px;
     background-color: #8c2635;
     border: none;
@@ -105,7 +122,7 @@ body{
 }
 
 .editBox{
-
+    
     display: flex;
     justify-content: center;
     margin-top: 100px;
@@ -115,13 +132,18 @@ body{
 
 /* edit button */
 #editButton {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     padding: 10px 20px;
     font-size: 20px;
-    background-color: #2f385f;
+    border:1px solid rgb(107, 6, 6);
+    background-color: #8c2635;
     color: #f0f0f0;
     box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     border-radius: 10px;   
-    
+}
+
+#editButton:hover{
+    background-color: #9f2b3d;
 }
 
 #selectWrapper,
@@ -129,7 +151,8 @@ body{
     display: none;
 }
 
-#selectWrapper {          
+#selectWrapper {       
+    font-family: sans-serif;  
     justify-content: center; 
     align-items: flex-start; 
     gap: 40px;               
@@ -138,15 +161,18 @@ body{
 }
 
 #selectSemester, #selectCourse {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     text-align: center;
     margin: 20px 0; 
     display: flex;            
     flex-direction: column;
     align-items: center;
+    
 }
 
 #selectSemester label, #selectCourse label {
     color: #f0f0f0;
+    -webkit-text-stroke: 1px black;
     margin-bottom: 10px;
     display: block;
     font-size: 22px;
@@ -154,20 +180,42 @@ body{
 
 #semester, #courses {
     padding: 18px 50px;
-    background-color: #2f385f;
+    background-color: #8c2635;
+    border: 2px solid rgb(107, 6, 6);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     color: white;
-    border: none;
+    
     border-radius: 10px;     
     font-size: 20px;
     cursor: pointer;
     transition: 0.2s ease;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns="http://www.w3.org/2000/svg"%20width="292.4"%20height="292.4"><path%20fill="%23FFFFFF"%20d="M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z"/></svg>');
+    background-repeat: no-repeat;
+  
+  
+    background-position: right 20px center; 
+    background-size: 12px;
+
+  
+    padding-right: 40px;
+    padding-left: 20px ;
+}
+
+#semester, #courses:hover {
+    background-color: #9f2b3d;
 }
 
 #courses{
     max-width: 700px;
 }
 
-#editWrapper {          
+#editWrapper {       
+    font-family: sans-serif;   
     justify-content: center; 
     align-items: center; 
     gap: 40px;               
@@ -176,9 +224,17 @@ body{
 }
 
 .editCourse {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
+    border-radius: 8px;      
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     background-color: #2f385f;
     padding: 25px;
     color: white;
+}
+
+input{
+   border-radius: 8px; 
+   border: none 
 }
 
 .editCourse h2{
@@ -244,13 +300,19 @@ body{
 
 /* Submit button */
 #editWrapper button {
-    background-color: #2f385f;       
-    color: #f0f0f0;                 
-    border: none;                     
-    border-radius: 10px;           
+    background-color: #8c2635; 
+    color: #f0f0f0;     
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);           
+    border:1px solid rgb(107, 6, 6);                     
+    border-radius: 8px;           
     cursor: pointer;
     padding: 30px;
     font-size: large;
     margin-bottom: 100px;
     margin-top: 50px;
+    font-weight: bold;
+}
+
+#editWrapper button:hover {
+    background-color: #9f2b3d;
 }
