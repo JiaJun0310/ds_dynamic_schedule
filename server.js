@@ -181,8 +181,6 @@ app.post("/getExam", async (req, res) => {
 
         const data = JSON.parse(fs.readFileSync(examPath, 'utf8'));
 
-        console.log(title)
-        console.log(data)
 
         // Find the exam associated with the specific course title
         const examData = data.find(exam => exam.title === title) || 
@@ -244,7 +242,6 @@ app.post('/upload', verifyToken, upload.single('uploadedFile'), (req, res) => {
         return res.status(400).send('No file uploaded.');
     }
     
-    console.log("Αρχείο αποθηκεύτηκε στο: " + req.file.path);
     res.json({ 
         message: "Επιτυχία!", 
         fileName: req.file.filename 
