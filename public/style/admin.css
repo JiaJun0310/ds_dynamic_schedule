@@ -1,3 +1,17 @@
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5); 
+  }
+  70% {
+    transform: scale(1.05); 
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1); 
+  }
+}
+
 body{
     background: radial-gradient(#3c516f, #0a0f29);
 }
@@ -50,6 +64,7 @@ body{
 
 /* file container */
 .fileContainer {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     font-family: sans-serif;
     display: flex;
     gap: 50px;       
@@ -92,6 +107,7 @@ body{
 
 /* upload button */
 .fileBox button {
+    
     padding: 10px;
     background-color: #8c2635;
     border: none;
@@ -106,7 +122,7 @@ body{
 }
 
 .editBox{
-
+    
     display: flex;
     justify-content: center;
     margin-top: 100px;
@@ -116,6 +132,7 @@ body{
 
 /* edit button */
 #editButton {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     padding: 10px 20px;
     font-size: 20px;
     border:1px solid rgb(107, 6, 6);
@@ -144,6 +161,7 @@ body{
 }
 
 #selectSemester, #selectCourse {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     text-align: center;
     margin: 20px 0; 
     display: flex;            
@@ -188,6 +206,10 @@ body{
     padding-left: 20px ;
 }
 
+#semester, #courses:hover {
+    background-color: #9f2b3d;
+}
+
 #courses{
     max-width: 700px;
 }
@@ -202,6 +224,7 @@ body{
 }
 
 .editCourse {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     border-radius: 8px;      
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     background-color: #2f385f;
