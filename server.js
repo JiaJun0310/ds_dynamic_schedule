@@ -170,6 +170,35 @@ app.post("/getClass", async (req, res) => {
     }
 });
 
+// Used in calendar.js to get all the data for an exam tied to a specific course
+app.post("/getExam", async (req, res) => {
+    try {
+        const { title } = req.body;
+
+        const baseTitle = title.split('(')[0].trim();
+
+        const examPath = path.join(__dirname, 'jsonData', 'TEST_Examinfo.json');
+
+        const data = JSON.parse(fs.readFileSync(examPath, 'utf8'));
+
+        console.log(title)
+        console.log(data)
+
+        // Find the exam associated with the specific course title
+        const examData = data.find(exam => exam.title === title) || 
+                         data.find(exam => exam.title === baseTitle);
+
+        if (!examData) {
+            return res.status(404).json({ message: "Exam not found" });
+        } 
+
+        res.status(200).json({ exam: examData }); 
+
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+})
+
 //request used in login.js to 
 app.post("/login", async (req, res) => {
     try {

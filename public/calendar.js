@@ -90,36 +90,41 @@ document.addEventListener("DOMContentLoaded", async function () {
             };
 
             hiddenPicker.oninput = function () {
-
                 const newColor = hiddenPicker.value;
 
-                info.event.setProp("backgroundColor", newColor);
-                info.event.setProp("borderColor", newColor);
 
-                calendar.getEvents().forEach(e => {
-                    if (e.title === info.event.title) {
+                // Using the subject title from the extended props property
+                const targetSubject = info.event.extendedProps.subjectTitle || info.event.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();
+
+                // Updating the local storage with the new color
+                let currentSchedule = getSavedSchedule();
+                let courseIndex = currentSchedule.findIndex(c => c.title === targetSubject);
+                if (courseIndex !== -1) {
+                    currentSchedule[courseIndex].color = newColor;
+                    saveSchedule(currentSchedule);
+                }
+
+                // TODO: Fix exam not changing the color of the actual class bug while the class also changes the exam like wtf ta nevra mou
+                // Get all events from the calendar
+                const allEvents = calendar.getEvents();
+
+                allEvents.forEach(e => {
+                    // Checking if the event belongs to the specific subject
+                    const eventSubject = e.extendedProps.subjectTitle || e.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();
+
+                    if (eventSubject === targetSubject) {
+                        // Changing the event's color
                         e.setProp("backgroundColor", newColor);
                         e.setProp("borderColor", newColor);
                     }
                 });
 
-                let currentSchedule = getSavedSchedule();
-
-                let courseIndex = currentSchedule.findIndex(c => c.title === info.event.title);
-
-                if (courseIndex !== -1) {
-                    currentSchedule[courseIndex].color = newColor;
-
-                    saveSchedule(currentSchedule);
-                }
-
-            }
-
+            };
             colorBtn.onclick = function () {
 
                 hiddenPicker.click();
 
-            };       
+            };
 
 
 
@@ -173,7 +178,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const savedClasses = getSavedSchedule();
 
     if (savedClasses.length > 0) {
-        savedClasses.forEach(async (item) => {
+        for (const item of savedClasses) {
             try {
                 const response = await fetch("/getClass", {
                     method: "POST",
@@ -211,11 +216,64 @@ document.addEventListener("DOMContentLoaded", async function () {
                         });
                         eventTracker[item.title].push(addedEvent);
                     });
+
+
+                    // Attempting to fetch examdata for the specific title
+                    let examData = null;
+                    try {
+                        const examResponse = await fetch("/getExam", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ title: item.title })
+                        });
+
+                        if (examResponse.ok) {
+                            const examJson = await examResponse.json();
+                            examData = examJson.exam;
+                        } else {
+                            console.warn(`No exam found for: ${item.title}`);
+                        }
+                    } catch (e) {
+                        console.warn("No exam for " + item.title);
+                    }
+
+                    // Addind the exam as an event to the calendar if the exam exists in the json
+                    if (examData) {
+
+                        const examTitle = "ΕΞΕΤΑΣΗ: " + examData.title;
+
+                        let existingExamEvent = null;
+                        Object.values(eventTracker).forEach(events => {
+                            const found = events.find(e => e && e.title === examTitle);
+                            if (found) existingExamEvent = found;
+
+                        });
+                        // Adding the exam to the calendar if it is not already there
+                        if (!existingExamEvent) {
+                            let addedExam = calendar.addEvent({
+                                title: examTitle,
+                                start: examData.start,
+                                end: examData.end,
+                                color: item.color,
+                                extendedProps: {
+                                    subjectTitle: item.title,
+                                    lectureHall: examData.location,
+                                    description: examData.description
+                                }
+                            })
+                            eventTracker[item.title].push(addedExam)
+                        } else {
+                            //also saving it to the event tracker
+                            eventTracker[item.title].push(existingExamEvent)
+                        }
+
+                    }
+
                 }
             } catch (error) {
                 console.error("Error loading saved class:", error);
             }
-        });
+        };
     }
     appearCalendar();
     resize();
@@ -301,7 +359,28 @@ buttons.forEach(async (button) => {
                                 body: JSON.stringify({ title: targetTitle }),
                             });
 
+
                             const data = await response.json();
+
+                            // Attempting to fetch examdata for the specific title
+                            let examData = null;
+                            try {
+                                const examResponse = await fetch("/getExam", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ title: targetTitle })
+                                });
+
+                                if (examResponse.ok) {
+                                    const examJson = await examResponse.json();
+                                    examData = examJson.exam;
+                                } else {
+                                    console.warn(`No exam found for: ${targetTitle}`);
+                                }
+                            } catch (e) {
+                                console.error("Exam fetch failed:", e);
+                            }
+
                             const dates = getSemesterDates(sem);
                             eventTracker[targetTitle] = [];
 
@@ -335,8 +414,40 @@ buttons.forEach(async (button) => {
                                 eventTracker[targetTitle].push(addedEvent);
                             });
 
-                            
+                            if (examData) {
+                                const examTitle = "ΕΞΕΤΑΣΗ: " + examData.title;
 
+                                // Checking if the exam already exists in the calendar
+                                let existingExamEvent = calendar.getEvents().find(e => e.title === examTitle);
+
+                                if (!existingExamEvent) {
+                                    // If it doesn't exist, add it
+                                    let addedExam = calendar.addEvent({
+                                        title: examTitle,
+                                        start: examData.start,
+                                        end: examData.end,
+                                        color: hiddenPicker.value,
+                                        extendedProps: {
+                                            subjectTitle: targetTitle,
+                                            lectureHall: examData.location,
+                                            description: examData.description,
+                                            isExam: true
+                                        }
+                                    });
+
+                                    // Adding the exam to the event tracker
+                                    if (!eventTracker[targetTitle]) eventTracker[targetTitle] = [];
+                                    eventTracker[targetTitle].push(addedExam);
+                                } else {
+                                    // If it already exists we just update the color to match the subject
+                                    existingExamEvent.setProp("backgroundColor", hiddenPicker.value);
+                                    existingExamEvent.setProp("borderColor", hiddenPicker.value);
+
+                                    if (!eventTracker[targetTitle].includes(existingExamEvent)) {
+                                        eventTracker[targetTitle].push(existingExamEvent);
+                                    }
+                                }
+                            }
                             if (!saved.some(c => c.title === targetTitle)) {
                                 saved.push({ title: targetTitle, color: hiddenPicker.value, semester: sem });
                                 saveSchedule(saved);
@@ -348,7 +459,6 @@ buttons.forEach(async (button) => {
                                 delete eventTracker[targetTitle];
                             }
 
-                          
 
                             let saved = getSavedSchedule();
                             saved = saved.filter(c => c.title !== targetTitle);
@@ -360,7 +470,7 @@ buttons.forEach(async (button) => {
                         setTimeout(() => this.disabled = false, 250);
                     }
                 };
-           
+
             }
         } else {
             SemesterDiv.innerHTML = ``;
@@ -399,41 +509,62 @@ function downloadCalendar() {
 
     Object.values(eventTracker).forEach(subjectEvents => {
         subjectEvents.forEach(event => {
-            const days = event._def.recurringDef.typeData.daysOfWeek;
-            const sem = event.extendedProps.semester;
-            const dates = getSemesterDates(sem);
+            // Only adding class events here, not exams 
+            if (event._def.recurringDef) {
+                const days = event._def.recurringDef.typeData.daysOfWeek;
+                const sem = event.extendedProps.semester;
+                const dates = getSemesterDates(sem);
 
-            if (!dates) return;
+                if (!dates) return;
 
-            const rrule = { freq: "WEEKLY", until: dates.end, byday: days.map(d => daysMap[d]) };
+                const rrule = { freq: "WEEKLY", until: dates.end, byday: days.map(d => daysMap[d]) };
 
-            // FIX: Parse the time directly from the raw database string we saved in extendedProps
-            const parseTime = (timeInput) => {
-                if (Array.isArray(timeInput)) timeInput = timeInput[0]; // Handles arrays from Schema
-                if (!timeInput) return { h: "00", m: "00" };
-                const parts = String(timeInput).split(':');
-                return {
-                    h: parts[0].padStart(2, '0'),
-                    m: (parts[1] || "00").padStart(2, '0')
+                // FIX: Parse the time directly from the raw database string we saved in extendedProps
+                const parseTime = (timeInput) => {
+                    if (Array.isArray(timeInput)) timeInput = timeInput[0]; // Handles arrays from Schema
+                    if (!timeInput) return { h: "00", m: "00" };
+                    const parts = String(timeInput).split(':');
+                    return {
+                        h: parts[0].padStart(2, '0'),
+                        m: (parts[1] || "00").padStart(2, '0')
+                    };
                 };
-            };
 
-            const startT = parseTime(event.extendedProps.rawStart);
-            const endT = parseTime(event.extendedProps.rawEnd);
+                const startT = parseTime(event.extendedProps.rawStart);
+                const endT = parseTime(event.extendedProps.rawEnd);
 
-            const [year, month, day] = dates.start.split('-');
-            const startDateStr = `${month}/${day}/${year} ${startT.h}:${startT.m}:00`;
-            const endDateStr = `${month}/${day}/${year} ${endT.h}:${endT.m}:00`;
+                const [year, month, day] = dates.start.split('-');
+                const startDateStr = `${month}/${day}/${year} ${startT.h}:${startT.m}:00`;
+                const endDateStr = `${month}/${day}/${year} ${endT.h}:${endT.m}:00`;
 
+                cal.addEvent(
+                    event.title,
+                    event.extendedProps.professor || "N/A",
+                    event.extendedProps.lectureHall || "",
+                    startDateStr,
+                    endDateStr,
+                    rrule
+                );
+            }
+        });
+    });
+
+    // This helps to only add each exam once (because sometimes it is linked with two events in the tracker e.g. "Φροντιστηριο" )
+    const uniqueExams = new Set();
+    events.forEach(event => {
+        // Filtering so we only get the exams
+        if (event.title.startsWith("ΕΞΕΤΑΣΗ:") && !uniqueExams.has(event.title)) {
+            // Adding the exam to the cal
             cal.addEvent(
                 event.title,
-                event.extendedProps.professor || "N/A",
+                event.extendedProps.description || "Exam",
                 event.extendedProps.lectureHall || "",
-                startDateStr,
-                endDateStr,
-                rrule
+                event.start.toISOString(),
+                (event.end || new Date(event.start.getTime() + 7200000)).toISOString() // Either using the endtime or addinf two hours to the start time
             );
-        });
+            // Adding the title to the unique exams set so it is not added twice if it is found again
+            uniqueExams.add(event.title);
+        }
     });
 
     // 3. Build the raw ICS string
@@ -442,17 +573,20 @@ function downloadCalendar() {
     // 4. Inject EXDATEs cleanly
     if (excludedDates.length > 0) {
         icsString = icsString.replace(/BEGIN:VEVENT([\s\S]*?)END:VEVENT/g, (match) => {
-            const startTimeMatch = match.match(/DTSTART(.*?):(\d{8})T(\d{6})(Z?)/);
+            // Only adding exdates to the recurring events, not the exams
+            if (match.includes("RRULE") || match.includes("rrule")) {
+                const startTimeMatch = match.match(/DTSTART(.*?):(\d{8})T(\d{6})(Z?)/);
 
-            if (startTimeMatch) {
-                const tzInfo = startTimeMatch[1];
-                const eventTime = startTimeMatch[3];
-                const zFlag = startTimeMatch[4];
+                if (startTimeMatch) {
+                    const tzInfo = startTimeMatch[1];
+                    const eventTime = startTimeMatch[3];
+                    const zFlag = startTimeMatch[4];
 
-                const formattedExDates = excludedDates.map(date => `${date}T${eventTime}${zFlag}`).join(',');
-                const exdateLine = `EXDATE${tzInfo}:${formattedExDates}\r\n`;
+                    const formattedExDates = excludedDates.map(date => `${date}T${eventTime}${zFlag}`).join(',');
+                    const exdateLine = `EXDATE${tzInfo}:${formattedExDates}\r\n`;
 
-                return match.replace('END:VEVENT', `${exdateLine}END:VEVENT`);
+                    return match.replace('END:VEVENT', `${exdateLine}END:VEVENT`);
+                }
             }
             return match;
         });
