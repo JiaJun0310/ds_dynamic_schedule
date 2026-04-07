@@ -197,6 +197,28 @@ app.post("/getExam", async (req, res) => {
     }
 })
 
+// Gets all exams for a specific semester
+app.post("/getSemesterExams", async (req, res) => {
+    try {
+        const { semester } = req.body; 
+        const examPath = path.join(__dirname, 'jsonData', 'TEST_Examinfo.json');
+
+        // Read and parse the exam JSON file
+        const data = JSON.parse(fs.readFileSync(examPath, 'utf8'));
+
+        // Filter out only the exams that match the requested semester
+        // We use String() to safely handle numbers vs strings (e.g., 7 vs "7")
+        const semesterExams = data.filter(exam => String(exam.semester) === String(semester));
+
+        // Send the filtered array directly back to the frontend
+        res.status(200).json(semesterExams); 
+
+    } catch (err) {
+        console.error("Error fetching semester exams:", err);
+        res.status(400).json({ error: err.message });
+    }
+});
+
 //request used in login.js to 
 app.post("/login", async (req, res) => {
     try {

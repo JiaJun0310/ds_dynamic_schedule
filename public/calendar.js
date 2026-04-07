@@ -2,6 +2,7 @@
 let calendar;
 let academicData = null;
 let eventTracker = {}; 
+let currentMode = "Μαθήματα"; //hardcode the default radio button
 
 //DOM ELEMENTS 
 const popup = document.getElementById("eventPopup");  //pop up for when you click on an event
@@ -17,6 +18,9 @@ const toggleScreenBtn = document.getElementById("toggleScreen");
 //UTILITIES
 const getSavedSchedule = () => JSON.parse(localStorage.getItem("userSchedule")) || [];  //returns everything saved on local storage or null if it's empty
 const saveSchedule = (scheduleArray) => localStorage.setItem("userSchedule", JSON.stringify(scheduleArray));
+
+const getSavedExams = () => JSON.parse(localStorage.getItem("userExams")) || [];    //local storage same as above but for exams
+const saveExams = (examsArray) => localStorage.setItem("userExams", JSON.stringify(examsArray));
 
 const formatJSONDate = (dateStr) => {  //this takes a date from 5/9/2023 to 2023-09-05
     const [day, month, year] = dateStr.trim().split('/');
@@ -87,6 +91,22 @@ function handleEventClick(info) {  //handles clicking on an event and dialog ape
     hiddenPicker.oninput = () => updateCourseColor(targetSubject, hiddenPicker.value);
 }
 
+// Listen for clicks on the radio buttons
+document.querySelectorAll('input[name="choice"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        currentMode = e.target.value;
+
+        // Clean up the UI: Close all open semester tabs when switching modes
+        document.querySelectorAll(".buttonDiv").forEach(btn => {
+            let sem = btn.textContent.trim().slice(-1);
+            document.getElementById(`Semester${sem}`).innerHTML = ""; // Empty the list
+            let arrow = btn.querySelector(".pointer");
+            if (arrow) arrow.src = "../images/right_pointer.svg";
+            btn.dataset.open = "false"; // Reset our tracking variable
+        });
+    });
+});
+
 function updateCourseColor(subjectTitle, newColor) {    //updates courses color after clicking with color picker
     let currentSchedule = getSavedSchedule();
     let courseIndex = currentSchedule.findIndex(c => c.title === subjectTitle);
@@ -120,21 +140,18 @@ async function handleCourseToggle(checkbox, targetTitle, sem) {     //new fucnti
     }
 }
 
-async function addCourseToCalendar(targetTitle, sem) {  //new function, again, does the whole adding stuff to the calendar just made cleaner with a function
-    const [courseData, examData] = await Promise.all([  //gets course data and exam data from functions created earlier
-        fetchCourseData(targetTitle),
-        fetchExamData(targetTitle)
-    ]);
+async function addCourseToCalendar(targetTitle, sem) {//new function, again, does the whole adding stuff to the calendar just made cleaner with a function
+    const courseData = await fetchCourseData(targetTitle);
 
     const dates = getSemesterDates(sem);
     if (!eventTracker[targetTitle]) eventTracker[targetTitle] = [];
 
-    let dbColor = courseData.schedules.length > 0 ? courseData.schedules[0].color : "#3788d8";  //color logic if user has picked a color, use that else use db color, if no db color use blue
+    let dbColor = courseData.schedules.length > 0 ? courseData.schedules[0].color : "#3788d8"; //color logic if user has picked a color, use that else use db color, if no db color use blue
     let saved = getSavedSchedule();
     const isAlreadySaved = saved.some(c => c.title === targetTitle);
     const eventColor = isAlreadySaved ? saved.find(c => c.title === targetTitle).color : dbColor;
 
-    if (!isAlreadySaved) { //if not aleady saved, saves it to local storage with the necessary data  
+    if (!isAlreadySaved) { //if not aleady saved, saves it to local storage with the necessary data
         hiddenPicker.value = eventColor;
         saved.push({ title: targetTitle, color: eventColor, semester: sem });
         saveSchedule(saved);
@@ -159,10 +176,10 @@ async function addCourseToCalendar(targetTitle, sem) {  //new function, again, d
                 rawEnd: item.endTime || item.end
             },
         });
-        eventTracker[targetTitle].push(addedEvent); //push event to eventTracker
-    });
+        eventTracker[targetTitle].push(addedEvent);     
+    }); //push event to eventTracker
 
-    if (examData) addExamToCalendar(examData, targetTitle, eventColor); //if we have exam data for the course, call the fanction addExamToCalendar
+
 }
 
 function addExamToCalendar(examData, targetTitle, color) {  //adds exam to calendar
@@ -199,6 +216,52 @@ function removeCourseFromCalendar(targetTitle) {        //removes and event from
     }
     let saved = getSavedSchedule();
     saveSchedule(saved.filter(c => c.title !== targetTitle));
+}
+
+function addStandaloneExam(examData) {
+    const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
+    
+    // Safety check, don't add if it already exists
+    let existing = calendar.getEvents().find(e => e.title === examTitleStr);
+
+    if (!existing) {
+        let addedExam = calendar.addEvent({
+            title: examTitleStr,
+            start: examData.start,       
+            end: examData.end,           
+            color: "#e74c3c",            
+            extendedProps: {
+                lectureHall: examData.location,
+                description: examData.description,
+                isExam: true
+            }
+        });
+
+        // Save it to the eventTracker
+        if (!eventTracker[examTitleStr]) eventTracker[examTitleStr] = [];
+        eventTracker[examTitleStr].push(addedExam);
+
+        //Save to Local Storage
+        let saved = getSavedExams();
+        if (!saved.some(e => e.title === examData.title)) {
+            saved.push(examData); // Save the whole object so we don't have to fetch it on reload
+            saveExams(saved);
+        }
+    }
+}
+
+function removeStandaloneExam(title) {
+    const examTitleStr = "ΕΞΕΤΑΣΗ: " + title;
+    
+    // Remove from visual calendar and tracker
+    if (eventTracker[examTitleStr]) {
+        eventTracker[examTitleStr].forEach(eventObj => eventObj.remove());
+        delete eventTracker[examTitleStr]; 
+    }
+
+    // --- NEW: Remove from Local Storage ---
+    let saved = getSavedExams();
+    saveExams(saved.filter(e => e.title !== title));
 }
 
 //INITIALIZATION of calendar
@@ -258,11 +321,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // Load saved classes
-    //everything saved in local storage get's displayed here
     const savedClasses = getSavedSchedule();
     for (const item of savedClasses) {
         await addCourseToCalendar(item.title, item.semester);
         updateCourseColor(item.title, item.color); // Ensure custom colors persist
+    }
+
+    //Load saved standalone exams
+    const savedExams = getSavedExams();
+    for (const examData of savedExams) {
+        addStandaloneExam(examData);
     }
 
     appearCalendar(); //refresh calendar to show events
@@ -278,62 +346,125 @@ clearSelectionBtn.onclick = () => {         //button that clears all selections
     eventTracker = {};
     document.querySelectorAll(".checkbox").forEach(cb => cb.checked = false);
     document.querySelectorAll(".colorBtn").forEach(cp => cp.style.display = "none");
+    
+
+    // Clear both local storages
     localStorage.removeItem("userSchedule");
+    localStorage.removeItem("userExams");
 };
 
-document.querySelectorAll(".buttonDiv").forEach(async (button) => { //loops through all "buttons" (divs in reality)
-    //We extract all data from all the divs
-    let pressed = false;        
+document.querySelectorAll(".buttonDiv").forEach((button) => {   //this selects eveything from all the "buttons"
+    button.dataset.open = "false"; // We use this instead of 'let pressed = false' so it doesn't break when switching tabs
+    
+    //we save the data like semester for every button
     let cleanText = button.textContent.trim();
     let sem = cleanText[cleanText.length - 1];
     let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
-    //here we get all the data for each Semester
-    const res = await fetch("/getSemester", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ semester: sem }),
-    });
-    const data = await res.json();  //we save the data here
-    const titlesArray = data.titles.map((course) => course.title); //and the titles in an array
+    button.onclick = async function () {    //this now goes in to spesific button clicked 
+        // Toggle the open state
+        let isOpen = button.dataset.open === "true";
+        isOpen = !isOpen;
+        button.dataset.open = isOpen.toString();
 
-    button.onclick = function () { //now we go spesific, not for each button but the the button pressed right now
-        pressed = !pressed; //we change it's status 
-        arrow.src = pressed ? "../images/down_pointer.svg" : "../images/right_pointer.svg"; //flip the arrow next to it
+        arrow.src = isOpen ? "../images/down_pointer.svg" : "../images/right_pointer.svg";
 
-        if (!pressed) {
+        if (!isOpen) {  //if it was already open it just clear it's html
             SemesterDiv.innerHTML = ``;
             return;
-        } //if it gets un-pressed we just clear it's html (we delete the div below it)
+        }
 
-        //but if it was just pressed
-        const savedClasses = getSavedSchedule(); //we get the data from the saved json
-        titlesArray.forEach((title, i) => { //for each title of a course we create it's own div with a checkbox (what adds the course to the calendar)
-            const div = document.createElement("div");
-            div.className = "course";
+        // This gets executed when the button was clicked and the radio button was on "Μαθήματα"
+        if (currentMode === "Μαθήματα") {
+            //here we get all the data for each Semester
+            const res = await fetch("/getSemester", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ semester: sem }),
+            });
+            const data = await res.json(); //we save the data here
+            const titlesArray = data.titles.map((course) => course.title); //and the titles in an array
+
+            const savedClasses = getSavedSchedule();
+
+            //creates for each title in title array a div with a pargaraph and a checkbox in it so it generates everything dinamicly
+            titlesArray.forEach((title, i) => {
+                const div = document.createElement("div");
+                div.className = "course";
+                
+                const p = document.createElement("p");
+                p.textContent = title;
+                
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.className = "checkbox";
+                checkbox.checked = savedClasses.some(saved => saved.title === title);
+
+                div.append(p, checkbox);
+                SemesterDiv.appendChild(div);
+
+                setTimeout(() => div.classList.add("visible"), i * 50);
+
+                div.onclick = (e) => {  //ckeckbox logic on the div
+                    if (checkbox.disabled || e.target === checkbox) return;
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event("change"));
+                };
+
+                checkbox.onchange = () => handleCourseToggle(checkbox, title, sem);
+            });
+        } 
+        
+        // This gets executed when the button was clicked and the radio button was on "Εξεταστική"
+        else if (currentMode === "Εξεταστική") {
             
-            const p = document.createElement("p");
-            p.textContent = title;
-            
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.className = "checkbox";
-            checkbox.checked = savedClasses.some(saved => saved.title === title);
+            const res = await fetch("/getSemesterExams", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ semester: sem }),
+            });
+            const examsArray = await res.json(); // This expects an array of your Exam JSON objects
 
-            div.append(p, checkbox);
-            SemesterDiv.appendChild(div);
+            const currentlySavedExams = getSavedExams();
 
-            setTimeout(() => div.classList.add("visible"), i * 50);
+            examsArray.forEach((examData, i) => {
+                const div = document.createElement("div");
+                div.className = "course"; // You can keep the same class for styling
+                
+                const p = document.createElement("p");
+                p.textContent = examData.title; // e.g., "ΨΣ-532-ΠΡΟΗΓΜΕΝΑ..."
+                
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.className = "checkbox";
 
-            div.onclick = (e) => {
-                if (checkbox.disabled || e.target === checkbox) return;
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event("change"));    //if that div is clicked we triger the checkbox that on it's own triggers the function to add the course
-            };
+                checkbox.checked = currentlySavedExams.some(saved => saved.title === examData.title);
+                
+                // Check if this exact exam is already on the calendar
+                const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
+                checkbox.checked = calendar.getEvents().some(e => e.title === examTitleStr);
 
-            checkbox.onchange = () => handleCourseToggle(checkbox, title, sem);
-        });
+                div.append(p, checkbox);
+                SemesterDiv.appendChild(div);
+
+                setTimeout(() => div.classList.add("visible"), i * 50);
+
+                div.onclick = (e) => {
+                    if (checkbox.disabled || e.target === checkbox) return;
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event("change"));
+                };
+
+                checkbox.onchange = () => {
+                    if (checkbox.checked) {
+                        addStandaloneExam(examData);
+                    } else {
+                        removeStandaloneExam(examData.title);
+                    }
+                };
+            });
+        }
     };
 });
 
@@ -417,6 +548,16 @@ function downloadCalendar() {
 
     // 5. Generate the raw text for the .ics file
     let icsString = cal.build();
+
+    // Google requires DTSTAMP to end in 'Z' (UTC format)
+    icsString = icsString.replace(/DTSTAMP;VALUE=DATE-TIME:(\d{8}T\d{6})/g, "DTSTAMP:$1Z");
+    
+    // Google prefers clean DTSTART/DTEND tags without the VALUE parameter
+    icsString = icsString.replace(/DTSTART;VALUE=DATE-TIME:/g, "DTSTART:");
+    icsString = icsString.replace(/DTEND;VALUE=DATE-TIME:/g, "DTEND:");
+    // Force unique IDs so Google Calendar doesn't silently ignore deleted test events
+    icsString = icsString.replace(/UID:\d+@default/g, () => `UID:${Math.random().toString(36).substring(2)}${Date.now()}@schedule.ics`);
+    // --------------------------------------------
     
     // 6. Inject the holiday exclusion dates into the raw ICS text using Regex
     if (excludedDates.length > 0) {
