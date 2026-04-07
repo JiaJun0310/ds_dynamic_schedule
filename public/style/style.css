@@ -306,11 +306,10 @@ footer {
     height: 1140px;
     overflow-y: auto;
 
-    width: auto;
-    min-width: 220px;
-    max-width: 320px;
-    flex: 0 0 280px;
-
+    
+    width: 280px;        /* Sets the default starting width */
+    min-width: 150px;    /* Allows it to shrink more */
+    
 }
 
 /* Box containing the radiobuttons */
@@ -356,6 +355,21 @@ footer {
 #radioBox label:has(input:checked) {
     background-color: #252d4f; 
     border: 2px solid #465286;
+}
+
+.resizer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px; /* Thickness of the grab area */
+    height: 100%;
+    cursor: col-resize;
+    z-index: 50;
+    transition: background-color 0.2s;
+}
+
+.resizer:hover, .resizer.dragging {
+    background-color: rgba(255, 255, 255, 0.2); /* Slight white highlight when dragging */
 }
 
 

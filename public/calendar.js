@@ -632,4 +632,64 @@ function appearCalendar() {
     }
 }
 
-addEventListener("resize", () => { appearCalendar(); resize(); });
+//resize wrapper/sidebar on window change 
+function resizeWrapper()
+{
+    const sidebar = document.getElementById("semesterWrapper");
+    if(sidebar)
+    {
+        sidebar.style.width = "280px";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const sidebar = document.getElementById("semesterWrapper");
+    const resizer = document.getElementById("dragHandle");
+
+    if (!sidebar || !resizer) return; // Safety check
+
+    let isResizing = false;
+
+    // Start dragging
+    resizer.addEventListener("mousedown", (e) => {
+        isResizing = true;
+        resizer.classList.add("dragging");
+        document.body.style.cursor = "col-resize"; 
+        document.body.style.userSelect = "none"; // Stops text highlighting
+    });
+
+    // Doing the drag
+    document.addEventListener("mousemove", (e) => {
+        if (!isResizing) return;
+        
+        // Calculate width: Window width minus mouse position (because sidebar is on the right)
+        let newWidth = window.innerWidth - e.clientX; 
+
+        //Min 272px, Max 30% of screen
+        if (newWidth > 272 && newWidth < (window.innerWidth * 0.3)) {
+            sidebar.style.width = `${newWidth}px`;
+            sidebar.style.flex = "none"; // Stop flexbox from ignoring our width
+            
+            if (typeof calendar !== 'undefined' && calendar) {
+                calendar.updateSize(); // Fixes the calendar grid instantly
+            }
+        }
+    });
+
+    // Stop dragging
+    document.addEventListener("mouseup", () => {
+        if (isResizing) {
+            isResizing = false;
+            resizer.classList.remove("dragging");
+            document.body.style.cursor = "default";
+            document.body.style.userSelect = "auto";
+        }
+    });
+});
+
+addEventListener("resize", () => 
+{
+    appearCalendar(); 
+    resize();
+    resizeWrapper();
+});
