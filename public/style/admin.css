@@ -158,6 +158,8 @@ body{
     gap: 40px;               
     margin-top: 20px;
     margin-bottom: 50px;
+
+    position: relative;
 }
 
 #selectSemester, #selectCourse {
@@ -319,14 +321,13 @@ input{
 
 /* back button */
 #backButton {
-
-    /* need to make it so that the button appears at the top left of the page, below the header */
-    /* margin-left: 5px;  */
+    position: absolute;
+    top: 10px;
+    left: 20px;
 
     padding: 6px 25px;
     background-color: #2f385f;
     color: #fff;
-
     border: none;
     border-radius: 8px;
     cursor: pointer;

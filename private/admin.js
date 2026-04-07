@@ -89,8 +89,8 @@ const selectWrapper = document.getElementById("selectWrapper")
 const editWrapper = document.getElementById("editWrapper")
 const editBox = document.querySelector(".editBox");
 const backButton = document.getElementById("backButton")
-const courses = document.getElementById("courses")
-const semester = document.getElementById("semester")
+const semesterSelect = document.getElementById("semester");
+const courseSelect = document.getElementById("courses");
 
 
 //When the edit button is clicked it over writes the admin page and loads the edit page
@@ -104,13 +104,12 @@ editButton.onclick = () => {
 
 };
 
+//When the back button is pressed it clears the content of the edit page and overwrites it with the admin page
 backButton.onclick = () => {
 
     editWrapper.innerHTML = "";
-
-    //need to make it so that when the back button is clicked to clear the drop boxes value
-    // courses.innerHTML = "";
-    // semester.innerHTML = "";
+    semesterSelect.selectedIndex = 0;
+    courseSelect.innerHTML = "";
 
 
     adminPage.style.display = "flex";
@@ -120,9 +119,6 @@ backButton.onclick = () => {
     editWrapper.style.display = "none"; 
 }
 
-
-const semesterSelect = document.getElementById("semester");
-const courseSelect = document.getElementById("courses");
 
 semesterSelect.addEventListener("change", async () => {
 
