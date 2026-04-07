@@ -27,7 +27,7 @@ const formatJSONDate = (dateStr) => {  //this takes a date from 5/9/2023 to 2023
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 };
 
-const getSemesterDates = (semesterNum) => {  //finds start and end of semster based on if semester is odd or even
+const getSemesterDates = (semesterNum) => {  //finds start and end of semester based on if semester is odd or even
     if (!academicData || !semesterNum) return null;
     const isOdd = parseInt(semesterNum) % 2 !== 0;
     const semData = academicData.semesters[isOdd ? 0 : 1];
@@ -74,7 +74,7 @@ async function fetchExamData(title) {
 }
 
 //EVENT HANDLERS
-function handleEventClick(info) {  //handles clicking on an event and dialog apearing
+function handleEventClick(info) {  //handles clicking on an event and dialog appearing
     popup.showModal();
     const event = info.event;
     const props = event.extendedProps;
@@ -86,7 +86,7 @@ function handleEventClick(info) {  //handles clicking on an event and dialog ape
     if (hallEl) hallEl.innerText = props.lectureHall || "N/A";
     timeEl.innerText = `${start} - ${end}`;
 
-    const targetSubject = props.subjectTitle || event.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();    //something to do with exams and dialog (I dont think it does anything)
+    const targetSubject = props.subjectTitle || event.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();    //something to do with exams and dialog (I don't think it does anything)
 
     hiddenPicker.oninput = () => updateCourseColor(targetSubject, hiddenPicker.value);
 }
@@ -117,7 +117,7 @@ function updateCourseColor(subjectTitle, newColor) {    //updates courses color 
 
     calendar.getEvents().forEach(e => {
         const eventSubject = e.extendedProps.subjectTitle || e.title.replace("ΕΞΕΤΑΣΗ: ", "").trim();   //I think this is supposed to change the colors of courses as well as the exam course but 
-        if (eventSubject === subjectTitle) {                                                            // I dont think it works corectly because it uses forEach .getEvent that only takes events currently on screen
+        if (eventSubject === subjectTitle) {                                                            //I don't think it works corectly because it uses forEach .getEvent that only takes events currently on screen
             e.setProp("backgroundColor", newColor);
             e.setProp("borderColor", newColor);
         }                                                                                                
@@ -125,7 +125,7 @@ function updateCourseColor(subjectTitle, newColor) {    //updates courses color 
     });
 }
 
-async function handleCourseToggle(checkbox, targetTitle, sem) {     //new fucntion to clear up callback hell, just does the toggling for the checkboxes
+async function handleCourseToggle(checkbox, targetTitle, sem) {     //new function to clear up callback hell, just does the toggling for the checkboxes
     checkbox.disabled = true;
     try {
         if (checkbox.checked) {
