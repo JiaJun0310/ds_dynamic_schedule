@@ -1,3 +1,15 @@
+/* Animation creating a shutter deopping down effect */
+@keyframes shutterOpen {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
 /* Global reset */
 * {
     box-sizing: border-box;
@@ -10,6 +22,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
+    background-color: rgb(107, 6, 6);
 }
 
 /* Header bar */
@@ -284,10 +297,10 @@ footer {
 
 /* Sidebar wrapper container */
 #semesterWrapper {
-
+    transform-origin: top;
+    animation: shutterOpen 0.5s ease-out forwards;
+    overflow: hidden;
     background-color: rgb(107, 6, 6);
-    border-left: 2px solid rgb(107, 6, 6);
-    border-right: 2px solid rgb(107, 6, 6);
     display: flex;
     flex-direction: column;
     height: 1140px;
@@ -300,28 +313,49 @@ footer {
 
 }
 
+/* Box containing the radiobuttons */
 #radioBox {
-    background-color: #8c2635;
-    border: 3px solid rgb(107, 6, 6);
-    padding: 5px;
+    background-color: #252d4f;
+    padding: 3px;
     color: white;                
     font-family: sans-serif;
-    margin-top: 3px;
+    display: block;
+    align-items: center;
 
 }
 
-#radioBox label {
+/* The label of the buttons, contains the text and the (hidden) clickable circle */
+#radioBox label{
+    background-color: #465286;
+    border: 2px solid #252d4f;
+    padding: 20px;
     color: white;               
     display: block;
     font-size: 18px;
     cursor: pointer;
 
+    display: flex;       
+    justify-content: center; 
+    align-items: center;
 }
 
+/* When the mouse hovers over the button it changes color */
+#radioBox label:hover{
+    background-color:#525f98;
+    
+}
+
+/* Hiding the default clickable circle */
 #radioBox input[type="radio"] {
     margin-right: 10px;
-
+    display: none;
     
+}
+
+/* The entire label triggers the radiobutton to be clicked. When selected, its appearance changes. */
+#radioBox label:has(input:checked) {
+    background-color: #252d4f; 
+    border: 2px solid #465286;
 }
 
 
