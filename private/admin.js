@@ -83,7 +83,7 @@ document.querySelectorAll(".fileBox").forEach((box) => {
     };
 });
 
-const editButton = document.getElementById("editButton");
+const editProgramButton = document.getElementById("editProgramButton");
 const adminPage = document.querySelector(".adminWrapper");
 const selectWrapper = document.getElementById("selectWrapper")
 const editWrapper = document.getElementById("editWrapper")
@@ -94,7 +94,7 @@ const courseSelect = document.getElementById("courses");
 
 
 //When the edit button is clicked it over writes the admin page and loads the edit page
-editButton.onclick = () => {
+editProgramButton.onclick = () => {
 
     adminPage.style.display = "none";
     editBox.style.display = "none";
