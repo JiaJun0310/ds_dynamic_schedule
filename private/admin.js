@@ -54,9 +54,9 @@ document.querySelectorAll(".fileBox").forEach((box) => {
 
                     alert( //If everything goes correct (which it will because it's an amazing pipeline) this alert will apear 
                         "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
-                            extractData +
-                            "\n2. Database: " +
-                            (syncResult.message || "Updated"),
+                        extractData +
+                        "\n2. Database: " +
+                        (syncResult.message || "Updated"),
                     );
                 } else if (id === "acCal") { //If the document uploaded was in the accademic calendar field 
                     const extractResponse = await fetch(
@@ -98,9 +98,9 @@ editButton.onclick = () => {
 
     adminPage.style.display = "none";
     editBox.style.display = "none";
-    
+
     selectWrapper.style.display = "flex";
-    editWrapper.style.display = "flex"; 
+    editWrapper.style.display = "flex";
 
 };
 
@@ -114,9 +114,9 @@ backButton.onclick = () => {
 
     adminPage.style.display = "flex";
     editBox.style.display = "flex";
-    
+
     selectWrapper.style.display = "none";
-    editWrapper.style.display = "none"; 
+    editWrapper.style.display = "none";
 }
 
 
@@ -164,7 +164,7 @@ semesterSelect.addEventListener("change", async () => {
     }
 });
 
- 
+
 courseSelect.addEventListener("change", async () => {
 
     //getting the value of the selected course
@@ -199,7 +199,15 @@ courseSelect.addEventListener("change", async () => {
                 </label><br>
 
                 <label class="Semesters">Εξάμηνο:
-                    <input type="text" name="semester" value="${semesterSelect.value[semesterSelect.value.length - 1]}">
+                 
+                    <select name="semester">
+                        ${[1, 2, 3, 4, 5, 6, 7, 8].map(s => `
+                            <option value="${s}" ${s == semesterSelect.value[semesterSelect.value.length - 1] ? "selected" : ""}>
+                                ${s}
+                            </option>
+                        `).join("")}
+                    </select>
+
                 </label><br>
 
                 <label class="professor">Καθηγητές:
@@ -207,7 +215,7 @@ courseSelect.addEventListener("change", async () => {
                 </label><br>
             </form>
         `;
-
+        
         editWrapper.appendChild(generalDiv);
 
         //generate the lecture info dynamically
@@ -225,15 +233,23 @@ courseSelect.addEventListener("change", async () => {
                     </label><br>
 
                     <label class="daysOfWeek">Ημέρα:
-                        <input type="text" name="day" value="${lecture.day}">
+
+                        <select name="day">
+                            ${[1, 2, 3, 4, 5].map(d => `
+                                <option value="${d}" ${d == lecture.day ? "selected" : ""}>
+                                    ${d}
+                                </option>
+                            `).join("")}
+                        </select>
+                       
                     </label><br>
 
                     <label class="startTime">Ώρα Έναρξης:
-                        <input type="time" name="start" value="${lecture.start ? lecture.start.slice(0,5) : ""}">
+                        <input type="time" name="start" value="${lecture.start ? lecture.start.slice(0, 5) : ""}">
                     </label><br>
 
                     <label class="endTime">Ώρα Λήξης:
-                        <input type="time" name="end" value="${lecture.end ? lecture.end.slice(0,5) : ""}">
+                        <input type="time" name="end" value="${lecture.end ? lecture.end.slice(0, 5) : ""}">
                     </label><br>
                 </form>
             `;
@@ -276,6 +292,27 @@ editWrapper.addEventListener("click", async (e) => {
         lectureHall: []
     };
 
+    //check if time is valid(start time < end time)
+    let validTime = true;
+
+    lectureForms.forEach(form => {
+        const formData = new FormData(form);
+
+        const start = formData.get("start");
+        const end = formData.get("end");
+
+        if (start >= end) {
+            alert("Η ώρα έναρξης πρέπει να είναι πριν την ώρα λήξης!");
+            validTime = false;
+            return;
+        }
+    });
+
+    //if time not valid stop 
+    if (!validTime){
+        return;
+    } 
+
     //collect lecture data into arrays
     lectureForms.forEach(form => {
         const formData = new FormData(form);
@@ -286,7 +323,7 @@ editWrapper.addEventListener("click", async (e) => {
         updatedCourse.lectureHall.push(formData.get("lectureHall"));
     });
 
-    try {
+   try {
         const response = await fetch("/updateCourse", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

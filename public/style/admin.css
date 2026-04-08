@@ -239,6 +239,11 @@ input{
    border: none 
 }
 
+select{
+    border-radius: 8px; 
+    border: none 
+}
+
 .editCourse h2{
     color: white;
     grid-column: 1 / 3;  
@@ -260,6 +265,12 @@ input{
 }
 
 .editCourse input {
+    width: 100%;
+    padding: 8px;
+    background-color: white;
+}
+
+.editCourse select {
     width: 100%;
     padding: 8px;
     background-color: white;
