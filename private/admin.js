@@ -87,20 +87,31 @@ const editProgramButton = document.getElementById("editProgramButton");
 const adminPage = document.querySelector(".adminWrapper");
 const selectWrapper = document.getElementById("selectWrapper")
 const editWrapper = document.getElementById("editWrapper")
-const editBox = document.querySelector(".editBox");
+// const editBox = document.querySelector(".editBox");
 const backButton = document.getElementById("backButton")
 const semesterSelect = document.getElementById("semester");
 const courseSelect = document.getElementById("courses");
-
+const editExamButton = document.getElementById("editExamButton")
+const editButtonWrapper = document.querySelector(".editButtonWrapper");
 
 //When the edit button is clicked it over writes the admin page and loads the edit page
 editProgramButton.onclick = () => {
 
     adminPage.style.display = "none";
-    editBox.style.display = "none";
+    editButtonWrapper.style.display = "none";
 
     selectWrapper.style.display = "flex";
     editWrapper.style.display = "flex";
+
+};
+
+editExamButton.onclick = () => {
+
+    adminPage.style.display = "none";
+    editButtonWrapper.style.display = "none";
+
+    selectWrapper.style.display = "flex";
+    // editWrapper.style.display = "flex";
 
 };
 
@@ -113,7 +124,7 @@ backButton.onclick = () => {
 
 
     adminPage.style.display = "flex";
-    editBox.style.display = "flex";
+    editButtonWrapper.style.display = "flex";
 
     selectWrapper.style.display = "none";
     editWrapper.style.display = "none";
