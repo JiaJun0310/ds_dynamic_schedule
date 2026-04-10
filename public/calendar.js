@@ -117,8 +117,8 @@ function examOptions() {
         examsBox.style.display = "none"
     }
 
-
-    // const response = await fetch("/getSemesterOfExams", {
+    try{
+        // const response = await fetch("/getSemesterOfExams", {
     //     method: "POST",
     //     headers: { "Content-Type": "application/json" },
     //     body: JSON.stringify(),
@@ -129,16 +129,23 @@ function examOptions() {
     // }
 
     // const isWinter = await response.json();
-    const isWinter = true;
+    }
+    catch (error)
+    {
+        alert("Something went wrong")
+    }
+    
+    const isWinter = true; //TO BE DELETED
 
-    let isClicked = false;
+    let isNormalClicked = false;
+    let isEmbolimClicked = false;
 
     normalExam.onclick = async () => {
 
-        isClicked = !isClicked;
+        isNormalClicked = !isNormalClicked;
         const normalExamDiv = document.getElementById("normalExamDiv")
 
-        if (isClicked) {
+        if (isNormalClicked) {
 
             normalExamDiv.style.display = "block"
 
@@ -167,10 +174,10 @@ function examOptions() {
 
     embolimExam.onclick = async () => {
 
-        isClicked = !isClicked;
+        isEmbolimClicked = !isEmbolimClicked;
         const embolimExamDiv = document.getElementById("embolimExamDiv")
 
-        if (isClicked) {
+        if (isEmbolimClicked) {
 
             embolimExamDiv.style.display = "block"
 
