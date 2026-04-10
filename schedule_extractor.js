@@ -18,8 +18,6 @@ const SubjectSchema = z.object({
     professor: z.array(z.string()).describe("A list of the professors teaching this course not corresponding to the days (e.g., ['ΦΙΛΙΠΠΑΚΗΣ Μ.'], ['ΜΗΛΙΩΝΗΣ Α.', 'ΑΝΑΣΤΑΣΟΠΟΥΛΟΣ Α.'])")
 });
 
-console.log("TREXEI TO PIPELINE");
-
 const ScheduleSchema = z.object({
     subjects: z.array(SubjectSchema).describe("An array of the subject objects that stores all subjects")
 })
@@ -122,7 +120,6 @@ async function runExtractionPipeline() {
 
     // call llama to convert pdf to markdown
     const rawMarkdown = await visionPdfToMarkdown(llamaAgent, filePath);
-    console.log(rawMarkdown)
 
     // call gemini to convert markdown to schema
     const finalDictionary = await markdownToDictionary(rawMarkdown);
