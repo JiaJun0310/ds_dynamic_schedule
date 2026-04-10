@@ -1,12 +1,12 @@
 //GLOBAL VARIABLES
 let calendar;
 let academicData = null;
-let eventTracker = {}; 
+let eventTracker = {};
 let currentMode = "Μαθήματα"; //hardcode the default radio button
 
 //DOM ELEMENTS 
 const popup = document.getElementById("eventPopup");  //pop up for when you click on an event
-const titleEl = document.getElementById("popTitle"); 
+const titleEl = document.getElementById("popTitle");
 const profEl = document.getElementById("popProfessor");
 const hallEl = document.getElementById("popHall");
 const timeEl = document.getElementById("popTime"); //until here it's pop up stuff
@@ -91,6 +91,115 @@ function handleEventClick(info) {  //handles clicking on an event and dialog app
     hiddenPicker.oninput = () => updateCourseColor(targetSubject, hiddenPicker.value);
 }
 
+function examOptions() {
+
+    const semesters = document.getElementById("semesters");
+    const examsBox = document.getElementById("examsBox");
+    const normalExam = document.getElementById("normalExam");
+    const embolimExam = document.getElementById("embolimExam");
+
+    if (currentMode === "Εξεταστική") {
+        semesters.style.display = "none"
+        examsBox.style.display = "flex"
+    }
+    if (currentMode === "Μαθήματα") {
+
+        const semesterWrappers = Array.from(document.querySelectorAll(".semesterButtonDivWrapper"));
+        semesters.innerHTML = ""
+        semesterWrappers.sort((a, b) => a.dataset.index - b.dataset.index)
+
+        semesterWrappers.forEach((semester) => {
+            console.log(semester)
+            semesters.append(semester)
+        })
+
+        semesters.style.display = "flex"
+        examsBox.style.display = "none"
+    }
+
+
+    // const response = await fetch("/getSemesterOfExams", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(),
+    // });
+
+    // if (!response.ok) {
+    //     throw new Error("Failed to fetch semester's exams");
+    // }
+
+    // const isWinter = await response.json();
+    const isWinter = true;
+
+    let isClicked = false;
+
+    normalExam.onclick = async () => {
+
+        isClicked = !isClicked;
+        const normalExamDiv = document.getElementById("normalExamDiv")
+
+        if (isClicked) {
+
+            normalExamDiv.style.display = "block"
+
+            if (isWinter) {
+                const winterSemesters = document.querySelectorAll(".winterSemesters")
+
+                winterSemesters.forEach((semester) => {
+
+                    normalExamDiv.append(semester)
+                });
+            }
+            else {
+                const springSemesters = document.querySelectorAll(".springSemesters")
+
+                springSemesters.forEach((semester) => {
+
+                    normalExamDiv.append(semester)
+                });
+            }
+        }
+        else{
+            normalExamDiv.style.display = "none"
+        }
+
+    };
+
+    embolimExam.onclick = async () => {
+
+        isClicked = !isClicked;
+        const embolimExamDiv = document.getElementById("embolimExamDiv")
+
+        if (isClicked) {
+
+            embolimExamDiv.style.display = "block"
+
+            if (!isWinter) {
+                const winterSemesters = document.querySelectorAll(".winterSemesters")
+
+                winterSemesters.forEach((semester) => {
+
+                    embolimExamDiv.append(semester)
+                });
+            }
+            else {
+                const springSemesters = document.querySelectorAll(".springSemesters")
+
+                springSemesters.forEach((semester) => {
+
+                    embolimExamDiv.append(semester)
+                });
+            }    
+        }
+        else{
+            embolimExamDiv.style.display = "none"
+        }
+
+    };
+
+
+}
+
 // Listen for clicks on the radio buttons
 document.querySelectorAll('input[name="choice"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
@@ -104,6 +213,9 @@ document.querySelectorAll('input[name="choice"]').forEach(radio => {
             if (arrow) arrow.src = "../images/right_pointer.svg";
             btn.dataset.open = "false"; // Reset our tracking variable
         });
+
+        examOptions()
+
     });
 });
 
@@ -120,7 +232,7 @@ function updateCourseColor(subjectTitle, newColor) {    //updates courses color 
         if (eventSubject === subjectTitle) {                                                            //I don't think it works corectly because it uses forEach .getEvent that only takes events currently on screen
             e.setProp("backgroundColor", newColor);
             e.setProp("borderColor", newColor);
-        }                                                                                                
+        }
         
     });
 }
@@ -176,7 +288,7 @@ async function addCourseToCalendar(targetTitle, sem) {//new function, again, doe
                 rawEnd: item.endTime || item.end
             },
         });
-        eventTracker[targetTitle].push(addedEvent);     
+        eventTracker[targetTitle].push(addedEvent);
     }); //push event to eventTracker
 
 
@@ -220,16 +332,16 @@ function removeCourseFromCalendar(targetTitle) {        //removes and event from
 
 function addStandaloneExam(examData) {
     const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
-    
+
     // Safety check, don't add if it already exists
     let existing = calendar.getEvents().find(e => e.title === examTitleStr);
 
     if (!existing) {
         let addedExam = calendar.addEvent({
             title: examTitleStr,
-            start: examData.start,       
-            end: examData.end,           
-            color: "#e74c3c",            
+            start: examData.start,
+            end: examData.end,
+            color: "#e74c3c",
             extendedProps: {
                 lectureHall: examData.location,
                 description: examData.description,
@@ -252,11 +364,11 @@ function addStandaloneExam(examData) {
 
 function removeStandaloneExam(title) {
     const examTitleStr = "ΕΞΕΤΑΣΗ: " + title;
-    
+
     // Remove from visual calendar and tracker
     if (eventTracker[examTitleStr]) {
         eventTracker[examTitleStr].forEach(eventObj => eventObj.remove());
-        delete eventTracker[examTitleStr]; 
+        delete eventTracker[examTitleStr];
     }
 
     // --- NEW: Remove from Local Storage ---
@@ -287,9 +399,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         eventClick: handleEventClick,
         eventDidMount: function (info) {        //this here handles holidays
             if (info.event.display === 'background') return;    //this draws the holidays in the calendar
-            const occurrenceStart = info.event.start.getTime(); 
+            const occurrenceStart = info.event.start.getTime();
             const isOnHoliday = calendar.getEvents().some(h => {        //in this function we check if events lands on a holiday if it does we do not make it apear
-                if (h.groupId !== 'holidays') return false; 
+                if (h.groupId !== 'holidays') return false;
                 const hStart = h.start.getTime();
                 const hEnd = h.end ? h.end.getTime() : hStart + 86400000;
                 return occurrenceStart >= hStart && occurrenceStart < hEnd;
@@ -346,7 +458,7 @@ clearSelectionBtn.onclick = () => {         //button that clears all selections
     eventTracker = {};
     document.querySelectorAll(".checkbox").forEach(cb => cb.checked = false);
     document.querySelectorAll(".colorBtn").forEach(cp => cp.style.display = "none");
-    
+
 
     // Clear both local storages
     localStorage.removeItem("userSchedule");
@@ -355,7 +467,7 @@ clearSelectionBtn.onclick = () => {         //button that clears all selections
 
 document.querySelectorAll(".buttonDiv").forEach((button) => {   //this selects eveything from all the "buttons"
     button.dataset.open = "false"; // We use this instead of 'let pressed = false' so it doesn't break when switching tabs
-    
+
     //we save the data like semester for every button
     let cleanText = button.textContent.trim();
     let sem = cleanText[cleanText.length - 1];
@@ -392,10 +504,10 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {   //this selects e
             titlesArray.forEach((title, i) => {
                 const div = document.createElement("div");
                 div.className = "course";
-                
+
                 const p = document.createElement("p");
                 p.textContent = title;
-                
+
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.className = "checkbox";
@@ -414,11 +526,11 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {   //this selects e
 
                 checkbox.onchange = () => handleCourseToggle(checkbox, title, sem);
             });
-        } 
-        
+        }
+
         // This gets executed when the button was clicked and the radio button was on "Εξεταστική"
         else if (currentMode === "Εξεταστική") {
-            
+
             const res = await fetch("/getSemesterExams", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -431,16 +543,16 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {   //this selects e
             examsArray.forEach((examData, i) => {
                 const div = document.createElement("div");
                 div.className = "course"; // You can keep the same class for styling
-                
+
                 const p = document.createElement("p");
                 p.textContent = examData.title; // e.g., "ΨΣ-532-ΠΡΟΗΓΜΕΝΑ..."
-                
+
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.className = "checkbox";
 
                 checkbox.checked = currentlySavedExams.some(saved => saved.title === examData.title);
-                
+
                 // Check if this exact exam is already on the calendar
                 const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
                 checkbox.checked = calendar.getEvents().some(e => e.title === examTitleStr);
@@ -487,7 +599,7 @@ function downloadCalendar() {
         while (current < end) {
             const pad = n => n < 10 ? '0' + n : n; // Adds a leading zero (e.g., 9 becomes "09")
             const dateStr = `${current.getFullYear()}${pad(current.getMonth() + 1)}${pad(current.getDate())}`;
-            
+
             if (!excludedDates.includes(dateStr)) excludedDates.push(dateStr); // Save the formatted date
             current.setDate(current.getDate() + 1); // Move to the next day
         }
@@ -505,7 +617,7 @@ function downloadCalendar() {
 
                 // Setup the weekly repeat rule until the end of the semester
                 const rrule = { freq: "WEEKLY", until: dates.end, byday: days.map(d => daysMap[d]) };
-                
+
                 // Helper to clean up database times into pure HH:MM formats
                 const parseTime = (t) => {
                     if (Array.isArray(t)) t = t[0];
@@ -551,14 +663,14 @@ function downloadCalendar() {
 
     // Google requires DTSTAMP to end in 'Z' (UTC format)
     icsString = icsString.replace(/DTSTAMP;VALUE=DATE-TIME:(\d{8}T\d{6})/g, "DTSTAMP:$1Z");
-    
+
     // Google prefers clean DTSTART/DTEND tags without the VALUE parameter
     icsString = icsString.replace(/DTSTART;VALUE=DATE-TIME:/g, "DTSTART:");
     icsString = icsString.replace(/DTEND;VALUE=DATE-TIME:/g, "DTEND:");
     // Force unique IDs so Google Calendar doesn't silently ignore deleted test events
     icsString = icsString.replace(/UID:\d+@default/g, () => `UID:${Math.random().toString(36).substring(2)}${Date.now()}@schedule.ics`);
     // --------------------------------------------
-    
+
     // 6. Inject the holiday exclusion dates into the raw ICS text using Regex
     if (excludedDates.length > 0) {
         icsString = icsString.replace(/BEGIN:VEVENT([\s\S]*?)END:VEVENT/g, (match) => {
@@ -580,7 +692,7 @@ function downloadCalendar() {
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
     link.download = 'university_schedule.ics'; // Name of the downloaded file
-    
+
     document.body.appendChild(link); // Temporarily attach the link to the screen
     link.click(); // Automatically click it
     document.body.removeChild(link); // Clean up the link afterward
@@ -633,11 +745,9 @@ function appearCalendar() {
 }
 
 //resize wrapper/sidebar on window change 
-function resizeWrapper()
-{
+function resizeWrapper() {
     const sidebar = document.getElementById("semesterWrapper");
-    if(sidebar)
-    {
+    if (sidebar) {
         sidebar.style.width = "280px";
     }
 }
@@ -654,22 +764,22 @@ document.addEventListener("DOMContentLoaded", function () {
     resizer.addEventListener("mousedown", (e) => {
         isResizing = true;
         resizer.classList.add("dragging");
-        document.body.style.cursor = "col-resize"; 
+        document.body.style.cursor = "col-resize";
         document.body.style.userSelect = "none"; // Stops text highlighting
     });
 
     // Doing the drag
     document.addEventListener("mousemove", (e) => {
         if (!isResizing) return;
-        
+
         // Calculate width: Window width minus mouse position (because sidebar is on the right)
-        let newWidth = window.innerWidth - e.clientX; 
+        let newWidth = window.innerWidth - e.clientX;
 
         //Min 272px, Max 30% of screen
         if (newWidth > 272 && newWidth < (window.innerWidth * 0.3)) {
             sidebar.style.width = `${newWidth}px`;
             sidebar.style.flex = "none"; // Stop flexbox from ignoring our width
-            
+
             if (typeof calendar !== 'undefined' && calendar) {
                 calendar.updateSize(); // Fixes the calendar grid instantly
             }
@@ -687,9 +797,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-addEventListener("resize", () => 
-{
-    appearCalendar(); 
+addEventListener("resize", () => {
+    appearCalendar();
     resize();
     resizeWrapper();
 });
