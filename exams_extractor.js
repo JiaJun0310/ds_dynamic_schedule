@@ -142,9 +142,15 @@ if (super_json) {
         if (super_json.isEmvolimi) { // if it is emvolimi
             // path where the json will be saved
             const outputPath = "./jsonData/make_up_exams.json";
+            // path were kanonika exams are saved
+            const semesterExamsPath = "./jsonData/semester_exams.json";
 
             // save the file to jsonData
             fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+
+            if (fs.existsSync(semesterExamsPath)) { // if the file exists
+                fs.unlinkSync(semesterExamsPath); // delete the file permanently. (no recycle bins. completely severs the link at hard drive level)
+            }
         } else { // if it is kanoniki
             // path where the json will be saved
             const outputPath = "./jsonData/semester_exams.json";
