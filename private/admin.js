@@ -36,7 +36,6 @@ document.querySelectorAll(".fileBox").forEach((box) => {
             if (response.ok) { //if file was uploaded correctly 
                 input.value = ""; //reset the value
 
-
                 // If it's a schedule, trigger the schedule_extractor.js
                 if (id === "schedule") {
                     const extractResponse = await fetch( //API to run schedule_extractor.js
@@ -67,6 +66,15 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                     );
                     const extractData = await extractResponse.text();
                     alert("Ολοκληρώθηκε: " + extractData); //Extraction complite and file saved as academic_calendar.json
+                } else if (id === "exams") {
+                    const extractResponse = await fetch(
+                        "/run_exams_extractor",
+                        {
+                            method: "POST",
+                        },
+                    );
+                    const extractData = await extractResponse.text();
+                    alert("Ολοκληρώθηκε: " + extractData); //Extraction complite and file saved as semester_exams.json or make_up_exams.json
                 } else {
                     alert("Το αρχείο ανέβηκε!");
                 }
