@@ -152,11 +152,24 @@ if (super_json) {
                 fs.unlinkSync(semesterExamsPath); // delete the file permanently. (no recycle bins. completely severs the link at hard drive level)
             }
         } else { // if it is kanoniki
-            // path where the json will be saved
-            const outputPath = "./jsonData/semester_exams.json";
+            // grabs the first date of the exam period
+            const firstDate = examArray[0].date;
+            // grabs the month of the first date
+            const month = parseInt(firstDate.split("/")[1], 10);
 
-            // save the file to jsonData
-            fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+            if (month === 8 || month === 9 || month === 10){ // if the month of the first date of the exams is august, september or october, it is a september exam period
+                // path where the json will be saved
+                const outputPath = "./jsonData/september_exams.json";
+
+                // save the file to jsonData
+                fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+            } else { // if it is anything else, it is a winter or spring exam period
+                // path where the json will be saved
+                const outputPath = "./jsonData/semester_exams.json";
+
+                // save the file to jsonData
+                fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+            }
         }
     } else { // if list was empty
         console.log("Pipeline finished, but list is empty")
