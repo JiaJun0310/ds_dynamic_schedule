@@ -44,10 +44,11 @@ async function visionPdfToMarkdown(llamaClient, filePath) {
                 custom_prompt: `You are extracting data from a university exam schedule. 
                 
                 STRICT INSTRUCTIONS:
-                1. The document contains dates dividing the exam days (e.g., "Δευτέρα, 24/11/2025"). 
-                2. Whenever you encounter a date, you MUST explicitly extract the date and place it as a clear Markdown header (e.g., "### DATE: 24/11/2025") immediately above the exams for that day.
-                3. Do not let the complex tables distract you from capturing these dates. 
-                4. Maintain the alignment of Times, Rooms, Semesters, Courses, and Divisions.`
+                1. EXTREMELY IMPORTANT: At the very top of the first page, there is a title line that starts with the word "ΕΞΕΤΑΣΕΙΣ" (e.g., "ΕΞΕΤΑΣΕΙΣ ΠΕΡΙΟΔΟΥ..." or "ΕΞΕΤΑΣΕΙΣ ΜΑΘΗΜΑΤΩΝ..."). You MUST extract this exact line and place it at the very beginning of the markdown output exactly like this: "# MAIN TITLE: [Extracted Line]".
+                2. The document contains dates dividing the exam days (e.g., "Δευτέρα, 24/11/2025"). 
+                3. Whenever you encounter a date, you MUST explicitly extract the date and place it as a clear Markdown header (e.g., "### DATE: 24/11/2025") immediately above the exams for that day.
+                4. Do not let the complex tables distract you from capturing these dates. 
+                5. Maintain the alignment of Times, Rooms, Semesters, Courses, and Divisions.`
             }
         });
         return result.markdown.pages.map(page => page.markdown).join('\n\n---\n\n'); // returns the markdown as a whole instead of pages
@@ -87,7 +88,8 @@ const promptTemplate = ChatPromptTemplate.fromMessages([
         2. TIME FORMATTING: The document shows times as ranges (e.g., "08:00-10:00"). You must split this into startTime and endTime, and append ":00" to strictly match the "HH:MM:SS" format (e.g., "08:00:00", "10:00:00").
         3. ROOM ARRAYS: Exams are often held in multiple rooms separated by commas (e.g., "ΓΛ21-305, ΓΑ21-405"). You must separate these into the lectureHall string array.
         4. EXTRACT ALL EXAMS: You must locate and extract every single exam listed in the document. Do not summarize or skip rows.
-        5. NO HALLUCINATIONS: Only extract what is present. If a semester is "Επι.", leave it blank or extract the numerical semester if provided.`
+        5. EMVOLIMI FLAG: Look at the very top of the markdown for the "# MAIN TITLE:". If that title text contains the words "ΕΠΙ ΠΤΥΧΙΩ" or "ΕΜΒΟΛΙΜΗ", you MUST set the isEmvolimi flag to true. If it does not contain those words, set it to false.
+        6. NO HALLUCINATIONS: Only extract what is present. If a semester is "Επι.", leave it blank or extract the numerical semester if provided.`
     ],
     [
         "human",
