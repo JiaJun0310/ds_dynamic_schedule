@@ -74,7 +74,18 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                         },
                     );
                     const extractData = await extractResponse.text();
-                    alert("Ολοκληρώθηκε: " + extractData); //Extraction complite and file saved as semester_exams.json or make_up_exams.json
+
+                    const syncResponse = await fetch("/sendExamData", { //After creating the .json in jsonData imediatly send it to the database with /sendData
+                        method: "POST",
+                    });
+
+                    const syncResult = await syncResponse.json();
+                    alert( //If everything goes correct (which it will because it's an amazing pipeline) this alert will apear 
+                        "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
+                        extractData +
+                        "\n2. Database: " +
+                        (syncResult.message || "Updated"),
+                    );
                 } else {
                     alert("Το αρχείο ανέβηκε!");
                 }

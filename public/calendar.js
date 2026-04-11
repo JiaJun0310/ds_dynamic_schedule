@@ -138,24 +138,24 @@ async function examOptions() {
         semesters.style.display = "flex";
         examsBox.style.display = "none";
     }
-    //TO BE UNCOMENTED WHEN BACKEND WORKS
-    // try {
-    //     const response = await fetch("/getSemesterOfExams", {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify(),
-    //     });
+    let isWinter = 0
+    try {
+        const response = await fetch("/getSemesterOfExams", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(),
+        });
 
-    //     if (!response.ok) {
-    //         throw new Error("Failed to fetch semester's exams");
-    //     }
+        if (!response.ok) {
+            throw new Error("Failed to fetch semester's exams");
+        }
 
-    //     const isWinter = await response.json();
-    // } catch (error) {
-    //     alert("Something went wrong");
-    // }
+        isWinter = await response.json();
+    } catch (error) {
+        alert("Something went wrong");
+    }
 
-    const isWinter = true; //TO BE DELETED
+    // const isWinter = true; //TO BE DELETED
 
     let isNormalClicked = false;
     let isEmbolimClicked = false;   //tracked what tabs are open and which are closed 
@@ -355,7 +355,7 @@ function addExamToCalendar(examData, targetTitle, color) {
 function removeCourseFromCalendar(targetTitle) {
     //removes and event from the calendar
     if (eventTracker[targetTitle]) {
-        eventTracker[targetTitle].forEach((eventObj) => eventObj.remove());
+        eventTracker[targetTitle].forEach((eventObj) => eventObj?.remove());
         delete eventTracker[targetTitle];
     }
     let saved = getSavedSchedule();
@@ -365,18 +365,30 @@ function removeCourseFromCalendar(targetTitle) {
 function addStandaloneExam(examData) {
     const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
 
+    // 1. Convert the DD/MM/YYYY date to YYYY-MM-DD using your existing helper
+    const formattedDate = formatJSONDate(examData.date); 
+    
+    // 2. Combine date and time into valid ISO8601 strings for FullCalendar
+    const startISO = `${formattedDate}T${examData.startTime}`;
+    const endISO = `${formattedDate}T${examData.endTime}`;
+    
+    // 3. Convert the lectureHall array into a single comma-separated string
+    const hallString = Array.isArray(examData.lectureHall) 
+        ? examData.lectureHall.join(", ") 
+        : examData.lectureHall || "N/A";
+
     // Safety check, don't add if it already exists
     let existing = calendar.getEvents().find((e) => e.title === examTitleStr);
 
     if (!existing) {
         let addedExam = calendar.addEvent({
             title: examTitleStr,
-            start: examData.start,
-            end: examData.end,
+            start: startISO,  // Now using the formatted string
+            end: endISO,      // Now using the formatted string
             color: "#e74c3c",
             extendedProps: {
-                lectureHall: examData.location,
-                description: examData.description,
+                lectureHall: hallString, // Now using the joined array
+                description: examData.division ? `Κλιμάκιο: ${examData.division}` : "", // Using division for the description
                 isExam: true,
             },
         });
@@ -388,7 +400,7 @@ function addStandaloneExam(examData) {
         //Save to Local Storage
         let saved = getSavedExams();
         if (!saved.some((e) => e.title === examData.title)) {
-            saved.push(examData); // Save the whole object so we don't have to fetch it on reload
+            saved.push(examData); 
             saveExams(saved);
         }
     }
@@ -399,7 +411,7 @@ function removeStandaloneExam(title) {
 
     // Remove from visual calendar and tracker
     if (eventTracker[examTitleStr]) {
-        eventTracker[examTitleStr].forEach((eventObj) => eventObj.remove());
+        eventTracker[examTitleStr].forEach((eventObj) => eventObj?.remove());
         delete eventTracker[examTitleStr];
     }
 
@@ -497,7 +509,7 @@ colorBtn.onclick = () => hiddenPicker.click();
 clearSelectionBtn.onclick = () => {
     //button that clears all selections
     Object.values(eventTracker).forEach((events) =>
-        events.forEach((e) => e.remove()),
+        events.forEach((e) => e?.remove()),
     );
     eventTracker = {};
     document
