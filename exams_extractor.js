@@ -113,9 +113,11 @@ async function markdownToDictionary(markdownText) {
     }
 }
 
+
+// main function that returns the information
 async function runExtractionPipeline() {
     // file path of the gods
-    const filePath = "./uploads/exams1.pdf";
+    const filePath = "./uploads/exams.pdf";
 
     // call llama to convert pdf to markdown
     const rawMarkdown = await visionPdfToMarkdown(llamaAgent, filePath);
@@ -129,6 +131,7 @@ async function runExtractionPipeline() {
 
 var super_json = await runExtractionPipeline()
 
+// unpacks the information and checks if the exams are emvolimi or kanoniki. names accordingly.
 if (super_json) {
     let examArray = super_json.exams || super_json
 
@@ -136,13 +139,13 @@ if (super_json) {
     const finalJsonString = JSON.stringify(examArray, null, 2);
 
     if (examArray.length > 0) { // if there was an output
-        if (super_json.isEmvolimi) {
+        if (super_json.isEmvolimi) { // if it is emvolimi
             // path where the json will be saved
             const outputPath = "./jsonData/make_up_exams.json";
 
             // save the file to jsonData
             fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
-        } else {
+        } else { // if it is kanoniki
             // path where the json will be saved
             const outputPath = "./jsonData/semester_exams.json";
 
