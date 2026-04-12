@@ -3,6 +3,7 @@ let calendar;
 let academicData = null;
 let eventTracker = {};
 let currentMode = "Μαθήματα"; //hardcode the default radio button
+let professorLinks = {}; 
 
 //DOM ELEMENTS
 const popup = document.getElementById("eventPopup"); //pop up for when you click on an event
@@ -54,6 +55,16 @@ async function fetchAcademicData() {
     }
 }
 
+async function fetchProfessorLinks() {
+    try {
+        const response = await fetch("/jsonData/teachers.json");
+        if (!response.ok) throw new Error("Links file not found");
+        professorLinks = await response.json();
+    } catch (err) {
+        console.error("Error loading professor links:", err);
+    }
+}
+
 //get's data of class based on title
 async function fetchCourseData(title) {
     const res = await fetch("/getClass", {
@@ -100,7 +111,23 @@ function handleEventClick(info) {
     });
 
     titleEl.innerText = event.title;
-    profEl.innerText = props.professor || "N/A";
+    let profs = props.professor;
+    if (!profs || profs.length === 0 || profs[0] === "") {
+        profEl.innerHTML = "N/A";
+    } else {
+        // if teachers are many 
+        let profArray = Array.isArray(profs) ? profs : profs.split(",");
+        
+        profEl.innerHTML = profArray.map(prof => {
+            let cleanName = prof.trim();
+            let link = professorLinks[cleanName]; // looks for the name
+            
+            // if it finds a link it replaces it with the <a> tag
+            return link 
+                ? `<a href="${link}" target="_blank" style="color: #3788d8; text-decoration: underline;">${cleanName}</a>` 
+                : cleanName;
+        }).join(", ");
+    }
     if (hallEl) hallEl.innerText = props.lectureHall || "N/A";
     timeEl.innerText = `${start} - ${end}`;
 
@@ -469,6 +496,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     calendar.render(); //Makes calendar visible
     await fetchAcademicData();
+    await fetchProfessorLinks();
 
     // Populate Holidays, this code gives names, dates and data to the holidays
     if (academicData?.holidays) {
