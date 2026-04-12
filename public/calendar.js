@@ -166,6 +166,7 @@ async function examOptions() {
 
         if (isNormalClicked) {  //changes the display setting
             normalExamDiv.style.display = "block";
+            normalExam.classList.add("active"); // Gives the button its 'checked' appearance
 
             if (isWinter) {     //this is the adding logic for the semester depending on the API's answer
                 const winterSemesters =
@@ -182,17 +183,22 @@ async function examOptions() {
                     normalExamDiv.append(semester);
                 });
             }
+
+            
+   
         } else {    //removes the divs
             normalExamDiv.style.display = "none";
+            normalExam.classList.remove("active"); //returns the button to its default state
         }
     };
 
     embolimExam.onclick = async () => { //this button apears the div below the embolim exams
         isEmbolimClicked = !isEmbolimClicked;
-        const embolimExamDiv = document.getElementById("embolimExamDiv");
+        const embolimExamDiv = document.getElementById("embolimExamDiv"); 
 
         if (isEmbolimClicked) { //changes the display setting
             embolimExamDiv.style.display = "block";
+            embolimExam.classList.add("active"); // Gives the button its 'checked' appearance
 
             if (!isWinter) {    //this is the adding logic for the semester depending on the API's answer
                 const winterSemesters =
@@ -211,6 +217,7 @@ async function examOptions() {
             }
         } else {    //removes the divs
             embolimExamDiv.style.display = "none";
+            embolimExam.classList.remove("active"); //returns the button to its default state
         }
     };
 }
@@ -366,15 +373,15 @@ function addStandaloneExam(examData) {
     const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
 
     // 1. Convert the DD/MM/YYYY date to YYYY-MM-DD using your existing helper
-    const formattedDate = formatJSONDate(examData.date); 
-    
+    const formattedDate = formatJSONDate(examData.date);
+
     // 2. Combine date and time into valid ISO8601 strings for FullCalendar
     const startISO = `${formattedDate}T${examData.startTime}`;
     const endISO = `${formattedDate}T${examData.endTime}`;
-    
+
     // 3. Convert the lectureHall array into a single comma-separated string
-    const hallString = Array.isArray(examData.lectureHall) 
-        ? examData.lectureHall.join(", ") 
+    const hallString = Array.isArray(examData.lectureHall)
+        ? examData.lectureHall.join(", ")
         : examData.lectureHall || "N/A";
 
     // Safety check, don't add if it already exists
@@ -400,7 +407,7 @@ function addStandaloneExam(examData) {
         //Save to Local Storage
         let saved = getSavedExams();
         if (!saved.some((e) => e.title === examData.title)) {
-            saved.push(examData); 
+            saved.push(examData);
             saveExams(saved);
         }
     }

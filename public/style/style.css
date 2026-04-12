@@ -375,21 +375,36 @@ footer {
 #examsBox{
     display: none;
     flex-direction: column;
-
-    
 }
 
 #normalExam,
 #embolimExam{
     display: flex;
     height: 3.5em;
-
+   
     cursor: pointer;
     justify-content: center;
     align-items: center;
-    background-color: #8c2635;
-    border: 3px solid rgb(107, 6, 6);
+    background-color: #465286;
+    border: 3px solid #252d4f;
+    color: white;
 }
+
+/* When the mouse hovers over the button it changes color */
+#normalExam:hover,
+#embolimExam:hover{
+    background-color:#525f98;
+}
+
+/* Class to be added when the button is clicked */
+#normalExam.active,
+#embolimExam.active{
+    background-color: #252d4f; 
+    border: 2px solid #465286;
+
+}
+
+
 
 /* Mobile layout */
 @media (max-width: 767px) {
