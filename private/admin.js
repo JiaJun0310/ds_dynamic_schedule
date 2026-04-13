@@ -421,7 +421,7 @@ examsSemesterSelect.addEventListener("change", async () => {
         }
 
         const data = await response.json();
-        const courses = data.map((course) => course.title);
+        const exams = data.map((exam) => exam.title);
 
         //clears the previous data in order to load the new ones
         examsCourseSelect.innerHTML = "";
@@ -435,10 +435,10 @@ examsSemesterSelect.addEventListener("change", async () => {
         examsCourseSelect.appendChild(defaultOption);
 
         //append it's exams to the choice box
-        courses.forEach((course) => {
+        exams.forEach((exam) => {
             const option = document.createElement("option");
-            option.value = course;
-            option.textContent = course;
+            option.value = exam;
+            option.textContent = exam;
             examsCourseSelect.appendChild(option);
         });
     } catch (error) {
@@ -466,8 +466,7 @@ examsCourseSelect.addEventListener("change", async () => {
         }
 
         const data = await response.json();
-        // console.log(data);
-
+        
         // 1. Create a safe exam title by replacing double quotes with HTML entities
         const safeExamTitle = data.exam.title.replace(/"/g, '&quot;');
 

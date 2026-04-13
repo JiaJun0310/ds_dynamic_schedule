@@ -458,7 +458,7 @@ app.post("/updateExamCourse", async (req, res) => {
         const courseIndex = data.findIndex(course => course.title === title);
 
         if (courseIndex === -1) {
-            return res.status(404).json({ message: "Course not found" });
+            return res.status(404).json({ message: "Exam not found" });
         }
 
         //replace course data 
@@ -475,7 +475,7 @@ app.post("/updateExamCourse", async (req, res) => {
 
         fs.writeFileSync(mergedPath, JSON.stringify(data, null, 2), 'utf8');
 
-        res.json({ message: "Course updated successfully!" });
+        res.json({ message: "Exam updated successfully!" });
 
     } catch (err) {
         console.error(err);
