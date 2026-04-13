@@ -240,6 +240,9 @@ courseSelect.addEventListener("change", async () => {
 
         const data = await response.json();
 
+        // 1. Create a safe title by replacing double quotes with HTML entities
+        const safeTitle = data.schedules[0].title.replace(/"/g, '&quot;');
+
         //clear the previous content 
         editWrapper.innerHTML = "";
 
@@ -252,7 +255,7 @@ courseSelect.addEventListener("change", async () => {
                 <h2>Γενικά Στοιχεία</h2>
 
                 <label class="title">Όνομα Μαθήματος:
-                    <input type="text" name="title" value="${data.schedules[0].title}" readonly>
+                    <input type="text" name="title" value="${safeTitle}" readonly>
                 </label><br>
 
                 <label class="Semesters">Εξάμηνο:
@@ -399,13 +402,13 @@ editWrapper.addEventListener("click", async (e) => {
 });
 
 
-//loads the corresponding courses of the semester based on the json for the exams
+//loads the corresponding exams of the semester based on the json for the exams
 examsSemesterSelect.addEventListener("change", async () => {
 
     //get the value of the semester
     const semester = examsSemesterSelect.value[examsSemesterSelect.value.length - 1];
 
-    //fetching the courses of the selected semester of the database
+    //fetching the exams of the selected semester of the database
     try {
         const response = await fetch("/getSemesterExams", {
             method: "POST",
@@ -414,7 +417,7 @@ examsSemesterSelect.addEventListener("change", async () => {
         });
 
         if (!response.ok) {
-            throw new Error("Failed to fetch courses");
+            throw new Error("Failed to fetch exam");
         }
 
         const data = await response.json();
@@ -423,7 +426,7 @@ examsSemesterSelect.addEventListener("change", async () => {
         //clears the previous data in order to load the new ones
         examsCourseSelect.innerHTML = "";
 
-        //set a default option so that it does not show a course at first
+        //set a default option so that it does not show a exams at first
         const defaultOption = document.createElement("option");
         defaultOption.textContent = "Επέλεξε Μάθημα:";
         defaultOption.disabled = true;
@@ -431,7 +434,7 @@ examsSemesterSelect.addEventListener("change", async () => {
 
         examsCourseSelect.appendChild(defaultOption);
 
-        //append it's course to the choice box
+        //append it's exams to the choice box
         courses.forEach((course) => {
             const option = document.createElement("option");
             option.value = course;
@@ -440,12 +443,12 @@ examsSemesterSelect.addEventListener("change", async () => {
         });
     } catch (error) {
         console.error(error);
-        alert("Could not load courses for this semester.");
+        alert("Could not load exam for this semester.");
     }
 });
 
 
-//creates dynamically the corresponding info of the course based on the json for the exams
+//creates dynamically the corresponding info of the exams based on the json for the exams
 examsCourseSelect.addEventListener("change", async () => {
 
     //getting the value of the selected course
@@ -459,11 +462,14 @@ examsCourseSelect.addEventListener("change", async () => {
         });
 
         if (!response.ok) {
-            throw new Error("Failed to fetch course information");
+            throw new Error("Failed to fetch exam information");
         }
 
         const data = await response.json();
         // console.log(data);
+
+        // 1. Create a safe exam title by replacing double quotes with HTML entities
+        const safeExamTitle = data.exam.title.replace(/"/g, '&quot;');
 
         const formatDate = (dateStr) => {
             if (!dateStr) return "";
@@ -483,7 +489,7 @@ examsCourseSelect.addEventListener("change", async () => {
                 <h2>Πληροφορίες Εξεταστικής</h2>
 
                 <label class="examsTitle">Όνομα Μαθήματος:
-                    <input type="text" name="title" value="${data.exam.title}" readonly>
+                    <input type="text" name="title" value="${safeExamTitle}" readonly>
                 </label><br>
 
                 <label class="examsLectureHall">Αμφιθέατρο:
@@ -499,7 +505,7 @@ examsCourseSelect.addEventListener("change", async () => {
                             </option>
                         `).join("")}
                     </select>
-
+                
                 </label><br>
 
                 <label class="examsDate">Ημερομηνία:
@@ -532,7 +538,7 @@ examsCourseSelect.addEventListener("change", async () => {
 
     } catch (error) {
         console.error(error);
-        alert("Could not load course.");
+        alert("Could not load exam.");
     }
 });
 
@@ -591,6 +597,6 @@ examsEditWrapper.addEventListener("click", async (e) => {
 
     } catch (error) {
         console.error(error);
-        alert("Failed to update course.");
+        alert("Failed to update exam.");
     }
 });

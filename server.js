@@ -439,7 +439,6 @@ app.post("/updateCourse", async (req, res) => {
 
 //gets the new data of the course and updates the exam json file
 app.post("/updateExamCourse", async (req, res) => {
-    console.log("🔥 HIT updateExamCourse");
     try {
         const {
             title,
