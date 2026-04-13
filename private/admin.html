@@ -20,6 +20,7 @@
 
     </header>
 
+    <!-- div that includes the upload of the files -->
     <div class="adminWrapper">
 
         <div class="fileContainer">
@@ -51,8 +52,9 @@
 
     </div>
 
+    <!-- div that includes the two buttons for the edit of the program and the exam -->
     <div class="editButtonWrapper">
-        
+
         <div class="editBox">
             <button type="button" id="editProgramButton">
                 <h3>Επεξεργασία Ωρολόγιου Προγράμματος</h3>
@@ -68,17 +70,18 @@
     </div>
 
 
-    <div id="selectWrapper">
+    <!-- div that includes the drop down boxes for the selection of semester and course for the program-->
+    <div id="programSelectWrapper">
 
         <button type="button" id="backButton">
             <h3>Πίσω</h3>
         </button>
 
-        <div id="selectSemester">
+        <div id="programSelectSemester">
 
             <label for="semester"> <h1>Επέλεξε Εξάμηνο:</h1> </label>
 
-            <select name="semesters" id="semester">
+            <select name="semesters" id="programSemester">
                 <option disabled selected>Επέλεξε Εξάμηνο:</option> 
                 <option>Εξάμηνο 1</option>
                 <option>Εξάμηνο 2</option>
@@ -103,7 +106,50 @@
 
     </div>
 
+    <!-- div that contains the edit of the course that is created dynamically in js -->
     <div id="editWrapper">
+
+    </div>
+
+
+    <!-- div that includes the drop down boxes for the selection of semester and course of the exams-->
+    <div id="examsSelectWrapper">
+
+        <button type="button" id="examsBackButton">
+            <h3>Πίσω</h3>
+        </button>
+
+        <div id="examsSelectSemester">
+
+            <label for="semester"> <h1>Επέλεξε Εξάμηνο:</h1> </label>
+
+            <select name="semesters" id="examsSemester">
+                <option disabled selected>Επέλεξε Εξάμηνο:</option> 
+                <option>Εξάμηνο 1</option>
+                <option>Εξάμηνο 2</option>
+                <option>Εξάμηνο 3</option>
+                <option>Εξάμηνο 4</option>
+                <option>Εξάμηνο 5</option>
+                <option>Εξάμηνο 6</option>
+                <option>Εξάμηνο 7</option>
+                <option>Εξάμηνο 8</option>
+            </select>
+
+        </div>
+
+        <div id="examsSelectCourse">
+
+            <label for="courses"> <h1>Επέλεξε Μάθημα:</h1> </label>
+
+            <select id="examsCourses">    
+            </select>
+
+        </div>
+
+    </div>
+
+    <!-- div that contains the edit of the course that is created dynamically in js -->
+    <div id="examsEditWrapper">
 
     </div>
 

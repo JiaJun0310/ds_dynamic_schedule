@@ -391,7 +391,7 @@ app.listen(PORT, () => {
 });
 
 
-//gets the new data of the course and updates the json file
+//gets the new data of the course and updates the program json file
 app.post("/updateCourse", async (req, res) => {
     try {
         const {
@@ -425,6 +425,53 @@ app.post("/updateCourse", async (req, res) => {
             lectureHall,
             semester,
             professor
+        };
+
+        fs.writeFileSync(mergedPath, JSON.stringify(data, null, 2), 'utf8');
+
+        res.json({ message: "Course updated successfully!" });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
+    }
+});
+
+//gets the new data of the course and updates the exam json file
+app.post("/updateExamCourse", async (req, res) => {
+    console.log("🔥 HIT updateExamCourse");
+    try {
+        const {
+            title,
+            date,
+            startTime,
+            endTime,
+            lectureHall,
+            semester,
+            division
+        } = req.body;
+
+        const mergedPath = path.join(__dirname, 'jsonData', 'merged_exams.json');
+
+        const data = JSON.parse(fs.readFileSync(mergedPath, 'utf8'));
+
+        //find the specific course 
+        const courseIndex = data.findIndex(course => course.title === title);
+
+        if (courseIndex === -1) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        //replace course data 
+        data[courseIndex] = {
+            ...data[courseIndex],
+            title,
+            date,
+            startTime,
+            endTime,
+            lectureHall,
+            semester,
+            division
         };
 
         fs.writeFileSync(mergedPath, JSON.stringify(data, null, 2), 'utf8');

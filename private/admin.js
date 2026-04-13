@@ -102,39 +102,49 @@ document.querySelectorAll(".fileBox").forEach((box) => {
     };
 });
 
-const editProgramButton = document.getElementById("editProgramButton");
+//for admin
 const adminPage = document.querySelector(".adminWrapper");
-const selectWrapper = document.getElementById("selectWrapper")
-const editWrapper = document.getElementById("editWrapper")
-// const editBox = document.querySelector(".editBox");
-const backButton = document.getElementById("backButton")
-const semesterSelect = document.getElementById("semester");
-const courseSelect = document.getElementById("courses");
-const editExamButton = document.getElementById("editExamButton")
 const editButtonWrapper = document.querySelector(".editButtonWrapper");
 
-//When the edit button is clicked it over writes the admin page and loads the edit page
+//for program
+const editProgramButton = document.getElementById("editProgramButton");
+const programSelectWrapper = document.getElementById("programSelectWrapper")
+const editWrapper = document.getElementById("editWrapper")
+const backButton = document.getElementById("backButton")
+const semesterSelect = document.getElementById("programSemester");
+const courseSelect = document.getElementById("courses");
+
+//for exams
+const editExamButton = document.getElementById("editExamButton")
+const examsSelectWrapper = document.getElementById("examsSelectWrapper")
+const examsBackButton = document.getElementById("examsBackButton")
+const examsSemesterSelect = document.getElementById("examsSemester");
+const examsCourseSelect = document.getElementById("examsCourses");
+const examsEditWrapper = document.getElementById("examsEditWrapper")
+
+//When the edit button is clicked it over writes the admin page and loads the program edit page
 editProgramButton.onclick = () => {
 
     adminPage.style.display = "none";
     editButtonWrapper.style.display = "none";
 
-    selectWrapper.style.display = "flex";
+    programSelectWrapper.style.display = "flex";
     editWrapper.style.display = "flex";
 
 };
 
+//When the edit button is clicked it over writes the admin page and loads the exams edit page
 editExamButton.onclick = () => {
 
     adminPage.style.display = "none";
     editButtonWrapper.style.display = "none";
 
-    selectWrapper.style.display = "flex";
-    // editWrapper.style.display = "flex";
+    examsSelectWrapper.style.display = "flex";
+    examsEditWrapper.style.display = "flex";
 
 };
 
-//When the back button is pressed it clears the content of the edit page and overwrites it with the admin page
+//When the back button is pressed it clears the content of the program edit page and overwrites it with the admin page
 backButton.onclick = () => {
 
     editWrapper.innerHTML = "";
@@ -145,11 +155,27 @@ backButton.onclick = () => {
     adminPage.style.display = "flex";
     editButtonWrapper.style.display = "flex";
 
-    selectWrapper.style.display = "none";
+    programSelectWrapper.style.display = "none";
     editWrapper.style.display = "none";
 }
 
+//When the back button is pressed it clears the content of the exam edit page and overwrites it with the admin page
+examsBackButton.onclick = () => {
 
+    examsEditWrapper.innerHTML = "";
+    examsSemesterSelect.selectedIndex = 0;
+    examsCourseSelect.innerHTML = "";
+
+
+    adminPage.style.display = "flex";
+    editButtonWrapper.style.display = "flex";
+
+    examsSelectWrapper.style.display = "none";
+    examsEditWrapper.style.display = "none";
+}
+
+
+//loads the corresponding courses of the semester based on the json for the program
 semesterSelect.addEventListener("change", async () => {
 
     //get the value of the semester
@@ -195,6 +221,7 @@ semesterSelect.addEventListener("change", async () => {
 });
 
 
+//creates dynamically the corresponding info of the course based on the json for the program
 courseSelect.addEventListener("change", async () => {
 
     //getting the value of the selected course
@@ -300,7 +327,7 @@ courseSelect.addEventListener("change", async () => {
     }
 });
 
-
+//when save button is pressed it changes the data on the json for the program
 editWrapper.addEventListener("click", async (e) => {
 
     //Only run if save button was pressed
@@ -355,6 +382,203 @@ editWrapper.addEventListener("click", async (e) => {
 
    try {
         const response = await fetch("/updateCourse", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedCourse),
+        });
+
+        if (!response.ok) throw new Error("Failed");
+
+        const result = await response.json();
+        alert(result.message || "Saved!");
+
+    } catch (error) {
+        console.error(error);
+        alert("Failed to update course.");
+    }
+});
+
+
+//loads the corresponding courses of the semester based on the json for the exams
+examsSemesterSelect.addEventListener("change", async () => {
+
+    //get the value of the semester
+    const semester = examsSemesterSelect.value[examsSemesterSelect.value.length - 1];
+
+    //fetching the courses of the selected semester of the database
+    try {
+        const response = await fetch("/getSemesterExams", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ semester: semester }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch courses");
+        }
+
+        const data = await response.json();
+        const courses = data.map((course) => course.title);
+
+        //clears the previous data in order to load the new ones
+        examsCourseSelect.innerHTML = "";
+
+        //set a default option so that it does not show a course at first
+        const defaultOption = document.createElement("option");
+        defaultOption.textContent = "Επέλεξε Μάθημα:";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+
+        examsCourseSelect.appendChild(defaultOption);
+
+        //append it's course to the choice box
+        courses.forEach((course) => {
+            const option = document.createElement("option");
+            option.value = course;
+            option.textContent = course;
+            examsCourseSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error(error);
+        alert("Could not load courses for this semester.");
+    }
+});
+
+
+//creates dynamically the corresponding info of the course based on the json for the exams
+examsCourseSelect.addEventListener("change", async () => {
+
+    //getting the value of the selected course
+    const course = examsCourseSelect.value;
+
+    try {
+        const response = await fetch("/getExam", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: course }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch course information");
+        }
+
+        const data = await response.json();
+        // console.log(data);
+
+        const formatDate = (dateStr) => {
+            if (!dateStr) return "";
+            const [day, month, year] = dateStr.split("/");
+            return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+        };
+
+        //clear the previous content 
+        examsEditWrapper.innerHTML = "";
+
+        const examsDiv = document.createElement("div");
+        examsDiv.classList.add("editCourse");
+
+        //generate the general info dynamically
+        examsDiv.innerHTML = `
+            <form id="examsForm">
+                <h2>Πληροφορίες Εξεταστικής</h2>
+
+                <label class="examsTitle">Όνομα Μαθήματος:
+                    <input type="text" name="title" value="${data.exam.title}" readonly>
+                </label><br>
+
+                <label class="examsLectureHall">Αμφιθέατρο:
+                    <input type="text" name="lectureHall" value="${data.exam.lectureHall}">
+                </label><br>
+
+                <label class="examsSemesters">Εξάμηνο:
+                 
+                    <select name="semester">
+                        ${[1, 2, 3, 4, 5, 6, 7, 8].map(s => `
+                            <option value="${s}" ${s == examsSemesterSelect.value[examsSemesterSelect.value.length - 1] ? "selected" : ""}>
+                                ${s}
+                            </option>
+                        `).join("")}
+                    </select>
+
+                </label><br>
+
+                <label class="examsDate">Ημερομηνία:
+                    <input type="date" name="date" value="${formatDate(data.exam.date)}">
+                </label><br>
+
+                <label class="examsStartTime">Ώρα Έναρξης:
+                    <input type="time" name="start" value="${data.exam.startTime ? data.exam.startTime.slice(0, 5) : ""}">
+                </label><br>
+
+                <label class="examsEndTime">Ώρα Λήξης:
+                    <input type="time" name="end" value="${data.exam.endTime ? data.exam.endTime.slice(0, 5) : ""}">
+                </label><br>
+
+                <label class="examsDivision">Ομάδες:
+                    <input type="text" name="division" value="${data.exam.division}">
+                </label><br>
+
+            </form>
+        `;
+        
+        examsEditWrapper.appendChild(examsDiv);
+
+        //create the save button dynamically
+        const button = document.createElement("button");
+        button.textContent = "Αποθήκευση";
+        button.id = "examSaveButton";
+
+        examsEditWrapper.appendChild(button);
+
+    } catch (error) {
+        console.error(error);
+        alert("Could not load course.");
+    }
+});
+
+
+//when save button is pressed it changes the data on the json for the exams
+examsEditWrapper.addEventListener("click", async (e) => {
+
+    //Only run if save button was pressed
+    if (e.target.id !== "examSaveButton") return;
+
+    const examsForm = document.getElementById("examsForm");
+
+    const examsData = new FormData(examsForm);
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return "";
+        const [year, month, day] = dateStr.split("-");
+        return `${day}/${month}/${year}`;
+    };
+
+    //final object sent to backend
+    const updatedCourse = {
+        title: examsData.get("title"),
+        semester: parseInt(examsData.get("semester")),
+        date: formatDate(examsData.get("date")),
+        division: examsData.get("division"),
+        startTime: examsData.get("start"),
+        endTime: examsData.get("end"),
+        lectureHall: examsData.get("lectureHall")
+    };
+
+    //check if time is valid(start time < end time)
+    let validTime = true;
+
+    if (examsData.get("start") >= examsData.get("end")) {
+        alert("Η ώρα έναρξης πρέπει να είναι πριν την ώρα λήξης!");
+        validTime = false;
+    }
+
+    //if time not valid stop 
+    if (!validTime){
+        return;
+    } 
+
+    try {
+        const response = await fetch("/updateExamCourse", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedCourse),
