@@ -4,6 +4,8 @@ let academicData = null;
 let eventTracker = {};
 let currentMode = "Μαθήματα"; //hardcode the default radio button
 let professorLinks = {}; 
+let titleLinks = {};
+let normalizedTitleLinks = {};
 
 //DOM ELEMENTS
 const popup = document.getElementById("eventPopup"); //pop up for when you click on an event
@@ -43,6 +45,29 @@ const getSemesterDates = (semesterNum) => {
     };
 };
 
+//function to only get the title without the code
+function extractTitleName(str) {
+    return str
+        .replace(/^([^-]+-){2,}/, "")
+        .replace(/\([^)]*\)/g, "")
+        .replace(/(^|\s)επ\.?(\s|$)/gi, " ")
+        .replace(/[^Α-Ωα-ωA-Za-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+//fuction to match the title on the pop up with the title on the json
+function normalizeTitleName(str) {
+    return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9α-ω\s]/gi, "")   // removes hidden symbols
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+
 //API FETCHERS
 async function fetchAcademicData() {
     //gets data from academic_calendar.json
@@ -64,6 +89,21 @@ async function fetchProfessorLinks() {
         console.error("Error loading professor links:", err);
     }
 }
+
+async function fetchTitleLinks() {
+    try {
+        const response = await fetch("/jsonData/courses.json");
+        titleLinks = await response.json();
+
+        Object.entries(titleLinks).forEach(([title, url]) => {
+            normalizedTitleLinks[normalizeTitleName(title)] = url;
+        });
+
+    } catch (err) {
+        console.error("Error loading courses:", err);
+    }
+}
+
 
 //get's data of class based on title
 async function fetchCourseData(title) {
@@ -110,7 +150,17 @@ function handleEventClick(info) {
         timeZone: "UTC",
     });
 
-    titleEl.innerText = event.title;
+    const originalTitle = event.title;
+    const Title = extractTitleName(originalTitle);
+    const normalized = normalizeTitleName(Title);
+    const link = normalizedTitleLinks[normalized];
+
+    titleEl.innerHTML = link
+    ? `<a href="${link}" target="_blank" style="color: inherit; text-decoration: none;">
+         ${originalTitle}
+       </a>`
+    : originalTitle;
+
     let profs = props.professor;
     if (!profs || profs.length === 0 || profs[0] === "") {
         profEl.innerHTML = "N/A";
@@ -497,6 +547,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     calendar.render(); //Makes calendar visible
     await fetchAcademicData();
     await fetchProfessorLinks();
+    await fetchTitleLinks();
 
     // Populate Holidays, this code gives names, dates and data to the holidays
     if (academicData?.holidays) {
