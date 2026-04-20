@@ -6,6 +6,7 @@ let currentMode = "Μαθήματα"; //hardcode the default radio button
 let professorLinks = {}; 
 let titleLinks = {};
 let normalizedTitleLinks = {};
+let isSeptember = false; 
 
 //DOM ELEMENTS
 const popup = document.getElementById("eventPopup"); //pop up for when you click on an event
@@ -215,7 +216,10 @@ async function examOptions() {
         semesters.style.display = "flex";
         examsBox.style.display = "none";
     }
-    let isWinter = 0
+    
+    let isWinter = 0;
+
+    // Fetch winter semester status
     try {
         const response = await fetch("/getSemesterOfExams", {
             method: "POST",
@@ -232,7 +236,21 @@ async function examOptions() {
         alert("Something went wrong");
     }
 
-    // const isWinter = true; //TO BE DELETED
+    
+
+    //Check if september_exams.json exists
+    try {
+        const septResponse = await fetch("/jsonData/september_exams.json", { method: "HEAD" });
+        if (septResponse.ok) {
+            isSeptember = true;
+        } else {
+            isSeptember = false;
+        }
+    } catch (error) {
+        console.warn("September exams file not found or could not be checked.");
+        isSeptember = false;
+    }
+
 
     let isNormalClicked = false;
     let isEmbolimClicked = false;   //tracked what tabs are open and which are closed 
@@ -245,24 +263,19 @@ async function examOptions() {
             normalExamDiv.style.display = "block";
             normalExam.classList.add("active"); // Gives the button its 'checked' appearance
 
-            if (isWinter) {     //this is the adding logic for the semester depending on the API's answer
-                const winterSemesters =
-                    document.querySelectorAll(".winterSemesters");
+            const winterSemesters = document.querySelectorAll(".winterSemesters");
+            const springSemesters = document.querySelectorAll(".springSemesters");
 
-                winterSemesters.forEach((semester) => {
-                    normalExamDiv.append(semester);
-                });
+            if (isSeptember) {
+                // If september file exists, append ALL semesters to normalExamDiv
+                winterSemesters.forEach((semester) => normalExamDiv.append(semester));
+                springSemesters.forEach((semester) => normalExamDiv.append(semester));
+            } else if (isWinter) {     //this is the adding logic for the semester depending on the API's answer
+                winterSemesters.forEach((semester) => normalExamDiv.append(semester));
             } else {
-                const springSemesters =
-                    document.querySelectorAll(".springSemesters");
-
-                springSemesters.forEach((semester) => {
-                    normalExamDiv.append(semester);
-                });
+                springSemesters.forEach((semester) => normalExamDiv.append(semester));
             }
 
-            
-   
         } else {    //removes the divs
             normalExamDiv.style.display = "none";
             normalExam.classList.remove("active"); //returns the button to its default state
@@ -277,20 +290,16 @@ async function examOptions() {
             embolimExamDiv.style.display = "block";
             embolimExam.classList.add("active"); // Gives the button its 'checked' appearance
 
-            if (!isWinter) {    //this is the adding logic for the semester depending on the API's answer
-                const winterSemesters =
-                    document.querySelectorAll(".winterSemesters");
+            const winterSemesters = document.querySelectorAll(".winterSemesters");
+            const springSemesters = document.querySelectorAll(".springSemesters");
 
-                winterSemesters.forEach((semester) => {
-                    embolimExamDiv.append(semester);
-                });
-            } else {
-                const springSemesters =
-                    document.querySelectorAll(".springSemesters");
-
-                springSemesters.forEach((semester) => {
-                    embolimExamDiv.append(semester);
-                });
+            if (!isSeptember) {
+                // Only append to embolim if it's NOT September (since September puts them all in normal)
+                if (!isWinter) {    //this is the adding logic for the semester depending on the API's answer
+                    winterSemesters.forEach((semester) => embolimExamDiv.append(semester));
+                } else {
+                    springSemesters.forEach((semester) => embolimExamDiv.append(semester));
+                }
             }
         } else {    //removes the divs
             embolimExamDiv.style.display = "none";
@@ -684,12 +693,25 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
 
         // This gets executed when the button was clicked and the radio button was on "Εξεταστική"
         else if (currentMode === "Εξεταστική") {
-            const res = await fetch("/getSemesterExams", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ semester: sem }),
-            });
-            const examsArray = await res.json(); // This expects an array of your Exam JSON objects
+
+            let examsArray = [];
+
+            if (isSeptember) {
+                // Fetch directly from the September file
+                const res = await fetch("/jsonData/september_exams.json");
+                const allSeptExams = await res.json();
+                
+                // Filter the data so it only shows exams belonging to the clicked semester tab
+                examsArray = allSeptExams.filter(exam => String(exam.semester) === String(sem));
+            } else {
+                // Normal fetch behavior
+                const res = await fetch("/getSemesterExams", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ semester: sem }),
+                });
+                examsArray = await res.json(); // This expects an array of your Exam JSON objects
+            }
 
             const currentlySavedExams = getSavedExams();
 
