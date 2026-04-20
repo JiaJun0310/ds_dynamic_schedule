@@ -482,3 +482,7 @@ app.post("/updateExamCourse", async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, 'public', 'html', '404.html'));
+});

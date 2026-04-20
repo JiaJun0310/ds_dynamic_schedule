@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.unipi-header {
+    background-color: #2f385f;
+    height: 100px;
+    width: 100%;
+    box-sizing: border-box;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.unipi-logo {
+    height: 70px;
+    width: auto;
+    margin-right: 20px;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.gr-text {
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.en-text {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.error-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-box {
+    text-align: center;
+    background-color: white;
+    padding: 60px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.error-box h1 {
+    font-size: 7rem;
+    margin: 0;
+    color: #242c4b;
+    line-height: 1;
+}
+
+.error-box h2 {
+    color: #333;
+    margin-top: 10px;
+    font-weight: normal;
+}
+
+.error-box p {
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+.home-btn {
+    display: inline-block;
+    background-color: #9e1b22;
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+.home-btn:hover {
+    background-color: #7a151a;
+}
