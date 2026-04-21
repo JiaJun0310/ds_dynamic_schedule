@@ -142,14 +142,15 @@ if (super_json) {
         if (super_json.isEmvolimi) { // if it is emvolimi
             // path where the json will be saved
             const outputPath = "./jsonData/make_up_exams.json";
-            // path were kanonika exams are saved
-            const semesterExamsPath = "./jsonData/semester_exams.json";
 
             // save the file to jsonData
             fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
 
-            if (fs.existsSync(semesterExamsPath)) { // if the file exists
-                fs.unlinkSync(semesterExamsPath); // delete the file permanently. (no recycle bins. completely severs the link at hard drive level)
+            if (fs.existsSync("./jsonData/september_exams.json")) { // if the file exists
+                fs.unlinkSync("./jsonData/september_exams.json"); // delete the file permanently. (no recycle bins. completely severs the link at hard drive level)
+            }
+            if (fs.existsSync("./jsonData/semester_exams.json")) { // if the file exists
+                fs.unlinkSync("./jsonData/semester_exams.json"); // delete the file permanently. (no recycle bins. completely severs the link at hard drive level)
             }
         } else { // if it is kanoniki
             // grabs the first date of the exam period
@@ -163,12 +164,37 @@ if (super_json) {
 
                 // save the file to jsonData
                 fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+
+                if (fs.existsSync("./jsonData/make_up_exams.json")) { // if the file exists
+                    fs.unlinkSync("./jsonData/make_up_exams.json"); // delete the file permanently. (no recycle bins. completely severs the link at hard drive level)
+                }
+                if (fs.existsSync("./jsonData/semester_exams.json")) { // if the file exists
+                    fs.unlinkSync("./jsonData/semester_exams.json"); // delete the file permanently. (no recycle bins. completely severs the link at hard drive level)
+                }
             } else { // if it is anything else, it is a winter or spring exam period
                 // path where the json will be saved
                 const outputPath = "./jsonData/semester_exams.json";
 
                 // save the file to jsonData
                 fs.writeFileSync(outputPath, finalJsonString, 'utf-8');
+
+                if (fs.existsSync("./jsonData/september_exams.json")) { // if the file exists
+                    fs.unlinkSync("./jsonData/september_exams.json"); // delete the file permanently. (no recycle bins. completely severs the link at hard drive level)
+                }
+                if (fs.existsSync("./jsonData/make_up_exams.json")) { // if emvolimi exists
+                    // read the emvolimi file and save it
+                    const rawOldData = fs.readFileSync("./jsonData/make_up_exams.json", 'utf-8');
+                    const oldMakeUpExams = JSON.parse(rawOldData);
+
+                    // if it is not empty
+                    if (oldMakeUpExams.length > 0) {
+                        // if the files have subjects of same semesters
+                        if ((oldMakeUpExams[0].semester % 2) === (examArray[0].semester % 2)) {
+                            // delete the file
+                            fs.unlinkSync("./jsonData/make_up_exams.json");
+                        }
+                    }
+                }
             }
         }
     } else { // if list was empty

@@ -318,8 +318,9 @@ footer {
     padding: 3px;
     color: white;                
     font-family: sans-serif;
-    display: block;
+    display: flex; 
     align-items: center;
+    justify-content: center; 
 
 }
 
@@ -327,11 +328,13 @@ footer {
 #radioBox label{
     background-color: #465286;
     border: 2px solid #252d4f;
-    padding: 20px;
+    padding: 10px;
     color: white;               
-    /* display: block; */
-    font-size: 18px;
+    
+    font-size: 70%;
     cursor: pointer;
+    flex-grow: 1; /* These two commands make the buttons resizable when the sidebar is resized */
+    flex-basis: 0;
 
     display: flex;       
     justify-content: center; 
@@ -346,7 +349,7 @@ footer {
 
 /* Hiding the default clickable circle */
 #radioBox input[type="radio"] {
-    margin-right: 10px;
+    margin-right: 20px;
     display: none;
     
 }

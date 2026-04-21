@@ -137,7 +137,8 @@ body{
 
 /* edit button (program and exam)*/
 #editProgramButton, 
-#editExamButton{
+#editExamButton,
+#editLabButton{
     animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     font-size: 20px;
     border:1px solid rgb(107, 6, 6);
@@ -146,17 +147,19 @@ body{
     box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     border-radius: 10px;   
     height: 90px;
-    width: 480px;
+    width: 500px;
 }
 
 #editProgramButton:hover,
-#editExamButton:hover{
+#editExamButton:hover,
+#editLabButton:hover{
     background-color: #9f2b3d;
 }
 
 /* wrappers for the selection and the edits at the program and exam page */
 #programSelectWrapper,
 #examsSelectWrapper,
+#labsSelectWrapper,
 #editWrapper,
 #examsEditWrapper{
     display: none;
@@ -164,7 +167,8 @@ body{
 
 /* styling for the select wrappers */
 #programSelectWrapper,
-#examsSelectWrapper {       
+#examsSelectWrapper,
+#labsSelectWrapper {       
     font-family: sans-serif;  
     justify-content: center; 
     align-items: flex-start; 
@@ -178,8 +182,10 @@ body{
 /* styling for the selection drop down boxes */
 #programSelectSemester, 
 #examsSelectSemester,
+#labsSelectSemester,
+#selectCourse,
 #examsSelectCourse,
-#selectCourse {
+#labsSelectCourse{
     animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     text-align: center;
     margin: 20px 0; 
@@ -192,8 +198,10 @@ body{
 /* styling for the selection drop down boxes label*/
 #programSelectSemester label, 
 #examsSelectSemester label,
+#labsSelectSemester label,
 #selectCourse label,
-#examsSelectCourse label {
+#examsSelectCourse label,
+#labsSelectCourse label {
     color: #f0f0f0;
     -webkit-text-stroke: 1px black;
     margin-bottom: 10px;
@@ -204,8 +212,10 @@ body{
 /* styling for the content inside the selection drop down boxes */
 #programSemester,
 #examsSemester, 
+#labsSemester,
 #courses,
-#examsCourses {
+#examsCourses,
+#labsCourses {
     padding: 18px 50px;
     background-color: #8c2635;
     border: 2px solid rgb(107, 6, 6);
@@ -235,19 +245,23 @@ body{
 
 #programSemester, 
 #examsSemester,
+#labsSemester,
 #courses:hover,
-#examsCourses:hover {
+#examsCourses:hover,
+#labsCourses:hover {
     background-color: #9f2b3d;
 }
 
 #courses,
-#examsCourses{
+#examsCourses,
+#labsCourses{
     max-width: 700px;
 }
 
 /* styling for the edit wrapper (program and exam) */
 #editWrapper,
-#examsEditWrapper {       
+#examsEditWrapper,
+#labsEditWrapper {       
     font-family: sans-serif;   
     justify-content: center; 
     align-items: center; 
@@ -385,7 +399,8 @@ select{
 
 /* Submit button */
 #editWrapper button,
-#examsEditWrapper button {
+#examsEditWrapper button,
+#labsEditWrapper button {
     background-color: #8c2635; 
     color: #f0f0f0;     
     box-shadow: 0 6px 20px rgba(0,0,0,0.4);           
@@ -400,13 +415,15 @@ select{
 }
 
 #editWrapper button:hover,
-#examsEditWrapper button:hover {
+#examsEditWrapper button:hover,
+#labsEditWrapper button:hover{
     background-color: #9f2b3d;
 }
 
 /* back button */
 #backButton,
-#examsBackButton {
+#examsBackButton,
+#labsBackButton {
     position: absolute;
     top: 10px;
     left: 20px;

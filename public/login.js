@@ -25,3 +25,14 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         alert("Server error. Please try again later.");
     }
 });
+
+const password = document.getElementById('password');
+const ShowPassword = document.getElementById('ShowPassword');
+
+ShowPassword.addEventListener('click', () => {
+    const type = password.type === 'password' ? 'text' : 'password';
+    password.type = type;
+
+    ShowPassword.classList.toggle('fa-eye');
+    ShowPassword.classList.toggle('fa-eye-slash');
+});
