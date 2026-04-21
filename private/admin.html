@@ -67,6 +67,12 @@
             </button>
         </div>
 
+        <div class="editBox">
+            <button type="button" id="editLabButton">
+                <h3>Επεξεργασία Προγράμματος Εργαστηρίων</h3>
+            </button>
+        </div>
+
     </div>
 
 
@@ -148,8 +154,50 @@
 
     </div>
 
-    <!-- div that contains the edit of the course that is created dynamically in js -->
+    <!-- div that contains the edit of the exam that is created dynamically in js -->
     <div id="examsEditWrapper">
+
+    </div>
+
+
+    <!-- div that includes the drop down boxes for the selection of semester and course of the labs-->
+    <div id="labsSelectWrapper">
+
+        <button type="button" id="labsBackButton">
+            <h3>Πίσω</h3>
+        </button>
+
+        <div id="labsSelectSemester">
+
+            <label for="semester"> <h1>Επέλεξε Εξάμηνο:</h1> </label>
+
+            <select name="semesters" id="labsSemester">
+                <option disabled selected>Επέλεξε Εξάμηνο:</option> 
+                <option>Εξάμηνο 1</option>
+                <option>Εξάμηνο 2</option>
+                <option>Εξάμηνο 3</option>
+                <option>Εξάμηνο 4</option>
+                <option>Εξάμηνο 5</option>
+                <option>Εξάμηνο 6</option>
+                <option>Εξάμηνο 7</option>
+                <option>Εξάμηνο 8</option>
+            </select>
+
+        </div>
+
+        <div id="labsSelectCourse">
+
+            <label for="courses"> <h1>Επέλεξε Μάθημα:</h1> </label>
+
+            <select id="labsCourses">    
+            </select>
+
+        </div>
+
+    </div>
+
+    <!-- div that contains the edit of the labs that is created dynamically in js -->
+    <div id="labsEditWrapper">
 
     </div>
 
