@@ -4,6 +4,7 @@ let eventTracker = {};
 let currentMode = "Μαθήματα";
 let professorLinks = {}; 
 let titleLinks = {};
+let normalizedTitleLinks = {};
 let isSeptember = false; 
 
 const popup = document.getElementById("eventPopup");
@@ -54,7 +55,6 @@ const getSemesterDates = (semesterNum) => {
     };
 };
 
-//function to only get the title without the code
 function extractTitleName(str) {
     return str
         .replace(/^([^-]+-){2,}/, "")
@@ -65,19 +65,26 @@ function extractTitleName(str) {
         .trim();
 }
 
-//fuction to match the title on the pop up with the title on the json
 function normalizeTitleName(str) {
     return str
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9α-ω\s]/gi, "")   // removes hidden symbols
+        .replace(/[^a-z0-9α-ω\s]/gi, "")   
         .replace(/\s+/g, " ")
         .trim();
 }
 
+const daysMapGreek = {
+    "1": "Δευτέρα",
+    "2": "Τρίτη",
+    "3": "Τετάρτη",
+    "4": "Πέμπτη",
+    "5": "Παρασκευή",
+    "6": "Σάββατο",
+    "7": "Κυριακή"
+};
 
-//API FETCHERS
 async function fetchAcademicData() {
     try {
         const response = await fetch("/jsonData/academic_calendar.json");
@@ -103,6 +110,10 @@ async function fetchTitleLinks() {
         const response = await fetch("/jsonData/courses.json");
         if (!response.ok) throw new Error("Links file not found");
         titleLinks = await response.json();
+
+        Object.entries(titleLinks).forEach(([title, url]) => {
+            normalizedTitleLinks[normalizeTitleName(title)] = url;
+        });
 
     } catch (err) {
         console.error("Error loading courses:", err);
@@ -150,13 +161,16 @@ function handleEventClick(info) {
         timeZone: "UTC",
     });
 
-    const link = titleLinks[event.title];
+    const originalTitle = event.title;
+    const Title = extractTitleName(originalTitle);
+    const normalized = normalizeTitleName(Title);
+    const link = normalizedTitleLinks[normalized] || titleLinks[originalTitle];
 
     titleEl.innerHTML = link
     ? `<a href="${link}" target="_blank" style="color: inherit; text-decoration: none;">
-         ${event.title}
+         ${originalTitle}
        </a>`
-    : event.title;
+    : originalTitle;
 
     let profs = props.professor;
     if (!profs || profs.length === 0 || profs[0] === "") {
@@ -460,8 +474,8 @@ function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
             lectureHall: slot.labhall,
             subjectTitle: labName,
             semester: sem,
-            rawStart: startTime.trim(), 
-            rawEnd: endTime.trim()      
+            rawStart: startTime.trim(),
+            rawEnd: endTime.trim()
         }
     });
     
