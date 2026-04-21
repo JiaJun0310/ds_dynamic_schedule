@@ -1,43 +1,52 @@
-//GLOBAL VARIABLES
 let calendar;
 let academicData = null;
 let eventTracker = {};
-let currentMode = "Μαθήματα"; //hardcode the default radio button
+let currentMode = "Μαθήματα";
 let professorLinks = {}; 
 let titleLinks = {};
 let normalizedTitleLinks = {};
 let isSeptember = false; 
 
-//DOM ELEMENTS
-const popup = document.getElementById("eventPopup"); //pop up for when you click on an event
+const popup = document.getElementById("eventPopup");
 const titleEl = document.getElementById("popTitle");
 const profEl = document.getElementById("popProfessor");
 const hallEl = document.getElementById("popHall");
-const timeEl = document.getElementById("popTime"); //until here it's pop up stuff
-const colorBtn = document.getElementById("colorBtn"); //the picker
+const timeEl = document.getElementById("popTime");
+const colorBtn = document.getElementById("colorBtn");
 const hiddenPicker = document.getElementById("hiddenPicker");
 const clearSelectionBtn = document.getElementById("clearSelection");
 const toggleScreenBtn = document.getElementById("toggleScreen");
 
-//UTILITIES
-const getSavedSchedule = () =>
-    JSON.parse(localStorage.getItem("userSchedule")) || []; //returns everything saved on local storage or null if it's empty
-const saveSchedule = (scheduleArray) =>
-    localStorage.setItem("userSchedule", JSON.stringify(scheduleArray));
+const labSlotPopup = document.getElementById("labSlotPopup");
+const labSlotOptions = document.getElementById("labSlotOptions");
+const labSlotTitle = document.getElementById("labSlotTitle");
+const labSlotConfirm = document.getElementById("labSlotConfirm");
+const labSlotCancel = document.getElementById("labSlotCancel");
 
-const getSavedExams = () => JSON.parse(localStorage.getItem("userExams")) || []; //local storage same as above but for exams
-const saveExams = (examsArray) =>
-    localStorage.setItem("userExams", JSON.stringify(examsArray));
+const getSavedSchedule = () => JSON.parse(localStorage.getItem("userSchedule")) || []; 
+const saveSchedule = (scheduleArray) => localStorage.setItem("userSchedule", JSON.stringify(scheduleArray));
+
+const getSavedExams = () => JSON.parse(localStorage.getItem("userExams")) || []; 
+const saveExams = (examsArray) => localStorage.setItem("userExams", JSON.stringify(examsArray));
+
+const getSavedLabs = () => JSON.parse(localStorage.getItem("userLabs")) || [];
+const saveLabs = (labsArray) => localStorage.setItem("userLabs", JSON.stringify(labsArray));
 
 const formatJSONDate = (dateStr) => {
-    //this takes a date from 5/9/2023 to 2023-09-05
     const [day, month, year] = dateStr.trim().split("/");
     return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
 };
 
 const getSemesterDates = (semesterNum) => {
-    //finds start and end of semester based on if semester is odd or even
     if (!academicData || !semesterNum) return null;
+    
+    if (semesterNum === "General") {
+        return {
+            start: formatJSONDate(academicData.semesters[0].classes_start),
+            end: formatJSONDate(academicData.semesters[1].classes_end),
+        };
+    }
+
     const isOdd = parseInt(semesterNum) % 2 !== 0;
     const semData = academicData.semesters[isOdd ? 0 : 1];
     return {
@@ -46,7 +55,6 @@ const getSemesterDates = (semesterNum) => {
     };
 };
 
-//function to only get the title without the code
 function extractTitleName(str) {
     return str
         .replace(/^([^-]+-){2,}/, "")
@@ -57,21 +65,27 @@ function extractTitleName(str) {
         .trim();
 }
 
-//fuction to match the title on the pop up with the title on the json
 function normalizeTitleName(str) {
     return str
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9α-ω\s]/gi, "")   // removes hidden symbols
+        .replace(/[^a-z0-9α-ω\s]/gi, "")   
         .replace(/\s+/g, " ")
         .trim();
 }
 
+const daysMapGreek = {
+    "1": "Δευτέρα",
+    "2": "Τρίτη",
+    "3": "Τετάρτη",
+    "4": "Πέμπτη",
+    "5": "Παρασκευή",
+    "6": "Σάββατο",
+    "7": "Κυριακή"
+};
 
-//API FETCHERS
 async function fetchAcademicData() {
-    //gets data from academic_calendar.json
     try {
         const response = await fetch("/jsonData/academic_calendar.json");
         if (!response.ok) throw new Error("File not found");
@@ -105,8 +119,6 @@ async function fetchTitleLinks() {
     }
 }
 
-
-//get's data of class based on title
 async function fetchCourseData(title) {
     const res = await fetch("/getClass", {
         method: "POST",
@@ -116,7 +128,6 @@ async function fetchCourseData(title) {
     return res.ok ? res.json() : { schedules: [] };
 }
 
-//get's exam data
 async function fetchExamData(title) {
     try {
         const res = await fetch("/getExam", {
@@ -134,9 +145,7 @@ async function fetchExamData(title) {
     return null;
 }
 
-//EVENT HANDLERS
 function handleEventClick(info) {
-    //handles clicking on an event and dialog appearing
     popup.showModal();
     const event = info.event;
     const props = event.extendedProps;
@@ -166,14 +175,12 @@ function handleEventClick(info) {
     if (!profs || profs.length === 0 || profs[0] === "") {
         profEl.innerHTML = "N/A";
     } else {
-        // if teachers are many 
         let profArray = Array.isArray(profs) ? profs : profs.split(",");
         
         profEl.innerHTML = profArray.map(prof => {
             let cleanName = prof.trim();
-            let link = professorLinks[cleanName]; // looks for the name
+            let link = professorLinks[cleanName]; 
             
-            // if it finds a link it replaces it with the <a> tag
             return link 
                 ? `<a href="${link}" target="_blank" style="color: #3788d8; text-decoration: underline;">${cleanName}</a>` 
                 : cleanName;
@@ -182,32 +189,29 @@ function handleEventClick(info) {
     if (hallEl) hallEl.innerText = props.lectureHall || "N/A";
     timeEl.innerText = `${start} - ${end}`;
 
-    const targetSubject =
-        props.subjectTitle || event.title.replace("ΕΞΕΤΑΣΗ: ", "").trim(); //something to do with exams and dialog (I don't think it does anything)
+    const targetSubject = props.subjectTitle || event.title.replace("ΕΞΕΤΑΣΗ: ", "").trim(); 
 
-    hiddenPicker.oninput = () =>
-        updateCourseColor(targetSubject, hiddenPicker.value);
+    hiddenPicker.oninput = () => updateCourseColor(targetSubject, hiddenPicker.value);
 }
 
-//this function haddles apearance of the exam page
 async function examOptions() {
-    //most of the standard html element we need for the function
     const semesters = document.getElementById("semesters");
     const examsBox = document.getElementById("examsBox");
     const normalExam = document.getElementById("normalExam");
     const embolimExam = document.getElementById("embolimExam");
+    const generalSem = document.querySelector('.semesterButtonDivWrapper[data-semester="General"]');
 
-    //This handless the simple options of disapearing and apearing the divs depending on the radio buttons clicked 
     if (currentMode === "Εξεταστική") {
         semesters.style.display = "none";
         examsBox.style.display = "flex";
     }
-    if (currentMode === "Μαθήματα") {   //this re apears everything when pressing Μαθήματα
+    
+    if (currentMode === "Μαθήματα" || currentMode === "Εργαστήρια") {
         const semesterWrappers = Array.from(
-            document.querySelectorAll(".semesterButtonDivWrapper"),
+            document.querySelectorAll(".semesterButtonDivWrapper")
         );
         semesters.innerHTML = "";
-        semesterWrappers.sort((a, b) => a.dataset.index - b.dataset.index); //sorts the divs so they are added in the correct order
+        semesterWrappers.sort((a, b) => parseInt(a.dataset.index) - parseInt(b.dataset.index));
 
         semesterWrappers.forEach((semester) => {
             semesters.append(semester);
@@ -215,11 +219,14 @@ async function examOptions() {
 
         semesters.style.display = "flex";
         examsBox.style.display = "none";
+
+        if (generalSem) {
+            generalSem.style.display = currentMode === "Εργαστήρια" ? "block" : "none";
+        }
     }
     
     let isWinter = 0;
 
-    // Fetch winter semester status
     try {
         const response = await fetch("/getSemesterOfExams", {
             method: "POST",
@@ -227,18 +234,12 @@ async function examOptions() {
             body: JSON.stringify(),
         });
 
-        if (!response.ok) {
-            throw new Error("Failed to fetch semester's exams");
+        if (response.ok) {
+            isWinter = await response.json();
         }
-
-        isWinter = await response.json();
     } catch (error) {
-        alert("Something went wrong");
     }
 
-    
-
-    //Check if september_exams.json exists
     try {
         const septResponse = await fetch("/jsonData/september_exams.json", { method: "HEAD" });
         if (septResponse.ok) {
@@ -251,83 +252,79 @@ async function examOptions() {
         isSeptember = false;
     }
 
-
     let isNormalClicked = false;
-    let isEmbolimClicked = false;   //tracked what tabs are open and which are closed 
+    let isEmbolimClicked = false; 
 
-    normalExam.onclick = async () => {  //this button apears the div below the normal exams
+    normalExam.onclick = async () => {
         isNormalClicked = !isNormalClicked;
         const normalExamDiv = document.getElementById("normalExamDiv");
 
-        if (isNormalClicked) {  //changes the display setting
+        if (isNormalClicked) { 
             normalExamDiv.style.display = "block";
-            normalExam.classList.add("active"); // Gives the button its 'checked' appearance
+            normalExam.classList.add("active"); 
 
             const winterSemesters = document.querySelectorAll(".winterSemesters");
             const springSemesters = document.querySelectorAll(".springSemesters");
 
             if (isSeptember) {
-                // If september file exists, append ALL semesters to normalExamDiv
                 winterSemesters.forEach((semester) => normalExamDiv.append(semester));
                 springSemesters.forEach((semester) => normalExamDiv.append(semester));
-            } else if (isWinter) {     //this is the adding logic for the semester depending on the API's answer
+            } else if (isWinter) {
                 winterSemesters.forEach((semester) => normalExamDiv.append(semester));
             } else {
                 springSemesters.forEach((semester) => normalExamDiv.append(semester));
             }
 
-        } else {    //removes the divs
+        } else {
             normalExamDiv.style.display = "none";
-            normalExam.classList.remove("active"); //returns the button to its default state
+            normalExam.classList.remove("active");
         }
     };
 
-    embolimExam.onclick = async () => { //this button apears the div below the embolim exams
+    embolimExam.onclick = async () => {
         isEmbolimClicked = !isEmbolimClicked;
         const embolimExamDiv = document.getElementById("embolimExamDiv"); 
 
-        if (isEmbolimClicked) { //changes the display setting
+        if (isEmbolimClicked) {
             embolimExamDiv.style.display = "block";
-            embolimExam.classList.add("active"); // Gives the button its 'checked' appearance
+            embolimExam.classList.add("active"); 
 
             const winterSemesters = document.querySelectorAll(".winterSemesters");
             const springSemesters = document.querySelectorAll(".springSemesters");
 
             if (!isSeptember) {
-                // Only append to embolim if it's NOT September (since September puts them all in normal)
-                if (!isWinter) {    //this is the adding logic for the semester depending on the API's answer
+                if (!isWinter) {
                     winterSemesters.forEach((semester) => embolimExamDiv.append(semester));
                 } else {
                     springSemesters.forEach((semester) => embolimExamDiv.append(semester));
                 }
             }
-        } else {    //removes the divs
+        } else {
             embolimExamDiv.style.display = "none";
-            embolimExam.classList.remove("active"); //returns the button to its default state
+            embolimExam.classList.remove("active"); 
         }
     };
 }
 
-// Listen for clicks on the radio buttons
 document.querySelectorAll('input[name="choice"]').forEach((radio) => {
     radio.addEventListener("change", (e) => {
         currentMode = e.target.value;
 
-        // Clean up the UI: Close all open semester tabs when switching modes
         document.querySelectorAll(".buttonDiv").forEach((btn) => {
-            let sem = btn.textContent.trim().slice(-1);
-            document.getElementById(`Semester${sem}`).innerHTML = ""; // Empty the list
+            let sem = btn.parentElement.dataset.semester || btn.textContent.trim().slice(-1);
+            let targetDiv = document.getElementById(`Semester${sem}`);
+            if (targetDiv) targetDiv.innerHTML = ""; 
+            
             let arrow = btn.querySelector(".pointer");
             if (arrow) arrow.src = "../images/right_pointer.svg";
-            btn.dataset.open = "false"; // Reset our tracking variable
+            btn.dataset.open = "false";
         });
 
-        examOptions(); //this function haddles apearance of the exam page
+        examOptions(); 
     });
 });
 
 function updateCourseColor(subjectTitle, newColor) {
-    //updates courses color after clicking with color picker
     let currentSchedule = getSavedSchedule();
     let courseIndex = currentSchedule.findIndex(
         (c) => c.title === subjectTitle,
@@ -338,11 +335,8 @@ function updateCourseColor(subjectTitle, newColor) {
     }
 
     calendar.getEvents().forEach((e) => {
-        const eventSubject =
-            e.extendedProps.subjectTitle ||
-            e.title.replace("ΕΞΕΤΑΣΗ: ", "").trim(); //I think this is supposed to change the colors of courses as well as the exam course but
+        const eventSubject = e.extendedProps.subjectTitle || e.title.replace("ΕΞΕΤΑΣΗ: ", "").trim(); 
         if (eventSubject === subjectTitle) {
-            //I don't think it works corectly because it uses forEach .getEvent that only takes events currently on screen
             e.setProp("backgroundColor", newColor);
             e.setProp("borderColor", newColor);
         }
@@ -350,7 +344,6 @@ function updateCourseColor(subjectTitle, newColor) {
 }
 
 async function handleCourseToggle(checkbox, targetTitle, sem) {
-    //new function to clear up callback hell, just does the toggling for the checkboxes
     checkbox.disabled = true;
     try {
         if (checkbox.checked) {
@@ -366,31 +359,22 @@ async function handleCourseToggle(checkbox, targetTitle, sem) {
 }
 
 async function addCourseToCalendar(targetTitle, sem) {
-    //new function, again, does the whole adding stuff to the calendar just made cleaner with a function
     const courseData = await fetchCourseData(targetTitle);
-
     const dates = getSemesterDates(sem);
     if (!eventTracker[targetTitle]) eventTracker[targetTitle] = [];
 
-    let dbColor =
-        courseData.schedules.length > 0
-            ? courseData.schedules[0].color
-            : "#3788d8"; //color logic if user has picked a color, use that else use db color, if no db color use blue
+    let dbColor = courseData.schedules.length > 0 ? courseData.schedules[0].color : "#3788d8"; 
     let saved = getSavedSchedule();
     const isAlreadySaved = saved.some((c) => c.title === targetTitle);
-    const eventColor = isAlreadySaved
-        ? saved.find((c) => c.title === targetTitle).color
-        : dbColor;
+    const eventColor = isAlreadySaved ? saved.find((c) => c.title === targetTitle).color : dbColor;
 
     if (!isAlreadySaved) {
-        //if not aleady saved, saves it to local storage with the necessary data
         hiddenPicker.value = eventColor;
         saved.push({ title: targetTitle, color: eventColor, semester: sem });
         saveSchedule(saved);
     }
 
     courseData.schedules.forEach((item) => {
-        //add's all courses (per index) to the calendar
         let addedEvent = calendar.addEvent({
             title: item.title,
             daysOfWeek: item.daysOfWeek || [item.day],
@@ -401,7 +385,6 @@ async function addCourseToCalendar(targetTitle, sem) {
             backgroundColor: eventColor,
             borderColor: eventColor,
             extendedProps: {
-                //extended props just saves some extra data to be used later, mostly at the download calendar button
                 professor: item.professor,
                 lectureHall: item.lectureHall,
                 subjectTitle: targetTitle,
@@ -411,42 +394,10 @@ async function addCourseToCalendar(targetTitle, sem) {
             },
         });
         eventTracker[targetTitle].push(addedEvent);
-    }); //push event to eventTracker
-}
-
-function addExamToCalendar(examData, targetTitle, color) {
-    //adds exam to calendar
-    const examTitle = "ΕΞΕΤΑΣΗ: " + examData.title;
-    let existingExamEvent = calendar
-        .getEvents()
-        .find((e) => e.title === examTitle);
-
-    if (!existingExamEvent) {
-        //if it doesn't already exist in the calendar, push it
-        let addedExam = calendar.addEvent({
-            title: examTitle,
-            start: examData.start,
-            end: examData.end,
-            color: color,
-            extendedProps: {
-                subjectTitle: targetTitle,
-                lectureHall: examData.location,
-                description: examData.description,
-                isExam: true,
-            },
-        });
-        eventTracker[targetTitle].push(addedExam); //add it to event tracker
-    } else {
-        existingExamEvent.setProp("backgroundColor", color);
-        existingExamEvent.setProp("borderColor", color);
-        if (!eventTracker[targetTitle].includes(existingExamEvent)) {
-            eventTracker[targetTitle].push(existingExamEvent);
-        }
-    }
+    }); 
 }
 
 function removeCourseFromCalendar(targetTitle) {
-    //removes and event from the calendar
     if (eventTracker[targetTitle]) {
         eventTracker[targetTitle].forEach((eventObj) => eventObj?.remove());
         delete eventTracker[targetTitle];
@@ -455,42 +406,126 @@ function removeCourseFromCalendar(targetTitle) {
     saveSchedule(saved.filter((c) => c.title !== targetTitle));
 }
 
+function handleLabToggle(checkbox, labData, sem) {
+    if (checkbox.checked) {
+        checkbox.checked = false; 
+        
+        labSlotTitle.textContent = labData.name;
+        labSlotOptions.innerHTML = ""; 
+
+        labData.data.forEach((slot, index) => {
+            const label = document.createElement("label");
+            label.style.cursor = "pointer";
+            
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "labSlotChoice";
+            radio.value = index;
+            if (index === 0) radio.checked = true;
+
+            const dayName = daysMapGreek[slot.day] || slot.day;
+            const text = document.createTextNode(` ${dayName}, ${slot.time} (${slot.labhall})`);
+            
+            label.append(radio, text);
+            labSlotOptions.appendChild(label);
+        });
+
+        labSlotConfirm.onclick = () => {
+            const selectedRadio = document.querySelector('input[name="labSlotChoice"]:checked');
+            if (selectedRadio) {
+                const selectedIndex = parseInt(selectedRadio.value);
+                const selectedSlot = labData.data[selectedIndex];
+                
+                checkbox.checked = true; 
+                addSpecificLabToCalendar(labData.name, selectedSlot, sem);
+            }
+            labSlotPopup.close();
+        };
+
+        labSlotCancel.onclick = () => {
+            labSlotPopup.close();
+        };
+
+        labSlotPopup.showModal();
+    } else {
+        removeLabFromCalendar(labData.name);
+    }
+}
+
+function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
+    const eventColor = "#27ae60"; 
+    const dates = getSemesterDates(sem); 
+    
+    if (!eventTracker[labName]) eventTracker[labName] = [];
+
+    const [startTime, endTime] = slot.time.split("-");
+
+    let addedEvent = calendar.addEvent({
+        title: `ΕΡΓΑΣΤ.: ${labName}`,
+        daysOfWeek: [parseInt(slot.day)],
+        startTime: startTime.trim(),
+        endTime: endTime.trim(),
+        startRecur: dates ? dates.start : null, 
+        endRecur: dates ? dates.end : null,     
+        backgroundColor: eventColor,
+        borderColor: eventColor,
+        extendedProps: {
+            lectureHall: slot.labhall,
+            subjectTitle: labName,
+            semester: sem,
+            rawStart: startTime.trim(), 
+            rawEnd: endTime.trim()      
+        }
+    });
+    
+    eventTracker[labName].push(addedEvent);
+
+    if(!isRestoring) {
+        let saved = getSavedLabs();
+        if (!saved.some((l) => l.name === labName)) {
+            saved.push({ name: labName, slot, sem }); 
+            saveLabs(saved);
+        }
+    }
+}
+
+function removeLabFromCalendar(labName) {
+    if (eventTracker[labName]) {
+        eventTracker[labName].forEach(eventObj => eventObj?.remove());
+        delete eventTracker[labName];
+    }
+
+    let saved = getSavedLabs();
+    saveLabs(saved.filter(l => l.name !== labName));
+}
+
 function addStandaloneExam(examData) {
     const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
-
-    // 1. Convert the DD/MM/YYYY date to YYYY-MM-DD using your existing helper
     const formattedDate = formatJSONDate(examData.date);
-
-    // 2. Combine date and time into valid ISO8601 strings for FullCalendar
     const startISO = `${formattedDate}T${examData.startTime}`;
     const endISO = `${formattedDate}T${examData.endTime}`;
-
-    // 3. Convert the lectureHall array into a single comma-separated string
     const hallString = Array.isArray(examData.lectureHall)
         ? examData.lectureHall.join(", ")
         : examData.lectureHall || "N/A";
 
-    // Safety check, don't add if it already exists
     let existing = calendar.getEvents().find((e) => e.title === examTitleStr);
 
     if (!existing) {
         let addedExam = calendar.addEvent({
             title: examTitleStr,
-            start: startISO,  // Now using the formatted string
-            end: endISO,      // Now using the formatted string
+            start: startISO, 
+            end: endISO,     
             color: "#e74c3c",
             extendedProps: {
-                lectureHall: hallString, // Now using the joined array
-                description: examData.division ? `Κλιμάκιο: ${examData.division}` : "", // Using division for the description
+                lectureHall: hallString, 
+                description: examData.division ? `Κλιμάκιο: ${examData.division}` : "", 
                 isExam: true,
             },
         });
 
-        // Save it to the eventTracker
         if (!eventTracker[examTitleStr]) eventTracker[examTitleStr] = [];
         eventTracker[examTitleStr].push(addedExam);
 
-        //Save to Local Storage
         let saved = getSavedExams();
         if (!saved.some((e) => e.title === examData.title)) {
             saved.push(examData);
@@ -501,19 +536,14 @@ function addStandaloneExam(examData) {
 
 function removeStandaloneExam(title) {
     const examTitleStr = "ΕΞΕΤΑΣΗ: " + title;
-
-    // Remove from visual calendar and tracker
     if (eventTracker[examTitleStr]) {
         eventTracker[examTitleStr].forEach((eventObj) => eventObj?.remove());
         delete eventTracker[examTitleStr];
     }
-
-    // --- NEW: Remove from Local Storage ---
     let saved = getSavedExams();
     saveExams(saved.filter((e) => e.title !== title));
 }
 
-//INITIALIZATION of calendar
 document.addEventListener("DOMContentLoaded", async function () {
     const calendarEl = document.getElementById("calendar");
 
@@ -539,11 +569,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         },
         eventClick: handleEventClick,
         eventDidMount: function (info) {
-            //this here handles holidays
-            if (info.event.display === "background") return; //this draws the holidays in the calendar
+            if (info.event.display === "background") return; 
             const occurrenceStart = info.event.start.getTime();
             const isOnHoliday = calendar.getEvents().some((h) => {
-                //in this function we check if events lands on a holiday if it does we do not make it apear
                 if (h.groupId !== "holidays") return false;
                 const hStart = h.start.getTime();
                 const hEnd = h.end ? h.end.getTime() : hStart + 86400000;
@@ -553,12 +581,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         },
     });
 
-    calendar.render(); //Makes calendar visible
+    calendar.render(); 
     await fetchAcademicData();
     await fetchProfessorLinks();
     await fetchTitleLinks();
 
-    // Populate Holidays, this code gives names, dates and data to the holidays
     if (academicData?.holidays) {
         academicData.holidays.forEach((holiday) => {
             let start = holiday.date,
@@ -578,31 +605,33 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    // Load saved classes
     const savedClasses = getSavedSchedule();
     for (const item of savedClasses) {
         await addCourseToCalendar(item.title, item.semester);
-        updateCourseColor(item.title, item.color); // Ensure custom colors persist
+        updateCourseColor(item.title, item.color); 
     }
 
-    //Load saved standalone exams
     const savedExams = getSavedExams();
     for (const examData of savedExams) {
         addStandaloneExam(examData);
     }
 
-    appearCalendar(); //refresh calendar to show events
+    const savedLabs = getSavedLabs();
+    for (const lab of savedLabs) {
+        addSpecificLabToCalendar(lab.name, lab.slot, lab.sem || "General", true);
+    }
+
+    appearCalendar(); 
     resize();
+    examOptions(); 
 });
 
-//UI EVENT LISTENERS
 popup.onclick = (e) => {
     if (e.target === popup) popup.close();
 };
 colorBtn.onclick = () => hiddenPicker.click();
 
 clearSelectionBtn.onclick = () => {
-    //button that clears all selections
     Object.values(eventTracker).forEach((events) =>
         events.forEach((e) => e?.remove()),
     );
@@ -614,24 +643,21 @@ clearSelectionBtn.onclick = () => {
         .querySelectorAll(".colorBtn")
         .forEach((cp) => (cp.style.display = "none"));
 
-    // Clear both local storages
     localStorage.removeItem("userSchedule");
     localStorage.removeItem("userExams");
+    localStorage.removeItem("userLabs");
+
 };
 
 document.querySelectorAll(".buttonDiv").forEach((button) => {
-    //this selects eveything from all the "buttons"
-    button.dataset.open = "false"; // We use this instead of 'let pressed = false' so it doesn't break when switching tabs
+    button.dataset.open = "false"; 
 
-    //we save the data like semester for every button
     let cleanText = button.textContent.trim();
-    let sem = cleanText[cleanText.length - 1];
+    let sem = button.parentElement.dataset.semester || cleanText[cleanText.length - 1];
     let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
     button.onclick = async function () {
-        //this now goes in to spesific button clicked
-        // Toggle the open state
         let isOpen = button.dataset.open === "true";
         isOpen = !isOpen;
         button.dataset.open = isOpen.toString();
@@ -641,25 +667,21 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
             : "../images/right_pointer.svg";
 
         if (!isOpen) {
-            //if it was already open it just clear it's html
             SemesterDiv.innerHTML = ``;
             return;
         }
 
-        // This gets executed when the button was clicked and the radio button was on "Μαθήματα"
         if (currentMode === "Μαθήματα") {
-            //here we get all the data for each Semester
             const res = await fetch("/getSemester", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ semester: sem }),
             });
-            const data = await res.json(); //we save the data here
-            const titlesArray = data.titles.map((course) => course.title); //and the titles in an array
+            const data = await res.json(); 
+            const titlesArray = data.titles.map((course) => course.title); 
 
             const savedClasses = getSavedSchedule();
 
-            //creates for each title in title array a div with a pargaraph and a checkbox in it so it generates everything dinamicly
             titlesArray.forEach((title, i) => {
                 const div = document.createElement("div");
                 div.className = "course";
@@ -680,7 +702,6 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                 setTimeout(() => div.classList.add("visible"), i * 50);
 
                 div.onclick = (e) => {
-                    //ckeckbox logic on the div
                     if (checkbox.disabled || e.target === checkbox) return;
                     checkbox.checked = !checkbox.checked;
                     checkbox.dispatchEvent(new Event("change"));
@@ -689,38 +710,68 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                 checkbox.onchange = () =>
                     handleCourseToggle(checkbox, title, sem);
             });
+        } 
+        
+        else if (currentMode === "Εργαστήρια") {
+            const res = await fetch("/getLabs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ semester: sem }),
+            });
+            const labsArray = await res.json();
+
+            labsArray.forEach((lab, i) => {
+                const div = document.createElement("div");
+                div.className = "course";
+
+                const p = document.createElement("p");
+                p.textContent = lab.name;
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.className = "checkbox";
+                
+                checkbox.checked = !!eventTracker[lab.name];
+
+                div.append(p, checkbox);
+                SemesterDiv.appendChild(div);
+
+                div.onclick = (e) => {
+                    if (e.target === checkbox) return;
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event("change"));
+                };
+
+                checkbox.onchange = () => handleLabToggle(checkbox, lab, sem);
+                
+                setTimeout(() => div.classList.add("visible"), i * 50);
+            });
         }
 
-        // This gets executed when the button was clicked and the radio button was on "Εξεταστική"
         else if (currentMode === "Εξεταστική") {
-
             let examsArray = [];
 
             if (isSeptember) {
-                // Fetch directly from the September file
                 const res = await fetch("/jsonData/september_exams.json");
                 const allSeptExams = await res.json();
-                
-                // Filter the data so it only shows exams belonging to the clicked semester tab
                 examsArray = allSeptExams.filter(exam => String(exam.semester) === String(sem));
             } else {
-                // Normal fetch behavior
                 const res = await fetch("/getSemesterExams", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ semester: sem }),
                 });
-                examsArray = await res.json(); // This expects an array of your Exam JSON objects
+                examsArray = await res.json(); 
             }
 
             const currentlySavedExams = getSavedExams();
 
             examsArray.forEach((examData, i) => {
                 const div = document.createElement("div");
-                div.className = "course"; // You can keep the same class for styling
+                div.className = "course"; 
 
                 const p = document.createElement("p");
-                p.textContent = examData.title; // e.g., "ΨΣ-532-ΠΡΟΗΓΜΕΝΑ..."
+                p.textContent = examData.title; 
 
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
@@ -730,7 +781,6 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                     (saved) => saved.title === examData.title,
                 );
 
-                // Check if this exact exam is already on the calendar
                 const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
                 checkbox.checked = calendar
                     .getEvents()
@@ -759,53 +809,44 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
     };
 });
 
-//ICS EXPORT
-//this is the dark side of our code, we dont know exacty how it works but it uses the library https://github.com/nwcell/ics.js/ to make a ics file
-//for the rest of this function gemini added the comments because I dont understand it
 function downloadCalendar() {
-    // 1. Initialize the ICS generator and get all current calendar events
     const cal = ics();
     const events = calendar.getEvents();
-    if (events.length === 0) return; // Stop if the calendar is empty
+    if (events.length === 0) return; 
 
-    // 2. Find all holidays and list every single day they cover so we can skip classes on those dates
     const excludedDates = [];
     events
         .filter((e) => e.groupId === "holidays")
         .forEach((h) => {
             let current = new Date(h.start);
             let end = h.end ? new Date(h.end) : new Date(h.start);
-            if (!h.end) end.setDate(end.getDate() + 1); // If holiday is 1 day, make sure the loop runs once
+            if (!h.end) end.setDate(end.getDate() + 1); 
 
             while (current < end) {
-                const pad = (n) => (n < 10 ? "0" + n : n); // Adds a leading zero (e.g., 9 becomes "09")
+                const pad = (n) => (n < 10 ? "0" + n : n); 
                 const dateStr = `${current.getFullYear()}${pad(current.getMonth() + 1)}${pad(current.getDate())}`;
 
                 if (!excludedDates.includes(dateStr))
-                    excludedDates.push(dateStr); // Save the formatted date
-                current.setDate(current.getDate() + 1); // Move to the next day
+                    excludedDates.push(dateStr); 
+                current.setDate(current.getDate() + 1); 
             }
         });
 
-    // 3. Loop through saved classes and add them as repeating weekly events
     const daysMap = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
     Object.values(eventTracker).forEach((subjectEvents) => {
         subjectEvents.forEach((event) => {
             if (event._def.recurringDef) {
-                // Check if it's a repeating class
                 const days = event._def.recurringDef.typeData.daysOfWeek;
-                const sem = event.extendedProps.semester;
+                const sem = event.extendedProps.semester || "1"; 
                 const dates = getSemesterDates(sem);
                 if (!dates) return;
 
-                // Setup the weekly repeat rule until the end of the semester
                 const rrule = {
                     freq: "WEEKLY",
                     until: dates.end,
                     byday: days.map((d) => daysMap[d]),
                 };
 
-                // Helper to clean up database times into pure HH:MM formats
                 const parseTime = (t) => {
                     if (Array.isArray(t)) t = t[0];
                     if (!t) return { h: "00", m: "00" };
@@ -816,11 +857,10 @@ function downloadCalendar() {
                     };
                 };
 
-                const startT = parseTime(event.extendedProps.rawStart);
-                const endT = parseTime(event.extendedProps.rawEnd);
+                const startT = parseTime(event.extendedProps.rawStart || event.start);
+                const endT = parseTime(event.extendedProps.rawEnd || event.end);
                 const [year, month, day] = dates.start.split("-");
 
-                // Add the class to the ICS file
                 cal.addEvent(
                     event.title,
                     event.extendedProps.professor || "N/A",
@@ -833,7 +873,6 @@ function downloadCalendar() {
         });
     });
 
-    // 4. Add exams to the calendar (using a Set to prevent drawing the same exam twice)
     const uniqueExams = new Set();
     events.forEach((event) => {
         if (
@@ -847,44 +886,36 @@ function downloadCalendar() {
                 event.start.toISOString(),
                 (
                     event.end || new Date(event.start.getTime() + 7200000)
-                ).toISOString(), // Default to 2 hours if no end time
+                ).toISOString(), 
             );
-            uniqueExams.add(event.title); // Mark this exam as processed
+            uniqueExams.add(event.title); 
         }
     });
 
-    // 5. Generate the raw text for the .ics file
     let icsString = cal.build();
 
-    // Google requires DTSTAMP to end in 'Z' (UTC format)
     icsString = icsString.replace(
         /DTSTAMP;VALUE=DATE-TIME:(\d{8}T\d{6})/g,
         "DTSTAMP:$1Z",
     );
 
-    // Google prefers clean DTSTART/DTEND tags without the VALUE parameter
     icsString = icsString.replace(/DTSTART;VALUE=DATE-TIME:/g, "DTSTART:");
     icsString = icsString.replace(/DTEND;VALUE=DATE-TIME:/g, "DTEND:");
-    // Force unique IDs so Google Calendar doesn't silently ignore deleted test events
     icsString = icsString.replace(
         /UID:\d+@default/g,
         () =>
             `UID:${Math.random().toString(36).substring(2)}${Date.now()}@schedule.ics`,
     );
-    // --------------------------------------------
 
-    // 6. Inject the holiday exclusion dates into the raw ICS text using Regex
     if (excludedDates.length > 0) {
         icsString = icsString.replace(
             /BEGIN:VEVENT([\s\S]*?)END:VEVENT/g,
             (match) => {
-                // Only apply exclusions to repeating events (classes), not one-off events (exams)
                 if (match.includes("RRULE") || match.includes("rrule")) {
                     const startMatch = match.match(
                         /DTSTART(.*?):(\d{8})T(\d{6})(Z?)/,
-                    ); // Find the exact start time of the class
+                    ); 
                     if (startMatch) {
-                        // Attach the class's start time to every holiday date, so the calendar knows exactly what time slot to cancel
                         const exDatesFormatted = excludedDates
                             .map((d) => `${d}T${startMatch[3]}${startMatch[4]}`)
                             .join(",");
@@ -899,21 +930,16 @@ function downloadCalendar() {
         );
     }
 
-    // 7. Create a virtual file (Blob) in the browser and force a download
     const blob = new Blob([icsString], { type: "text/calendar;charset=utf-8" });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
-    link.download = "university_schedule.ics"; // Name of the downloaded file
+    link.download = "university_schedule.ics"; 
 
-    document.body.appendChild(link); // Temporarily attach the link to the screen
-    link.click(); // Automatically click it
-    document.body.removeChild(link); // Clean up the link afterward
+    document.body.appendChild(link); 
+    link.click(); 
+    document.body.removeChild(link); 
 }
 
-//now back to human comments :)
-
-//this is the visual (the gay part) of our js code
-//this function hides the list of semesters on the right hand side
 function hideList() {
     if (window.innerWidth <= 767) return toggleScreenBtn?.click();
     const list = document.getElementById("semesterWrapper");
@@ -921,7 +947,6 @@ function hideList() {
     calendar.updateSize();
 }
 
-//this function get's called when we click the button on the calendar has 2 diffrent functions depending on your screen
 toggleScreenBtn.onclick = function () {
     const list = document.getElementById("semesterWrapper");
     const calEl = document.getElementById("calendar");
@@ -935,7 +960,6 @@ toggleScreenBtn.onclick = function () {
     }
 };
 
-//this just resizes the calendar (refresh's it)
 function resize() {
     const sidebar = document.getElementById("semesterWrapper");
     sidebar.style.height = "unset";
@@ -944,7 +968,6 @@ function resize() {
     ).height;
 }
 
-//this makes the calendar apear if we click it from mobile
 function appearCalendar() {
     const list = document.getElementById("semesterWrapper");
     const calEl = document.getElementById("calendar");
@@ -957,7 +980,6 @@ function appearCalendar() {
     }
 }
 
-//resize wrapper/sidebar on window change
 function resizeWrapper() {
     const sidebar = document.getElementById("semesterWrapper");
     if (sidebar) {
@@ -969,37 +991,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.getElementById("semesterWrapper");
     const resizer = document.getElementById("dragHandle");
 
-    if (!sidebar || !resizer) return; // Safety check
+    if (!sidebar || !resizer) return; 
 
     let isResizing = false;
 
-    // Start dragging
     resizer.addEventListener("mousedown", (e) => {
         isResizing = true;
         resizer.classList.add("dragging");
         document.body.style.cursor = "col-resize";
-        document.body.style.userSelect = "none"; // Stops text highlighting
+        document.body.style.userSelect = "none"; 
     });
 
-    // Doing the drag
     document.addEventListener("mousemove", (e) => {
         if (!isResizing) return;
 
-        // Calculate width: Window width minus mouse position (because sidebar is on the right)
         let newWidth = window.innerWidth - e.clientX;
 
-        //Min 272px, Max 30% of screen
         if (newWidth > 272 && newWidth < window.innerWidth * 0.3) {
             sidebar.style.width = `${newWidth}px`;
-            sidebar.style.flex = "none"; // Stop flexbox from ignoring our width
+            sidebar.style.flex = "none"; 
 
             if (typeof calendar !== "undefined" && calendar) {
-                calendar.updateSize(); // Fixes the calendar grid instantly
+                calendar.updateSize(); 
             }
         }
     });
 
-    // Stop dragging
     document.addEventListener("mouseup", () => {
         if (isResizing) {
             isResizing = false;

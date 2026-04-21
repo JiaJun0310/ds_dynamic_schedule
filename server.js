@@ -143,6 +143,26 @@ app.post("/sendExamData", verifyToken, async (req, res) => {
     }
 });
 
+app.post("/getLabs", async (req, res) => {
+    try {
+        const { semester } = req.body;
+        const labsPath = path.join(__dirname, 'jsonData', 'labs.json');
+        
+        if (!fs.existsSync(labsPath)) {
+            return res.status(404).json({ error: "Labs file not found" });
+        }
+
+        const data = JSON.parse(fs.readFileSync(labsPath, 'utf8'));
+
+        //("1", "6", ή "General")
+        const filteredLabs = data.filter(lab => String(lab.semester) === String(semester));
+
+        res.status(200).json(filteredLabs);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 
 //used in calendar.js and admin.js to get all the title names of courses based on the given semester
 app.post("/getSemester", async (req, res) => {

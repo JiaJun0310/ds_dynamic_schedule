@@ -38,9 +38,9 @@
                             style="font: sans-serif; cursor: pointer; background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px;">Κλείσιμο</button>
 
                         <button onclick="document.getElementById('eventPopup').close()" id="colorBtn" style="background: none; border: none; cursor: pointer; 
-                   display: flex; align-items: center; justify-content: center; 
-                   width: 35px; height: 35px; min-width: 35px; min-height: 35px; 
-                   flex-shrink: 0; padding: 0;">
+                                                                                                            display: flex; align-items: center; justify-content: center; 
+                                                                                                            width: 35px; height: 35px; min-width: 35px; min-height: 35px; 
+                                                                                                            flex-shrink: 0; padding: 0;">
                             <img src="../images/color.svg" alt="icon"
                                 style="width: 22px; height: 22px; display: block; pointer-events: none;">
                         </button>
@@ -48,6 +48,18 @@
                     </div>
 
 
+                </dialog>
+
+
+                <dialog id="labSlotPopup" style="padding: 20px; border-radius: 8px; border: 1px solid #ccc;">
+                    <h3 style="margin-top: 0;">Επιλογή Ώρας Εργαστηρίου</h3>
+                    <p id="labSlotTitle" style="font-weight: bold;"></p>
+                    <div id="labSlotOptions" style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
+                        </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button id="labSlotCancel" style="padding: 5px 10px;">Ακύρωση</button>
+                        <button id="labSlotConfirm" style="padding: 5px 10px; background: #3788d8; color: white; border: none; border-radius: 4px; cursor: pointer;">Αποθήκευση</button>
+                    </div>
                 </dialog>
             </div>
             <div id="semesterWrapper">
@@ -150,6 +162,14 @@
                             <img class="pointer" src="../images/right_pointer.svg"></img>
                         </div>
                         <div id="Semester8"></div>
+                    </div>
+
+                    <div data-index="9" data-semester="General" class="semesterButtonDivWrapper" style="display: none;">
+                        <div class="buttonDiv">
+                            <p class="semesterButtons">Διαλέξεις που διδάσκονται σαν εργαστήρια</p>
+                            <img class="pointer" src="../images/right_pointer.svg">
+                        </div>
+                        <div id="SemesterGeneral"></div>
                     </div>
                     
 
