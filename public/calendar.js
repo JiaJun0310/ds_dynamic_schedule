@@ -5,7 +5,6 @@ let eventTracker = {};
 let currentMode = "Μαθήματα"; //hardcode the default radio button
 let professorLinks = {}; 
 let titleLinks = {};
-let normalizedTitleLinks = {};
 let isSeptember = false; 
 
 //DOM ELEMENTS
@@ -46,29 +45,6 @@ const getSemesterDates = (semesterNum) => {
     };
 };
 
-//function to only get the title without the code
-function extractTitleName(str) {
-    return str
-        .replace(/^([^-]+-){2,}/, "")
-        .replace(/\([^)]*\)/g, "")
-        .replace(/(^|\s)επ\.?(\s|$)/gi, " ")
-        .replace(/[^Α-Ωα-ωA-Za-z0-9\s]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-}
-
-//fuction to match the title on the pop up with the title on the json
-function normalizeTitleName(str) {
-    return str
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9α-ω\s]/gi, "")   // removes hidden symbols
-        .replace(/\s+/g, " ")
-        .trim();
-}
-
-
 //API FETCHERS
 async function fetchAcademicData() {
     //gets data from academic_calendar.json
@@ -94,11 +70,8 @@ async function fetchProfessorLinks() {
 async function fetchTitleLinks() {
     try {
         const response = await fetch("/jsonData/courses.json");
+        if (!response.ok) throw new Error("Links file not found");
         titleLinks = await response.json();
-
-        Object.entries(titleLinks).forEach(([title, url]) => {
-            normalizedTitleLinks[normalizeTitleName(title)] = url;
-        });
 
     } catch (err) {
         console.error("Error loading courses:", err);
@@ -151,16 +124,13 @@ function handleEventClick(info) {
         timeZone: "UTC",
     });
 
-    const originalTitle = event.title;
-    const Title = extractTitleName(originalTitle);
-    const normalized = normalizeTitleName(Title);
-    const link = normalizedTitleLinks[normalized];
+    const link = titleLinks[event.title];
 
     titleEl.innerHTML = link
     ? `<a href="${link}" target="_blank" style="color: inherit; text-decoration: none;">
-         ${originalTitle}
+         ${event.title}
        </a>`
-    : originalTitle;
+    : event.title;
 
     let profs = props.professor;
     if (!profs || profs.length === 0 || profs[0] === "") {
