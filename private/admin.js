@@ -122,6 +122,14 @@ const examsSemesterSelect = document.getElementById("examsSemester");
 const examsCourseSelect = document.getElementById("examsCourses");
 const examsEditWrapper = document.getElementById("examsEditWrapper")
 
+//for labs
+const editLabButton = document.getElementById("editLabButton")
+const labsSelectWrapper = document.getElementById("labsSelectWrapper")
+const labsBackButton = document.getElementById("labsBackButton")
+const labsSemesterSelect = document.getElementById("labsSemester");
+const labsCourseSelect = document.getElementById("labsCourses");
+const labsEditWrapper = document.getElementById("labsEditWrapper")
+
 //When the edit button is clicked it over writes the admin page and loads the program edit page
 editProgramButton.onclick = () => {
 
@@ -143,6 +151,18 @@ editExamButton.onclick = () => {
     examsEditWrapper.style.display = "flex";
 
 };
+
+//When the edit button is clicked it over writes the admin page and loads the labs edit page
+editLabButton.onclick = () => {
+
+    adminPage.style.display = "none";
+    editButtonWrapper.style.display = "none";
+
+    labsSelectWrapper.style.display = "flex";
+    labsEditWrapper.style.display = "flex";
+
+};
+
 
 //When the back button is pressed it clears the content of the program edit page and overwrites it with the admin page
 backButton.onclick = () => {
@@ -172,6 +192,21 @@ examsBackButton.onclick = () => {
 
     examsSelectWrapper.style.display = "none";
     examsEditWrapper.style.display = "none";
+}
+
+//When the back button is pressed it clears the content of the lab edit page and overwrites it with the admin page
+labsBackButton.onclick = () => {
+
+    labsEditWrapper.innerHTML = "";
+    labsSemesterSelect.selectedIndex = 0;
+    labsCourseSelect.innerHTML = "";
+
+
+    adminPage.style.display = "flex";
+    editButtonWrapper.style.display = "flex";
+
+    labsSelectWrapper.style.display = "none";
+    labsEditWrapper.style.display = "none";
 }
 
 
@@ -599,3 +634,231 @@ examsEditWrapper.addEventListener("click", async (e) => {
         alert("Failed to update exam.");
     }
 });
+
+
+
+
+
+labsSemesterSelect.addEventListener("change", async () => {
+
+    //get the value of the semester
+    const semester = semesterSelect.value[semesterSelect.value.length - 1];
+
+    //fetching the courses of the selected semester of the database
+    try {
+        const response = await fetch("/getSemester", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ semester: semester }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch courses");
+        }
+
+        const data = await response.json();
+        const courses = data.titles.map((course) => course.title);
+
+        //clears the previous data in order to load the new ones
+        labsCourseSelect.innerHTML = "";
+
+        //set a default option so that it does not show a course at first
+        const defaultOption = document.createElement("option");
+        defaultOption.textContent = "Επέλεξε Μάθημα:";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+
+        courseSelect.appendChild(defaultOption);
+
+        //append it's course to the choice box
+        courses.forEach((course) => {
+            const option = document.createElement("option");
+            option.value = course;
+            option.textContent = course;
+            labsCourseSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error(error);
+        alert("Could not load courses for this semester.");
+    }
+});
+
+
+//creates dynamically the corresponding info of the course based on the json for the program
+labsCourseSelect.addEventListener("change", async () => {
+
+    //getting the value of the selected course
+    const course = courseSelect.value;
+
+    try {
+        const response = await fetch("/getClass", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: course }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch course information");
+        }
+
+        const data = await response.json();
+
+        // 1. Create a safe title by replacing double quotes with HTML entities
+        const safeTitle = data.schedules[0].title.replace(/"/g, '&quot;');
+
+        //clear the previous content 
+        labsEditWrapper.innerHTML = "";
+
+        const generalDiv = document.createElement("div");
+        generalDiv.classList.add("editCourse");
+
+        //generate the general info dynamically
+        generalDiv.innerHTML = `
+            <form id="generalForm">
+                <h2>Γενικά Στοιχεία</h2>
+
+                <label class="title">Όνομα Μαθήματος:
+                    <input type="text" name="title" value="${safeTitle}" readonly>
+                </label><br>
+
+                <label class="Semesters">Εξάμηνο:
+                 
+                    <select name="semester">
+                        ${[1, 2, 3, 4, 5, 6, 7, 8].map(s => `
+                            <option value="${s}" ${s == semesterSelect.value[semesterSelect.value.length - 1] ? "selected" : ""}>
+                                ${s}
+                            </option>
+                        `).join("")}
+                    </select>
+
+                </label><br>
+
+            </form>
+        `;
+        
+        labsEditWrapper.appendChild(generalDiv);
+
+        //generate the lecture info dynamically
+        data.schedules.forEach((lecture, i) => {
+
+            const div = document.createElement("div");
+            div.classList.add("editCourse");
+
+            // MAYBE I WILL PLACE IT
+            // <h3>Διάλεξη ${i + 1}</h3>
+
+            div.innerHTML = `
+                <form class="lectureForm">
+
+                    <label class="lectureHall">Αμφιθέατρο:
+                        <input type="text" name="lectureHall" value="${lecture.lectureHall}">
+                    </label><br>
+
+                    <label class="daysOfWeek">Ημέρα:
+
+                        <select name="day">
+                            ${[1, 2, 3, 4, 5].map(d => `
+                                <option value="${d}" ${d == lecture.day ? "selected" : ""}>
+                                    ${d}
+                                </option>
+                            `).join("")}
+                        </select>
+                       
+                    </label><br>
+
+                    <label class="startTime">Ώρα Έναρξης:
+                        <input type="time" name="start" value="${lecture.start ? lecture.start.slice(0, 5) : ""}">
+                    </label><br>
+
+                    <label class="endTime">Ώρα Λήξης:
+                        <input type="time" name="end" value="${lecture.end ? lecture.end.slice(0, 5) : ""}">
+                    </label><br>
+                </form>
+            `;
+
+            labsEditWrapper.appendChild(div);
+        });
+
+        //create the save button dynamically
+        const button = document.createElement("button");
+        button.textContent = "Αποθήκευση";
+        button.id = "labSaveButton";
+
+        labsEditWrapper.appendChild(button);
+
+    } catch (error) {
+        console.error(error);
+        alert("Could not load course.");
+    }
+});
+
+//when save button is pressed it changes the data on the json for the program
+labsEditWrapper.addEventListener("click", async (e) => {
+
+    //Only run if save button was pressed
+    if (e.target.id !== "labSaveButton") return;
+
+    const generalForm = document.getElementById("generalForm");
+    const lectureForms = editWrapper.querySelectorAll(".lectureForm");
+
+    const generalData = new FormData(generalForm);
+
+    //final object sent to backend
+    const updatedCourse = {
+        title: generalData.get("title"),
+        semester: parseInt(generalData.get("semester")),
+        daysOfWeek: [],
+        startTime: [],
+        endTime: [],
+        lectureHall: []
+    };
+
+    //check if time is valid(start time < end time)
+    let validTime = true;
+
+    lectureForms.forEach(form => {
+        const formData = new FormData(form);
+
+        const start = formData.get("start");
+        const end = formData.get("end");
+
+        if (start >= end) {
+            alert("Η ώρα έναρξης πρέπει να είναι πριν την ώρα λήξης!");
+            validTime = false;
+            return;
+        }
+    });
+
+    //if time not valid stop 
+    if (!validTime){
+        return;
+    } 
+
+    //collect lecture data into arrays
+    lectureForms.forEach(form => {
+        const formData = new FormData(form);
+
+        updatedCourse.daysOfWeek.push(parseInt(formData.get("day")));
+        updatedCourse.startTime.push(formData.get("start"));
+        updatedCourse.endTime.push(formData.get("end"));
+        updatedCourse.lectureHall.push(formData.get("lectureHall"));
+    });
+
+   try {
+        const response = await fetch("/updateCourse", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedCourse),
+        });
+
+        if (!response.ok) throw new Error("Failed");
+
+        const result = await response.json();
+        alert(result.message || "Saved!");
+
+    } catch (error) {
+        console.error(error);
+        alert("Failed to update course.");
+    }
+});
+
