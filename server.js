@@ -232,7 +232,7 @@ app.post("/getSearch", async (req, res) => {
             .map(exam => ({ title: exam.title }));
 
         } else if (mode === "Εργαστήρια") {
-            dataPath = path.join(__dirname, 'jsonData', 'labs.json');
+            dataPath = path.join(__dirname, 'jsonData', 'merged_labs.json');
             const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
             titles = data

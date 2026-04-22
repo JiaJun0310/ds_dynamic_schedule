@@ -344,6 +344,10 @@ document.querySelectorAll('input[name="choice"]').forEach((radio) => {
     radio.addEventListener("change", (e) => {
         currentMode = e.target.value;
 
+        const semesters = document.getElementById("semesters"); // Getting the semesters from the documment so we can show or hide them
+        const matchingCourses = document.getElementById("matchingCourses") // Getting the new div we made so we can add the matching classes there
+        const searchbar = document.getElementById("searchbar"); // Getting the searchbar 
+    
         // Clean up the UI: Close all open semester tabs when switching modes
         document.querySelectorAll(".buttonDiv").forEach((btn) => {
             let sem = btn.parentElement.dataset.semester || btn.textContent.trim().slice(-1);
@@ -354,6 +358,11 @@ document.querySelectorAll('input[name="choice"]').forEach((radio) => {
             if (arrow) arrow.src = "../images/right_pointer.svg";
             btn.dataset.open = "false"; // Reset our tracking variable
         });
+
+        // Resetting the searchbar if another mode is toggled
+        semesters.style.display = "block" // Semesters reappear
+        matchingCourses.style.display = "none" // Previous results dissapear
+        searchbar.value = "" // Bar is cleared
 
         examOptions(); //this function haddles apearance of the exam page
     });
@@ -1168,6 +1177,7 @@ searchbar.addEventListener("keyup", async function (e) {
     // If it is not null we move on to show the user the matched courses
     if (search) {
         matchingCourses.innerHTML = ''; // Clearing the previous searches 
+        matchingCourses.style.display = "block" // Making sure its visible
         console.log(search)
         semesters.style.display = "none" // We remove the semesters so the sidebar does not get cluttered and ugly
         examsBox.style.display = "none" // Hiding the examsbox
