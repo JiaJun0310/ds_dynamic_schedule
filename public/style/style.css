@@ -70,12 +70,13 @@ main {
 .buttonDiv {
     display: flex;
     height: 3.5em;
-
     cursor: pointer;
-    justify-content: center;
+    justify-content: space-between; /* Pushes text to middle and arrow to right */
     align-items: center;
     background-color: #8c2635;
     border: 3px solid rgb(107, 6, 6);
+    padding: 0 15px; /* Adds some breathing room on the sides */
+    transition: background-color 0.2s ease;
 }
 
 /* Hover effect for semester buttons */
@@ -86,14 +87,13 @@ main {
 
 /* Semester button text */
 .semesterButtons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 0; /* REMOVES default paragraph margins that cause off-centering */
+    flex-grow: 1;
+    text-align: center;
     font-size: 1em;
     color: white;
-    width: 100%;
-    height: 100%;
     font-family: sans-serif;
+    font-weight: 500;
 }
 
 /* Course item container */
@@ -187,8 +187,9 @@ main {
 
 /* Generic image sizing */
 .pointer {
-    height: 50%;
-    width: 50%;
+    height: 14px; /* Set a specific size instead of 50% */
+    width: 14px;
+    margin-left: 10px;
 }
 
 /* Footer section */
