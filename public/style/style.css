@@ -187,8 +187,8 @@ main {
 
 /* Generic image sizing */
 .pointer {
-    height: 14px; /* Set a specific size instead of 50% */
-    width: 14px;
+    height: 30px; 
+    width: 30px;
     margin-left: 10px;
 }
 
