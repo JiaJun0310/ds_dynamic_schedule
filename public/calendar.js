@@ -3,10 +3,10 @@ let calendar;
 let academicData = null;
 let eventTracker = {};
 let currentMode = "Μαθήματα"; //hardcode the default radio button
-let professorLinks = {}; 
+let professorLinks = {};
 let titleLinks = {};
 let normalizedTitleLinks = {};
-let isSeptember = false; 
+let isSeptember = false;
 
 //DOM ELEMENTS
 const popup = document.getElementById("eventPopup"); //pop up for when you click on an event
@@ -18,6 +18,7 @@ const colorBtn = document.getElementById("colorBtn"); //the picker
 const hiddenPicker = document.getElementById("hiddenPicker");
 const clearSelectionBtn = document.getElementById("clearSelection");
 const toggleScreenBtn = document.getElementById("toggleScreen");
+const searchbar = document.getElementById("searchbar"); // The searchbar where the user will search for specific classes
 
 // Lab Popup Elements
 const labSlotPopup = document.getElementById("labSlotPopup");
@@ -184,10 +185,10 @@ function handleEventClick(info) {
     const link = normalizedTitleLinks[normalized] || titleLinks[originalTitle];
 
     titleEl.innerHTML = link
-    ? `<a href="${link}" target="_blank" style="color: inherit; text-decoration: none;">
+        ? `<a href="${link}" target="_blank" style="color: inherit; text-decoration: none;">
          ${originalTitle}
        </a>`
-    : originalTitle;
+        : originalTitle;
 
     let profs = props.professor;
     if (!profs || profs.length === 0 || profs[0] === "") {
@@ -195,14 +196,14 @@ function handleEventClick(info) {
     } else {
         // if teachers are many 
         let profArray = Array.isArray(profs) ? profs : profs.split(",");
-        
+
         profEl.innerHTML = profArray.map(prof => {
             let cleanName = prof.trim();
             let link = professorLinks[cleanName]; // looks for the name
-            
+
             // if it finds a link it replaces it with the <a> tag
-            return link 
-                ? `<a href="${link}" target="_blank" style="color: #3788d8; text-decoration: underline;">${cleanName}</a>` 
+            return link
+                ? `<a href="${link}" target="_blank" style="color: #3788d8; text-decoration: underline;">${cleanName}</a>`
                 : cleanName;
         }).join(", ");
     }
@@ -230,7 +231,7 @@ async function examOptions() {
         semesters.style.display = "none";
         examsBox.style.display = "flex";
     }
-    
+
     if (currentMode === "Μαθήματα" || currentMode === "Εργαστήρια") {   //this re apears everything when pressing Μαθήματα
         const semesterWrappers = Array.from(
             document.querySelectorAll(".semesterButtonDivWrapper"),
@@ -249,7 +250,7 @@ async function examOptions() {
             generalSem.style.display = currentMode === "Εργαστήρια" ? "block" : "none";
         }
     }
-    
+
     let isWinter = 0;
 
     // Fetch winter semester status
@@ -314,7 +315,7 @@ async function examOptions() {
 
     embolimExam.onclick = async () => { //this button apears the div below the embolim exams
         isEmbolimClicked = !isEmbolimClicked;
-        const embolimExamDiv = document.getElementById("embolimExamDiv"); 
+        const embolimExamDiv = document.getElementById("embolimExamDiv");
 
         if (isEmbolimClicked) { //changes the display setting
             embolimExamDiv.style.display = "block";
@@ -348,7 +349,7 @@ document.querySelectorAll('input[name="choice"]').forEach((radio) => {
             let sem = btn.parentElement.dataset.semester || btn.textContent.trim().slice(-1);
             let targetDiv = document.getElementById(`Semester${sem}`);
             if (targetDiv) targetDiv.innerHTML = ""; // Empty the list
-            
+
             let arrow = btn.querySelector(".pointer");
             if (arrow) arrow.src = "../images/right_pointer.svg";
             btn.dataset.open = "false"; // Reset our tracking variable
@@ -458,15 +459,15 @@ function removeCourseFromCalendar(targetTitle) {
 
 function handleLabToggle(checkbox, labData, sem) {
     if (checkbox.checked) {
-        checkbox.checked = false; 
-        
+        checkbox.checked = false;
+
         labSlotTitle.textContent = labData.name;
-        labSlotOptions.innerHTML = ""; 
+        labSlotOptions.innerHTML = "";
 
         labData.data.forEach((slot, index) => {
             const label = document.createElement("label");
             label.style.cursor = "pointer";
-            
+
             const radio = document.createElement("input");
             radio.type = "radio";
             radio.name = "labSlotChoice";
@@ -475,7 +476,7 @@ function handleLabToggle(checkbox, labData, sem) {
 
             const dayName = daysMapGreek[slot.day] || slot.day;
             const text = document.createTextNode(` ${dayName}, ${slot.time} (${slot.labhall})`);
-            
+
             label.append(radio, text);
             labSlotOptions.appendChild(label);
         });
@@ -485,8 +486,8 @@ function handleLabToggle(checkbox, labData, sem) {
             if (selectedRadio) {
                 const selectedIndex = parseInt(selectedRadio.value);
                 const selectedSlot = labData.data[selectedIndex];
-                
-                checkbox.checked = true; 
+
+                checkbox.checked = true;
                 addSpecificLabToCalendar(labData.name, selectedSlot, sem);
             }
             labSlotPopup.close();
@@ -503,9 +504,9 @@ function handleLabToggle(checkbox, labData, sem) {
 }
 
 function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
-    const eventColor = "#27ae60"; 
-    const dates = getSemesterDates(sem); 
-    
+    const eventColor = "#27ae60";
+    const dates = getSemesterDates(sem);
+
     if (!eventTracker[labName]) eventTracker[labName] = [];
 
     const [startTime, endTime] = slot.time.split("-");
@@ -515,8 +516,8 @@ function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
         daysOfWeek: [parseInt(slot.day)],
         startTime: startTime.trim(),
         endTime: endTime.trim(),
-        startRecur: dates ? dates.start : null, 
-        endRecur: dates ? dates.end : null,     
+        startRecur: dates ? dates.start : null,
+        endRecur: dates ? dates.end : null,
         backgroundColor: eventColor,
         borderColor: eventColor,
         extendedProps: {
@@ -527,13 +528,13 @@ function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
             rawEnd: endTime.trim()
         }
     });
-    
+
     eventTracker[labName].push(addedEvent);
 
-    if(!isRestoring) {
+    if (!isRestoring) {
         let saved = getSavedLabs();
         if (!saved.some((l) => l.name === labName)) {
-            saved.push({ name: labName, slot, sem }); 
+            saved.push({ name: labName, slot, sem });
             saveLabs(saved);
         }
     }
@@ -692,7 +693,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     appearCalendar(); //refresh calendar to show events
     resize();
-    examOptions(); 
+    examOptions();
 });
 
 //UI EVENT LISTENERS
@@ -791,8 +792,8 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                 checkbox.onchange = () =>
                     handleCourseToggle(checkbox, title, sem);
             });
-        } 
-        
+        }
+
         else if (currentMode === "Εργαστήρια") {
             const res = await fetch("/getLabs", {
                 method: "POST",
@@ -811,7 +812,7 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.className = "checkbox";
-                
+
                 checkbox.checked = !!eventTracker[lab.name];
 
                 div.append(p, checkbox);
@@ -824,7 +825,7 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                 };
 
                 checkbox.onchange = () => handleLabToggle(checkbox, lab, sem);
-                
+
                 setTimeout(() => div.classList.add("visible"), i * 50);
             });
         }
@@ -838,7 +839,7 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                 // Fetch directly from the September file
                 const res = await fetch("/jsonData/september_exams.json");
                 const allSeptExams = await res.json();
-                
+
                 // Filter the data so it only shows exams belonging to the clicked semester tab
                 examsArray = allSeptExams.filter(exam => String(exam.semester) === String(sem));
             } else {
@@ -932,7 +933,7 @@ function downloadCalendar() {
             if (event._def.recurringDef) {
                 // Check if it's a repeating class
                 const days = event._def.recurringDef.typeData.daysOfWeek;
-                const sem = event.extendedProps.semester || "1"; 
+                const sem = event.extendedProps.semester || "1";
                 const dates = getSemesterDates(sem);
                 if (!dates) return;
 
@@ -1153,3 +1154,77 @@ addEventListener("resize", () => {
     resize();
     resizeWrapper();
 });
+
+// Event listener for the searchbar
+searchbar.addEventListener("keyup", async function (e) {
+    search = e.target.value; // Stores whatever the use wrote
+
+    const semesters = document.getElementById("semesters"); // Getting the semesters from the documment so we can show or hide them
+    const matchingCourses = document.getElementById("matchingCourses") // Getting the new div we made so we can add the matching classes there
+    const examsBox = document.getElementById("examsBox"); // Also getting the examsbox so we can show or hide it
+    var titlesArray = {} // Creating this here so it can be used in all modes
+    const savedClasses = getSavedSchedule(); // Same for this
+
+    // If it is not null we move on to show the user the matched courses
+    if (search) {
+        matchingCourses.innerHTML = ''; // Clearing the previous searches 
+        console.log(search)
+        semesters.style.display = "none" // We remove the semesters so the sidebar does not get cluttered and ugly
+        examsBox.style.display = "none" // Hiding the examsbox
+
+        // Fetching matching classes
+        const res = await fetch("/getSearch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ search: search, mode: currentMode }), // Two arguments, both the search and the current mode
+        });
+        const data = await res.json(); //we save the data here
+        titlesArray = data.titles.map((course) => course.title); //and the titles in an array
+
+
+
+        //creates for each title in title array a div with a pargaraph and a checkbox in it so it generates everything dinamicly
+        titlesArray.forEach((title, i) => {
+            const div = document.createElement("div");
+            div.className = "course";
+
+            const p = document.createElement("p");
+            p.textContent = title;
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "checkbox";
+            checkbox.checked = savedClasses.some(
+                (saved) => saved.title === title,
+            );
+
+            div.append(p, checkbox);
+            matchingCourses.appendChild(div);
+
+            setTimeout(() => div.classList.add("visible"), i * 50);
+
+            div.onclick = (e) => {
+                //ckeckbox logic on the div
+                if (checkbox.disabled || e.target === checkbox) return;
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event("change"));
+            };
+
+            checkbox.onchange = () =>
+                handleCourseToggle(checkbox, title, sem);
+        });
+    }
+    else {
+
+        matchingCourses.innerHTML = ''; // Clearing the previous search results
+        if(currentMode === "Εξεταστική"){
+            examsBox.style.display = "flex" // if we're in exam mode we also show the examsbox
+        }
+        // Only bringing these back if we are not in exam mode since the user needs to choose make up exams or normal exams for the semesters to show up
+        else {
+            semesters.style.display = "block" // If the searchbar is null then the semesters reappear
+            
+        }
+    }
+
+})

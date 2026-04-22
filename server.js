@@ -184,6 +184,48 @@ app.post("/getSemester", async (req, res) => {
     }
 });
 
+// used in calendar.js to fetch course that match the user's search
+app.post("/getSearch", async (req, res) => {
+    try {
+
+        const {search, mode} = req.body // whatever the user typed into the searchbar, plus which mode the sidebar is in
+        var dataPath; // Declaring this here so it can be used for every mode
+        var titles; // We will store the matching titles here
+
+        // Depending on the mode we pull data from the respective json file
+        if (mode === "Μαθήματα") {
+            dataPath = path.join(__dirname, 'jsonData', 'merged_schedule.json');
+            const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+            titles = data
+            .filter(course => String(course.title).includes(String(search).toUpperCase()) ) // Filtering so we only return the results that match the search. We use "includes"
+            .map(course => ({ title: course.title }));
+
+        } else if (mode === "Εξεταστική") {
+            dataPath = path.join(__dirname, 'jsonData', 'merged_exams.json');
+            const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+            titles = data
+            .filter(exam => String(exam.title).includes(String(search).toUpperCase()) ) // Filtering so we only return the results that match the search. We use "includes"
+            .map(exam => ({ title: exam.title }));
+
+        } else if (mode === "Εργαστήρια") {
+            dataPath = path.join(__dirname, 'jsonData', 'labs.json');
+            const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+            titles = data
+            .filter(lab => String(lab.name).includes(String(search).toUpperCase()) ) // Filtering so we only return the results that match the search. We use "includes"
+            .map(lab => ({ title: lab.name }));
+
+        }
+    
+        res.status(200).json({ titles });  // Returning the titles
+
+    } catch (err) {
+        res.status(400).json({ error: err.message }); // Big beautiful error
+    }
+})
+
 //used in calendar.js and admin.js to get all the data of a spesific course/class 
 app.post("/getClass", async (req, res) => {
     try {
