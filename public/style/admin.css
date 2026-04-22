@@ -1,18 +1,26 @@
 @keyframes popIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.5); 
-  }
-  70% {
-    transform: scale(1.05); 
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1); 
-  }
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    70% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-body{
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
     background: radial-gradient(#3c516f, #0a0f29);
 }
 
@@ -23,7 +31,8 @@ body{
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
-    display: none; /* Hidden by default */
+    display: none;
+    /* Hidden by default */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -43,17 +52,22 @@ body{
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Admin page wrapper */
 .adminWrapper {
     font-family: sans-serif;
     display: flex;
-    flex-direction: column;   
-    justify-content: flex-start; 
-    align-items: center;    
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     /* min-height: 80vh;        */
     width: 100%;
     padding: 20px;
@@ -67,8 +81,8 @@ body{
     animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     font-family: sans-serif;
     display: flex;
-    gap: 50px;       
-    flex-wrap: wrap; 
+    gap: 50px;
+    flex-wrap: wrap;
     justify-content: center;
     width: 100%;
     /* height: 250px; */
@@ -81,11 +95,11 @@ body{
     padding: 20px;
     border-radius: 10px;
     width: 100%;
-    max-width: 300px; 
+    max-width: 300px;
     display: flex;
     flex-direction: column;
     gap: 30px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* file box title */
@@ -107,7 +121,7 @@ body{
 
 /* upload button */
 .fileBox button {
-    
+
     padding: 10px;
     background-color: #8c2635;
     border: none;
@@ -117,42 +131,42 @@ body{
     font-weight: bold;
 }
 
-.fileBox button:hover{
+.fileBox button:hover {
     background-color: #9f2b3d;
 }
 
 /* wrapper for the edit buttons at the admin page */
 .editButtonWrapper {
-    display: flex;            
-    justify-content: center;  
-    gap: 20px;                 
-    margin-top: 100px;         
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 100px;
 }
 
-.editBox{   
+.editBox {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 /* edit button (program and exam)*/
-#editProgramButton, 
+#editProgramButton,
 #editExamButton,
-#editLabButton{
+#editLabButton {
     animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     font-size: 20px;
-    border:1px solid rgb(107, 6, 6);
+    border: 1px solid rgb(107, 6, 6);
     background-color: #8c2635;
     color: #f0f0f0;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    border-radius: 10px;   
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
     height: 90px;
     width: 500px;
 }
 
 #editProgramButton:hover,
 #editExamButton:hover,
-#editLabButton:hover{
+#editLabButton:hover {
     background-color: #9f2b3d;
 }
 
@@ -161,18 +175,18 @@ body{
 #examsSelectWrapper,
 #labsSelectWrapper,
 #editWrapper,
-#examsEditWrapper{
+#examsEditWrapper {
     display: none;
 }
 
 /* styling for the select wrappers */
 #programSelectWrapper,
 #examsSelectWrapper,
-#labsSelectWrapper {       
-    font-family: sans-serif;  
-    justify-content: center; 
-    align-items: flex-start; 
-    gap: 40px;               
+#labsSelectWrapper {
+    font-family: sans-serif;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
     margin-top: 20px;
     margin-bottom: 50px;
 
@@ -180,23 +194,23 @@ body{
 }
 
 /* styling for the selection drop down boxes */
-#programSelectSemester, 
+#programSelectSemester,
 #examsSelectSemester,
 #labsSelectSemester,
 #selectCourse,
 #examsSelectCourse,
-#labsSelectCourse{
+#labsSelectCourse {
     animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     text-align: center;
-    margin: 20px 0; 
-    display: flex;            
+    margin: 20px 0;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    
+
 }
 
 /* styling for the selection drop down boxes label*/
-#programSelectSemester label, 
+#programSelectSemester label,
 #examsSelectSemester label,
 #labsSelectSemester label,
 #selectCourse label,
@@ -211,7 +225,7 @@ body{
 
 /* styling for the content inside the selection drop down boxes */
 #programSemester,
-#examsSemester, 
+#examsSemester,
 #labsSemester,
 #courses,
 #examsCourses,
@@ -219,10 +233,10 @@ body{
     padding: 18px 50px;
     background-color: #8c2635;
     border: 2px solid rgb(107, 6, 6);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     color: white;
-    
-    border-radius: 10px;     
+
+    border-radius: 10px;
     font-size: 20px;
     cursor: pointer;
     transition: 0.2s ease;
@@ -233,17 +247,17 @@ body{
 
     background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns="http://www.w3.org/2000/svg"%20width="292.4"%20height="292.4"><path%20fill="%23FFFFFF"%20d="M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z"/></svg>');
     background-repeat: no-repeat;
-  
-  
-    background-position: right 20px center; 
+
+
+    background-position: right 20px center;
     background-size: 12px;
 
-  
+
     padding-right: 40px;
-    padding-left: 20px ;
+    padding-left: 20px;
 }
 
-#programSemester, 
+#programSemester,
 #examsSemester,
 #labsSemester,
 #courses:hover,
@@ -254,59 +268,59 @@ body{
 
 #courses,
 #examsCourses,
-#labsCourses{
+#labsCourses {
     max-width: 700px;
 }
 
 /* styling for the edit wrapper (program and exam) */
 #editWrapper,
 #examsEditWrapper,
-#labsEditWrapper {       
-    font-family: sans-serif;   
-    justify-content: center; 
-    align-items: center; 
-    gap: 40px;               
+#labsEditWrapper {
+    font-family: sans-serif;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
     margin-top: 20px;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
 .editCourse {
     animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
-    border-radius: 8px;      
+    border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     background-color: #2f385f;
     padding: 25px;
     color: white;
 }
 
-input{
-   border-radius: 8px; 
-   border: none 
+input {
+    border-radius: 8px;
+    border: none
 }
 
-select{
-    border-radius: 8px; 
-    border: none 
+select {
+    border-radius: 8px;
+    border: none
 }
 
-.editCourse h2{
+.editCourse h2 {
     color: white;
-    grid-column: 1 / 3;  
+    grid-column: 1 / 3;
     grid-row: 1;
     margin: 0;
 }
 
 .editCourse form {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 15px 20px; 
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px 20px;
     width: 1000px;
 }
 
 .editCourse label {
-    display: flex;         
-    flex-direction: column; 
-    width: 100%;            
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .editCourse input {
@@ -323,12 +337,12 @@ select{
 
 /* placements for the info of the program */
 .title {
-    grid-column: 1 / 3; 
+    grid-column: 1 / 3;
     grid-row: 2;
 }
 
 .lectureHall {
-    grid-column: 1 / 3; 
+    grid-column: 1 / 3;
     grid-row: 2;
 }
 
@@ -356,56 +370,58 @@ select{
     grid-column: 1 / 3;
     grid-row: 4;
 }
-/* placements for the info of the program */ 
+
+/* placements for the info of the program */
 
 
-/* placements for the info of the exams */ 
-.examsTitle{
-    grid-column: 1 / 3; 
+/* placements for the info of the exams */
+.examsTitle {
+    grid-column: 1 / 3;
     grid-row: 2;
 }
 
-.examsLectureHall{
-    grid-column: 3 / 5; 
+.examsLectureHall {
+    grid-column: 3 / 5;
     grid-row: 2;
 }
 
-.examsSemesters{
-    grid-column: 1 / 3; 
+.examsSemesters {
+    grid-column: 1 / 3;
     grid-row: 3;
 }
 
-.examsDate{
-    grid-column: 3 / 5; 
+.examsDate {
+    grid-column: 3 / 5;
     grid-row: 3;
 }
 
-.examsStartTime{
-    grid-column: 1 / 3; 
+.examsStartTime {
+    grid-column: 1 / 3;
     grid-row: 4;
 }
 
-.examsEndTime{
-    grid-column: 3 / 5; 
+.examsEndTime {
+    grid-column: 3 / 5;
     grid-row: 4;
 }
 
-.examsDivision{
-    grid-column: 1 / 3; 
+.examsDivision {
+    grid-column: 1 / 3;
     grid-row: 5;
 }
-/* placements for the info of the exams */ 
+
+/* placements for the info of the exams */
 
 
 /* Submit button */
 #editWrapper button,
 #examsEditWrapper button,
 #labsEditWrapper button {
-    background-color: #8c2635; 
-    color: #f0f0f0;     
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);           
-    border:1px solid rgb(107, 6, 6);                     
-    border-radius: 8px;           
+    background-color: #8c2635;
+    color: #f0f0f0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgb(107, 6, 6);
+    border-radius: 8px;
     cursor: pointer;
     padding: 30px;
     font-size: large;
@@ -416,7 +432,7 @@ select{
 
 #editWrapper button:hover,
 #examsEditWrapper button:hover,
-#labsEditWrapper button:hover{
+#labsEditWrapper button:hover {
     background-color: #9f2b3d;
 }
 
@@ -434,4 +450,87 @@ select{
     border: none;
     border-radius: 8px;
     cursor: pointer;
+}
+
+
+@media (max-width: 767px) {
+
+    .editButtonWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    #editProgramButton,
+    #editExamButton,
+    #editLabButton {
+        width: 90%;
+        max-width: 350px;
+        height: 70px;
+        font-size: 18px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #backButton,
+    #examsBackButton,
+    #labsBackButton {
+        position: static;
+        align-self: flex-start;
+        margin-left: 30px;
+    }
+
+    #programSelectWrapper,
+    #examsSelectWrapper,
+    #labsSelectWrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #programSemester,
+    #examsSemester,
+    #labsSemester,
+    #courses,
+    #examsCourses,
+    #labsCourses {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .editCourse {
+        width: 95%;
+    }
+
+    .editCourse form {
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+
+    .editCourse label {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .title,
+    .lectureHall,
+    .daysOfWeek,
+    .Semesters,
+    .startTime,
+    .endTime,
+    .professor,
+    .examsTitle,
+    .examsLectureHall,
+    .examsSemesters,
+    .examsDate,
+    .examsStartTime,
+    .examsEndTime,
+    .examsDivision {
+        grid-column: auto;
+        grid-row: auto;
+    }
 }
