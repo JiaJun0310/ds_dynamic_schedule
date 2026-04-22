@@ -121,10 +121,38 @@ async function parseExcelToJson() {
         }
     });
 
-    // 4. Save to JSON
+    // // 4. Save to JSON
+    // const finalJson = Object.values(courses);
+    // fs.writeFileSync('jsonData/labs.json', JSON.stringify(finalJson, null, 4));
+    // console.log("Successfully extracted lab schedule to jsonData/labs.json");
+
+
+// 4. Prepare the final data
     const finalJson = Object.values(courses);
-    fs.writeFileSync('jsonData/labs.json', JSON.stringify(finalJson, null, 4));
-    console.log("Successfully extracted lab schedule to jsonData/labs.json");
+
+    if (finalJson.length > 0) { 
+        // Logic to determine if it's spring or winter based on the first course's semester
+        // We handle "General" or numeric semesters
+        const firstSem = finalJson[0].semester;
+        const isNumeric = !isNaN(parseInt(firstSem));
+        
+        let outputPath;
+        if (isNumeric && parseInt(firstSem) % 2 === 0) {
+            outputPath = "./jsonData/spring_labs.json";
+        } else {
+            // Defaults to winter for General or odd numbers
+            outputPath = "./jsonData/winter_labs.json";
+        }
+
+        fs.writeFileSync(outputPath, JSON.stringify(finalJson, null, 4), 'utf-8');
+        console.log(`Successfully extracted lab schedule to ${outputPath}`);
+        
+        // Also save to a generic labs.json if your frontend specifically looks for that
+        fs.writeFileSync("./jsonData/labs.json", JSON.stringify(finalJson, null, 4), 'utf-8');
+    } else {
+        console.log("No lab data extracted.");
+    }
 }
 
-parseExcelToJson();
+console.log("Starting lab schedule extraction...");
+parseExcelToJson().catch(err => console.error("Extraction failed:", err));

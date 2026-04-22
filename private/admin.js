@@ -66,7 +66,29 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                     );
                     const extractData = await extractResponse.text();
                     alert("Ολοκληρώθηκε: " + extractData); //Extraction complite and file saved as academic_calendar.json
-                } else if (id === "exams") {
+                } 
+                else if (id === "labs") {
+                    const extractResponse = await fetch(
+                        "/run_labs_extractor",
+                        {
+                            method: "POST",
+                        },
+                    );
+                    const extractData = await extractResponse.text();
+
+                    const syncResponse = await fetch("/sendLabData", { //After creating the .json in jsonData imediatly send it with /sendData
+                        method: "POST",
+                    });
+
+                    const syncResult = await syncResponse.json();
+                    alert( //If everything goes correct (which it will because it's an amazing pipeline) this alert will apear 
+                        "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
+                        extractData +
+                        "\n2. Files: " +
+                        (syncResult.message || "Updated"),
+                    );
+                } 
+                else if (id === "exams") {
                     const extractResponse = await fetch(
                         "/run_exams_extractor",
                         {
