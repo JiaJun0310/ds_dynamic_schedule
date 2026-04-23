@@ -658,45 +658,43 @@ examsEditWrapper.addEventListener("click", async (e) => {
 });
 
 
-
-
-
+//loads the corresponding labs of the semester based on the json for the labs
 labsSemesterSelect.addEventListener("change", async () => {
 
     //get the value of the semester
-    const semester = semesterSelect.value[semesterSelect.value.length - 1];
+    const semester = labsSemesterSelect.value[labsSemesterSelect.value.length - 1];
 
-    //fetching the courses of the selected semester of the database
+    //fetching the labs of the selected semester of the database
     try {
-        const response = await fetch("/getSemester", {
+        const response = await fetch("/getLabs", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ semester: semester }),
         });
 
         if (!response.ok) {
-            throw new Error("Failed to fetch courses");
+            throw new Error("Failed to fetch labs");
         }
 
         const data = await response.json();
-        const courses = data.titles.map((course) => course.title);
+        const labs = data.map(lab => lab.name);
 
         //clears the previous data in order to load the new ones
         labsCourseSelect.innerHTML = "";
 
-        //set a default option so that it does not show a course at first
+        //set a default option so that it does not show a lab at first
         const defaultOption = document.createElement("option");
         defaultOption.textContent = "Επέλεξε Μάθημα:";
         defaultOption.disabled = true;
         defaultOption.selected = true;
 
-        courseSelect.appendChild(defaultOption);
+        labsCourseSelect.appendChild(defaultOption);
 
-        //append it's course to the choice box
-        courses.forEach((course) => {
+        //append it's lab to the choice box
+        labs.forEach((lab) => {
             const option = document.createElement("option");
-            option.value = course;
-            option.textContent = course;
+            option.value = lab;
+            option.textContent = lab;
             labsCourseSelect.appendChild(option);
         });
     } catch (error) {
@@ -706,27 +704,27 @@ labsSemesterSelect.addEventListener("change", async () => {
 });
 
 
-//creates dynamically the corresponding info of the course based on the json for the program
+//creates dynamically the corresponding info of the labs based on the json for the labs
 labsCourseSelect.addEventListener("change", async () => {
 
-    //getting the value of the selected course
-    const course = courseSelect.value;
+    //getting the value of the selected lab
+    const labs = labsCourseSelect.value;
 
     try {
-        const response = await fetch("/getClass", {
+        const response = await fetch("/getLabs", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title: course }),
+            body: JSON.stringify({ title: labs }),
         });
 
         if (!response.ok) {
-            throw new Error("Failed to fetch course information");
+            throw new Error("Failed to fetch labs information");
         }
 
         const data = await response.json();
 
         // 1. Create a safe title by replacing double quotes with HTML entities
-        const safeTitle = data.schedules[0].title.replace(/"/g, '&quot;');
+        const safeTitle = data.schedules[0].name.replace(/"/g, '&quot;');
 
         //clear the previous content 
         labsEditWrapper.innerHTML = "";
@@ -747,7 +745,7 @@ labsCourseSelect.addEventListener("change", async () => {
                  
                     <select name="semester">
                         ${[1, 2, 3, 4, 5, 6, 7, 8].map(s => `
-                            <option value="${s}" ${s == semesterSelect.value[semesterSelect.value.length - 1] ? "selected" : ""}>
+                            <option value="${s}" ${s == labsSemesterSelect.value[labsSemesterSelect.value.length - 1] ? "selected" : ""}>
                                 ${s}
                             </option>
                         `).join("")}
@@ -760,8 +758,8 @@ labsCourseSelect.addEventListener("change", async () => {
         
         labsEditWrapper.appendChild(generalDiv);
 
-        //generate the lecture info dynamically
-        data.schedules.forEach((lecture, i) => {
+        //generate the lab info dynamically
+        data.schedules.forEach((lab, i) => {
 
             const div = document.createElement("div");
             div.classList.add("editCourse");
@@ -772,15 +770,15 @@ labsCourseSelect.addEventListener("change", async () => {
             div.innerHTML = `
                 <form class="lectureForm">
 
-                    <label class="lectureHall">Αμφιθέατρο:
-                        <input type="text" name="lectureHall" value="${lecture.lectureHall}">
+                    <label class="labhall">Αμφιθέατρο:
+                        <input type="text" name="labhall" value="${lab.labhall}">
                     </label><br>
 
                     <label class="daysOfWeek">Ημέρα:
 
                         <select name="day">
                             ${[1, 2, 3, 4, 5].map(d => `
-                                <option value="${d}" ${d == lecture.day ? "selected" : ""}>
+                                <option value="${d}" ${d == lab.day ? "selected" : ""}>
                                     ${d}
                                 </option>
                             `).join("")}
@@ -789,11 +787,11 @@ labsCourseSelect.addEventListener("change", async () => {
                     </label><br>
 
                     <label class="startTime">Ώρα Έναρξης:
-                        <input type="time" name="start" value="${lecture.start ? lecture.start.slice(0, 5) : ""}">
+                        <input type="time" name="start" value="${lab.start ? lab.start.slice(0, 5) : ""}">
                     </label><br>
 
                     <label class="endTime">Ώρα Λήξης:
-                        <input type="time" name="end" value="${lecture.end ? lecture.end.slice(0, 5) : ""}">
+                        <input type="time" name="end" value="${lab.end ? lab.end.slice(0, 5) : ""}">
                     </label><br>
                 </form>
             `;
@@ -814,7 +812,7 @@ labsCourseSelect.addEventListener("change", async () => {
     }
 });
 
-//when save button is pressed it changes the data on the json for the program
+//when save button is pressed it changes the data on the json for the labs
 labsEditWrapper.addEventListener("click", async (e) => {
 
     //Only run if save button was pressed
