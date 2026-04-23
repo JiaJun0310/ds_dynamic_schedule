@@ -470,51 +470,59 @@ function removeCourseFromCalendar(targetTitle) {
 }
 
 function handleLabToggle(checkbox, labData, sem) {
-    if (checkbox.checked) {
-        checkbox.checked = false;
-
-        labSlotTitle.textContent = labData.name;
-        labSlotOptions.innerHTML = "";
+    return new Promise((resolve) => {
+        if (checkbox.checked) {
+            checkbox.checked = false; 
+            
+            labSlotTitle.textContent = labData.name;
+            labSlotOptions.innerHTML = ""; 
 
         labData.data.forEach((slot, index) => {
             const label = document.createElement("label");
             label.style.cursor = "pointer";
-            label.className = "labRadioLabel" // Adding a class to manipulate in css
 
             const radio = document.createElement("input");
             radio.type = "radio";
             radio.name = "labSlotChoice";
             radio.value = index;
-            radio.className = "labRadioButton" // Adding a class to manipulate in css
             if (index === 0) radio.checked = true;
 
-            const dayName = daysMapGreek[slot.day] || slot.day;
-            const text = document.createTextNode(` ${dayName}, ${slot.time} (${slot.labhall})`);
+                const dayName = daysMapGreek[slot.day] || slot.day;
+                const text = document.createTextNode(` ${dayName}, ${slot.time} (${slot.labhall})`);
+                
+                label.append(radio, text);
+                labSlotOptions.appendChild(label);
+            });
 
-            label.append(radio, text);
-            labSlotOptions.appendChild(label);
-        });
+            // Event Listener that listens for the popup to close, so we can resolve the promise and allow future interactions
+            const onClose = () => {
+                labSlotPopup.removeEventListener("close", onClose);
+                resolve();
+            };
+            labSlotPopup.addEventListener("close", onClose);
 
-        labSlotConfirm.onclick = () => {
-            const selectedRadio = document.querySelector('input[name="labSlotChoice"]:checked');
-            if (selectedRadio) {
-                const selectedIndex = parseInt(selectedRadio.value);
-                const selectedSlot = labData.data[selectedIndex];
+            labSlotConfirm.onclick = () => {
+                const selectedRadio = document.querySelector('input[name="labSlotChoice"]:checked');
+                if (selectedRadio) {
+                    const selectedIndex = parseInt(selectedRadio.value);
+                    const selectedSlot = labData.data[selectedIndex];
+                    
+                    checkbox.checked = true; 
+                    addSpecificLabToCalendar(labData.name, selectedSlot, sem);
+                }
+                labSlotPopup.close(); // This will trigger the onClose event
+            };
 
-                checkbox.checked = true;
-                addSpecificLabToCalendar(labData.name, selectedSlot, sem);
-            }
-            labSlotPopup.close();
-        };
+            labSlotCancel.onclick = () => {
+                labSlotPopup.close(); // This will trigger the onClose event
+            };
 
-        labSlotCancel.onclick = () => {
-            labSlotPopup.close();
-        };
-
-        labSlotPopup.showModal();
-    } else {
-        removeLabFromCalendar(labData.name);
-    }
+            labSlotPopup.showModal();
+        } else {
+            removeLabFromCalendar(labData.name);
+            resolve(); // If it's just unchecked, proceed immediately
+        }
+    });
 }
 
 function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
@@ -737,18 +745,14 @@ clearSelectionBtn.onclick = () => {
 };
 
 document.querySelectorAll(".buttonDiv").forEach((button) => {
-    //this selects eveything from all the "buttons"
-    button.dataset.open = "false"; // We use this instead of 'let pressed = false' so it doesn't break when switching tabs
+    button.dataset.open = "false"; 
 
-    //we save the data like semester for every button
     let cleanText = button.textContent.trim();
     let sem = button.parentElement.dataset.semester || cleanText[cleanText.length - 1];
     let arrow = button.querySelector(".pointer");
     const SemesterDiv = document.getElementById(`Semester${sem}`);
 
     button.onclick = async function () {
-        //this now goes in to spesific button clicked
-        // Toggle the open state
         let isOpen = button.dataset.open === "true";
         isOpen = !isOpen;
         button.dataset.open = isOpen.toString();
@@ -758,157 +762,149 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
             : "../images/right_pointer.svg";
 
         if (!isOpen) {
-            //if it was already open it just clear it's html
             SemesterDiv.innerHTML = ``;
             return;
         }
 
-        // This gets executed when the button was clicked and the radio button was on "Μαθήματα"
+        let dataArray = [];
+        let isLabMode = currentMode === "Εργαστήρια";
+        let isExamMode = currentMode === "Εξεταστική";
+
+        //FETCH DATA BASED ON MODE
         if (currentMode === "Μαθήματα") {
-            //here we get all the data for each Semester
             const res = await fetch("/getSemester", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ semester: sem }),
             });
-            const data = await res.json(); //we save the data here
-            const titlesArray = data.titles.map((course) => course.title); //and the titles in an array
-
-            const savedClasses = getSavedSchedule();
-
-            //creates for each title in title array a div with a pargaraph and a checkbox in it so it generates everything dinamicly
-            titlesArray.forEach((title, i) => {
-                const div = document.createElement("div");
-                div.className = "course";
-
-                const p = document.createElement("p");
-                p.textContent = title;
-
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.className = "checkbox";
-                checkbox.checked = savedClasses.some(
-                    (saved) => saved.title === title,
-                );
-
-                div.append(p, checkbox);
-                SemesterDiv.appendChild(div);
-
-                setTimeout(() => div.classList.add("visible"), i * 50);
-
-                div.onclick = (e) => {
-                    //ckeckbox logic on the div
-                    if (checkbox.disabled || e.target === checkbox) return;
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event("change"));
-                };
-
-                checkbox.onchange = () =>
-                    handleCourseToggle(checkbox, title, sem);
-            });
-        }
-
-        else if (currentMode === "Εργαστήρια") {
+            const data = await res.json();
+            dataArray = data.titles.map(c => ({ title: c.title, original: c }));
+        } 
+        else if (isLabMode) {
             const res = await fetch("/getLabs", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ semester: sem }),
             });
-            const labsArray = await res.json();
-
-            labsArray.forEach((lab, i) => {
-                const div = document.createElement("div");
-                div.className = "course";
-
-                const p = document.createElement("p");
-                p.textContent = lab.name;
-
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.className = "checkbox";
-
-                checkbox.checked = !!eventTracker[lab.name];
-
-                div.append(p, checkbox);
-                SemesterDiv.appendChild(div);
-
-                div.onclick = (e) => {
-                    if (e.target === checkbox) return;
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event("change"));
-                };
-
-                checkbox.onchange = () => handleLabToggle(checkbox, lab, sem);
-
-                setTimeout(() => div.classList.add("visible"), i * 50);
-            });
+            const labs = await res.json();
+            dataArray = labs.map(l => ({ title: l.name, original: l }));
         }
-
-        // This gets executed when the button was clicked and the radio button was on "Εξεταστική"
-        else if (currentMode === "Εξεταστική") {
-
-            let examsArray = [];
-
+        else if (isExamMode) {
             if (isSeptember) {
-                // Fetch directly from the September file
                 const res = await fetch("/jsonData/september_exams.json");
                 const allSeptExams = await res.json();
-
-                // Filter the data so it only shows exams belonging to the clicked semester tab
-                examsArray = allSeptExams.filter(exam => String(exam.semester) === String(sem));
+                dataArray = allSeptExams.filter(exam => String(exam.semester) === String(sem)).map(e => ({ title: e.title, original: e }));
             } else {
-                // Normal fetch behavior
                 const res = await fetch("/getSemesterExams", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ semester: sem }),
                 });
-                examsArray = await res.json(); // This expects an array of your Exam JSON objects
+                const exams = await res.json();
+                dataArray = exams.map(e => ({ title: e.title, original: e }));
+            }
+        }
+
+        if (dataArray.length === 0) return;
+
+        // 2. CREATE SELECT ALL BUTTON
+        const selectAllDiv = document.createElement("div");
+        selectAllDiv.className = "course select-all-wrapper visible";
+
+        const selectAllText = document.createElement("p");
+        selectAllText.textContent = "Επιλογή Όλων";
+        selectAllText.style.fontWeight = "bold";
+
+        const selectAllCheckbox = document.createElement("input");
+        selectAllCheckbox.type = "checkbox";
+        selectAllCheckbox.className = "checkbox master-checkbox";
+
+        selectAllDiv.append(selectAllText, selectAllCheckbox);
+        SemesterDiv.appendChild(selectAllDiv);
+
+        const itemCheckboxes = [];
+        const savedClasses = getSavedSchedule();
+        const currentlySavedExams = getSavedExams();
+
+        //GENERATE COURSES
+        dataArray.forEach((item, i) => {
+            const div = document.createElement("div");
+            div.className = "course";
+
+            const p = document.createElement("p");
+            p.textContent = item.title;
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "checkbox";
+
+            // Determine initial checked state
+            if (currentMode === "Μαθήματα") {
+                checkbox.checked = savedClasses.some(s => s.title === item.title);
+            } else if (isLabMode) {
+                checkbox.checked = !!eventTracker[item.title];
+            } else if (isExamMode) {
+                const examTitleStr = "ΕΞΕΤΑΣΗ: " + item.title;
+                checkbox.checked = currentlySavedExams.some(s => s.title === item.title) || 
+                                   calendar.getEvents().some(e => e.title === examTitleStr);
             }
 
-            const currentlySavedExams = getSavedExams();
+            itemCheckboxes.push(checkbox);
+            div.append(p, checkbox);
+            SemesterDiv.appendChild(div);
+            setTimeout(() => div.classList.add("visible"), i * 50);
 
-            examsArray.forEach((examData, i) => {
-                const div = document.createElement("div");
-                div.className = "course"; // You can keep the same class for styling
+            div.onclick = (e) => {
+                if (checkbox.disabled || e.target === checkbox) return;
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event("change"));
+            };
 
-                const p = document.createElement("p");
-                p.textContent = examData.title; // e.g., "ΨΣ-532-ΠΡΟΗΓΜΕΝΑ..."
+            checkbox.onchange = () => {
+                if (currentMode === "Μαθήματα") {
+                    handleCourseToggle(checkbox, item.title, sem);
+                } else if (isLabMode) {
+                    handleLabToggle(checkbox, item.original, sem);
+                } else if (isExamMode) {
+                    if (checkbox.checked) addStandaloneExam(item.original);
+                    else removeStandaloneExam(item.title);
+                }
+                selectAllCheckbox.checked = itemCheckboxes.every(cb => cb.checked);
+            };
+        });
 
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.className = "checkbox";
+        // Initial Select All sync
+        selectAllCheckbox.checked = itemCheckboxes.length > 0 && itemCheckboxes.every(cb => cb.checked);
 
-                checkbox.checked = currentlySavedExams.some(
-                    (saved) => saved.title === examData.title,
-                );
+        // Select All Click Logic
+        selectAllDiv.onclick = (e) => {
+            if (e.target === selectAllCheckbox) return;
+            selectAllCheckbox.checked = !selectAllCheckbox.checked;
+            selectAllCheckbox.dispatchEvent(new Event("change"));
+        };
 
-                // Check if this exact exam is already on the calendar
-                const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
-                checkbox.checked = calendar
-                    .getEvents()
-                    .some((e) => e.title === examTitleStr);
-
-                div.append(p, checkbox);
-                SemesterDiv.appendChild(div);
-
-                setTimeout(() => div.classList.add("visible"), i * 50);
-
-                div.onclick = (e) => {
-                    if (checkbox.disabled || e.target === checkbox) return;
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event("change"));
-                };
-
-                checkbox.onchange = () => {
-                    if (checkbox.checked) {
-                        addStandaloneExam(examData);
-                    } else {
-                        removeStandaloneExam(examData.title);
+        selectAllCheckbox.onchange = async () => {
+            const isChecked = selectAllCheckbox.checked;
+            
+            
+            for (let index = 0; index < itemCheckboxes.length; index++) {
+                const cb = itemCheckboxes[index];
+                
+                if (cb.checked !== isChecked) {
+                    cb.checked = isChecked;
+                    
+                    if (currentMode === "Μαθήματα") {
+                        await handleCourseToggle(cb, dataArray[index].title, sem);
+                    } else if (isLabMode) {
+                        
+                        await handleLabToggle(cb, dataArray[index].original, sem);
+                    } else if (isExamMode) {
+                        if (cb.checked) addStandaloneExam(dataArray[index].original);
+                        else removeStandaloneExam(dataArray[index].title);
                     }
-                };
-            });
-        }
+                }
+            }
+        };
     };
 });
 
