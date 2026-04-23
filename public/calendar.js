@@ -19,6 +19,7 @@ const hiddenPicker = document.getElementById("hiddenPicker");
 const clearSelectionBtn = document.getElementById("clearSelection");
 const toggleScreenBtn = document.getElementById("toggleScreen");
 const searchbar = document.getElementById("searchbar"); // The searchbar where the user will search for specific classes
+const filterBtn = document.getElementById("filter"); // The filter button next to the searchbar 
 
 // Lab Popup Elements
 const labSlotPopup = document.getElementById("labSlotPopup");
@@ -474,15 +475,15 @@ function handleLabToggle(checkbox, labData, sem) {
             labSlotTitle.textContent = labData.name;
             labSlotOptions.innerHTML = ""; 
 
-            labData.data.forEach((slot, index) => {
-                const label = document.createElement("label");
-                label.style.cursor = "pointer";
-                
-                const radio = document.createElement("input");
-                radio.type = "radio";
-                radio.name = "labSlotChoice";
-                radio.value = index;
-                if (index === 0) radio.checked = true;
+        labData.data.forEach((slot, index) => {
+            const label = document.createElement("label");
+            label.style.cursor = "pointer";
+
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "labSlotChoice";
+            radio.value = index;
+            if (index === 0) radio.checked = true;
 
                 const dayName = daysMapGreek[slot.day] || slot.day;
                 const text = document.createTextNode(` ${dayName}, ${slot.time} (${slot.labhall})`);
@@ -1189,7 +1190,22 @@ searchbar.addEventListener("keyup", async function (e) {
         const data = await res.json(); //we save the data here
         titlesArray = data.titles.map((course) => course.title); //and the titles in an array
 
+        // In case the search mathes no title we inform the user by creating a div containing a message
+        if (titlesArray.length === 0) {
+            const div = document.createElement("div");
+            
+            div.style.textAlign = "center"
 
+            const p = document.createElement("p");
+            p.textContent = "Δεν βρέθηκε μάθημα που να αντιστοιχεί σε '"+ String(search) +"' :(";
+            p.style.color = "white"
+            p.style.fontFamily = "sans-serif"
+
+            div.append(p);
+            matchingCourses.appendChild(div);
+
+            return // We stop the function from doing anything else
+        }
 
         //creates for each title in title array a div with a pargaraph and a checkbox in it so it generates everything dinamicly
         titlesArray.forEach((title, i) => {
@@ -1234,5 +1250,9 @@ searchbar.addEventListener("keyup", async function (e) {
             
         }
     }
+
+})
+
+filterBtn.addEventListener("click", function(){
 
 })
