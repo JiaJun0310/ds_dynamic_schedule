@@ -53,13 +53,6 @@ const getSemesterDates = (semesterNum) => {
     //finds start and end of semester based on if semester is odd or even
     if (!academicData || !semesterNum) return null;
 
-    if (semesterNum === "General") {
-        return {
-            start: formatJSONDate(academicData.semesters[0].classes_start),
-            end: formatJSONDate(academicData.semesters[1].classes_end),
-        };
-    }
-
     const isOdd = parseInt(semesterNum) % 2 !== 0;
     const semData = academicData.semesters[isOdd ? 0 : 1];
     return {
@@ -227,7 +220,6 @@ async function examOptions() {
     const examsBox = document.getElementById("examsBox");
     const normalExam = document.getElementById("normalExam");
     const embolimExam = document.getElementById("embolimExam");
-    const generalSem = document.querySelector('.semesterButtonDivWrapper[data-semester="General"]');
 
     //This handless the simple options of disapearing and apearing the divs depending on the radio buttons clicked 
     if (currentMode === "Εξεταστική") {
@@ -248,10 +240,6 @@ async function examOptions() {
 
         semesters.style.display = "flex";
         examsBox.style.display = "none";
-
-        if (generalSem) {
-            generalSem.style.display = currentMode === "Εργαστήρια" ? "block" : "none";
-        }
     }
 
     let isWinter = 0;
@@ -539,8 +527,8 @@ function handleLabToggle(checkbox, labData, sem) {
     });
 }
 
-function addSpecificLabToCalendar(labName, slot, sem,color, isRestoring = false) {
-    const eventColor = color || "#27ae60";
+function addSpecificLabToCalendar(labName, slot, sem, color, isRestoring = false) {
+    const eventColor = color || "#27ae60"; // Διαβάζει το χρώμα κατευθείαν!
     const dates = getSemesterDates(sem);
 
     if (!eventTracker[labName]) eventTracker[labName] = [];
@@ -724,7 +712,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const savedLabs = getSavedLabs();
     for (const lab of savedLabs) {
-        addSpecificLabToCalendar(lab.name, lab.slot, lab.sem || "General", lab.color, true);
+        addSpecificLabToCalendar(lab.name, lab.slot, lab.sem, lab.color, true);
     }
 
     appearCalendar(); //refresh calendar to show events
@@ -899,7 +887,6 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
 
         selectAllCheckbox.onchange = async () => {
             const isChecked = selectAllCheckbox.checked;
-            
             
             for (let index = 0; index < itemCheckboxes.length; index++) {
                 const cb = itemCheckboxes[index];
