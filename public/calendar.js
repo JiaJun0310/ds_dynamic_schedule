@@ -508,7 +508,7 @@ function handleLabToggle(checkbox, labData, sem) {
                     const selectedSlot = labData.data[selectedIndex];
                     
                     checkbox.checked = true; 
-                    addSpecificLabToCalendar(labData.name, selectedSlot, sem);
+                    addSpecificLabToCalendar(labData.name, selectedSlot, sem, labData.color);
                 }
                 labSlotPopup.close(); // This will trigger the onClose event
             };
@@ -525,8 +525,8 @@ function handleLabToggle(checkbox, labData, sem) {
     });
 }
 
-function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
-    const eventColor = "#27ae60";
+function addSpecificLabToCalendar(labName, slot, sem,color, isRestoring = false) {
+    const eventColor = color || "#27ae60";
     const dates = getSemesterDates(sem);
 
     if (!eventTracker[labName]) eventTracker[labName] = [];
@@ -556,7 +556,7 @@ function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
     if (!isRestoring) {
         let saved = getSavedLabs();
         if (!saved.some((l) => l.name === labName)) {
-            saved.push({ name: labName, slot, sem });
+            saved.push({ name: labName, slot, sem, color });
             saveLabs(saved);
         }
     }
@@ -710,7 +710,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const savedLabs = getSavedLabs();
     for (const lab of savedLabs) {
-        addSpecificLabToCalendar(lab.name, lab.slot, lab.sem || "General", true);
+        addSpecificLabToCalendar(lab.name, lab.slot, lab.sem || "General", lab.color, true);
     }
 
     appearCalendar(); //refresh calendar to show events

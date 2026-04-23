@@ -121,18 +121,35 @@ async function parseExcelToJson() {
         }
     });
 
-    // // 4. Save to JSON
-    // const finalJson = Object.values(courses);
-    // fs.writeFileSync('jsonData/labs.json', JSON.stringify(finalJson, null, 4));
-    // console.log("Successfully extracted lab schedule to jsonData/labs.json");
+    
 
 
-// 4. Prepare the final data
-    const finalJson = Object.values(courses);
+let finalJson = Object.values(courses);
+
+    // dictionary mapping semesters to colors
+    const semesterColors = {
+        1: "#d90429", 
+        2: "#d90429", 
+        3: "#0077b6", 
+        4: "#0077b6", 
+        5: "#38b000", 
+        6: "#38b000", 
+        7: "#7b2cbf", 
+        8: "#7b2cbf", 
+        "General": "#6c757d" 
+    };
+
+    // maps each lab to itself with a color attribute
+    finalJson = finalJson.map(singleLab => {
+        const classColor = semesterColors[singleLab.semester] || "#2bff00";
+        return {
+            ...singleLab, 
+            color: classColor 
+        };
+    });
 
     if (finalJson.length > 0) { 
         // Logic to determine if it's spring or winter based on the first course's semester
-        // We handle "General" or numeric semesters
         const firstSem = finalJson[0].semester;
         const isNumeric = !isNaN(parseInt(firstSem));
         
@@ -147,8 +164,7 @@ async function parseExcelToJson() {
         fs.writeFileSync(outputPath, JSON.stringify(finalJson, null, 4), 'utf-8');
         console.log(`Successfully extracted lab schedule to ${outputPath}`);
         
-        // Also save to a generic labs.json if your frontend specifically looks for that
-        fs.writeFileSync("./jsonData/labs.json", JSON.stringify(finalJson, null, 4), 'utf-8');
+    
     } else {
         console.log("No lab data extracted.");
     }
