@@ -512,14 +512,16 @@ footer {
     align-items: center;
     padding: 3px;
     background-color: #252d4f;
-    height: 2%;
+    height: 4%;
 }
 
 .filterParam{
     width: 40%;
+    height: 100%;
     padding: 2px;
     background-color: #465286;
-    border: 1px solid #252d4f;
+    border: 3px solid #252d4f;
+    border-radius: 5px;
     color: white;
     cursor: pointer;
 }
@@ -527,6 +529,7 @@ footer {
 #filterSubmit{
     padding-left: 7px;
     width: 20%;
+    height: 100%;
     background: #8c2635; 
     border: 1px solid rgb(107, 6, 6);
     color: white; 

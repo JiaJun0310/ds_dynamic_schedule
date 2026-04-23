@@ -22,6 +22,9 @@ const toggleScreenBtn = document.getElementById("toggleScreen");
 const searchbar = document.getElementById("searchbar"); // The searchbar where the user will search for specific classes
 const filterBtn = document.getElementById("filter"); // The filter button next to the searchbar 
 const filterMenu = document.getElementById("filterMenu"); //The menu containing the options for teachers and classrooms when the filter is clicked
+const filterSubmit = document.getElementById("filterSubmit"); // The "ok" button in the filter menu
+const teacherSelect = document.getElementById("teacherSelect"); // The menu for teachers in the filter menu
+const roomSelect = document.getElementById("roomSelect"); // The menu for teachers in the filter menu
 
 // Lab Popup Elements
 const labSlotPopup = document.getElementById("labSlotPopup");
@@ -350,7 +353,7 @@ document.querySelectorAll('input[name="choice"]').forEach((radio) => {
         const semesters = document.getElementById("semesters"); // Getting the semesters from the documment so we can show or hide them
         const matchingCourses = document.getElementById("matchingCourses") // Getting the new div we made so we can add the matching classes there
         const searchbar = document.getElementById("searchbar"); // Getting the searchbar 
-    
+
         // Clean up the UI: Close all open semester tabs when switching modes
         document.querySelectorAll(".buttonDiv").forEach((btn) => {
             let sem = btn.parentElement.dataset.semester || btn.textContent.trim().slice(-1);
@@ -366,6 +369,10 @@ document.querySelectorAll('input[name="choice"]').forEach((radio) => {
         semesters.style.display = "block" // Semesters reappear
         matchingCourses.style.display = "none" // Previous results dissapear
         searchbar.value = "" // Bar is cleared
+        filterMenu.style.display = "none" // hiding the filtermenu
+        filterOn = false;
+        teacherSelect.innerHTML = "<option disabled selected>Καθηγητής</option>" // Returning the selction boxes to their starting state
+        roomSelect.innerHTML = "<option disabled selected>Αίθουσα</option>"
 
         examOptions(); //this function haddles apearance of the exam page
     });
@@ -472,24 +479,24 @@ function removeCourseFromCalendar(targetTitle) {
 function handleLabToggle(checkbox, labData, sem) {
     return new Promise((resolve) => {
         if (checkbox.checked) {
-            checkbox.checked = false; 
-            
+            checkbox.checked = false;
+
             labSlotTitle.textContent = labData.name;
-            labSlotOptions.innerHTML = ""; 
+            labSlotOptions.innerHTML = "";
 
-        labData.data.forEach((slot, index) => {
-            const label = document.createElement("label");
-            label.style.cursor = "pointer";
+            labData.data.forEach((slot, index) => {
+                const label = document.createElement("label");
+                label.style.cursor = "pointer";
 
-            const radio = document.createElement("input");
-            radio.type = "radio";
-            radio.name = "labSlotChoice";
-            radio.value = index;
-            if (index === 0) radio.checked = true;
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "labSlotChoice";
+                radio.value = index;
+                if (index === 0) radio.checked = true;
 
                 const dayName = daysMapGreek[slot.day] || slot.day;
                 const text = document.createTextNode(` ${dayName}, ${slot.time} (${slot.labhall})`);
-                
+
                 label.append(radio, text);
                 labSlotOptions.appendChild(label);
             });
@@ -506,8 +513,8 @@ function handleLabToggle(checkbox, labData, sem) {
                 if (selectedRadio) {
                     const selectedIndex = parseInt(selectedRadio.value);
                     const selectedSlot = labData.data[selectedIndex];
-                    
-                    checkbox.checked = true; 
+
+                    checkbox.checked = true;
                     addSpecificLabToCalendar(labData.name, selectedSlot, sem);
                 }
                 labSlotPopup.close(); // This will trigger the onClose event
@@ -745,7 +752,7 @@ clearSelectionBtn.onclick = () => {
 };
 
 document.querySelectorAll(".buttonDiv").forEach((button) => {
-    button.dataset.open = "false"; 
+    button.dataset.open = "false";
 
     let cleanText = button.textContent.trim();
     let sem = button.parentElement.dataset.semester || cleanText[cleanText.length - 1];
@@ -779,7 +786,7 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
             });
             const data = await res.json();
             dataArray = data.titles.map(c => ({ title: c.title, original: c }));
-        } 
+        }
         else if (isLabMode) {
             const res = await fetch("/getLabs", {
                 method: "POST",
@@ -845,8 +852,8 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                 checkbox.checked = !!eventTracker[item.title];
             } else if (isExamMode) {
                 const examTitleStr = "ΕΞΕΤΑΣΗ: " + item.title;
-                checkbox.checked = currentlySavedExams.some(s => s.title === item.title) || 
-                                   calendar.getEvents().some(e => e.title === examTitleStr);
+                checkbox.checked = currentlySavedExams.some(s => s.title === item.title) ||
+                    calendar.getEvents().some(e => e.title === examTitleStr);
             }
 
             itemCheckboxes.push(checkbox);
@@ -885,18 +892,18 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
 
         selectAllCheckbox.onchange = async () => {
             const isChecked = selectAllCheckbox.checked;
-            
-            
+
+
             for (let index = 0; index < itemCheckboxes.length; index++) {
                 const cb = itemCheckboxes[index];
-                
+
                 if (cb.checked !== isChecked) {
                     cb.checked = isChecked;
-                    
+
                     if (currentMode === "Μαθήματα") {
                         await handleCourseToggle(cb, dataArray[index].title, sem);
                     } else if (isLabMode) {
-                        
+
                         await handleLabToggle(cb, dataArray[index].original, sem);
                     } else if (isExamMode) {
                         if (cb.checked) addStandaloneExam(dataArray[index].original);
@@ -1178,7 +1185,7 @@ searchbar.addEventListener("keyup", async function (e) {
     // If it is not null we move on to show the user the matched courses
     if (search) {
         // If the filter menu is visible we hide it
-        if (filterOn){
+        if (filterOn) {
             filterOn = !filterOn;
             filterMenu.style.display = "none"
         }
@@ -1200,11 +1207,11 @@ searchbar.addEventListener("keyup", async function (e) {
         // In case the search mathes no title we inform the user by creating a div containing a message
         if (titlesArray.length === 0) {
             const div = document.createElement("div");
-            
+
             div.style.textAlign = "center"
 
             const p = document.createElement("p");
-            p.textContent = "Δεν βρέθηκε μάθημα που να αντιστοιχεί σε '"+ String(search) +"' :(";
+            p.textContent = "Δεν βρέθηκε μάθημα που να αντιστοιχεί σε '" + String(search) + "' :(";
             p.style.color = "white"
             p.style.fontFamily = "sans-serif"
 
@@ -1248,29 +1255,153 @@ searchbar.addEventListener("keyup", async function (e) {
     else {
 
         matchingCourses.innerHTML = ''; // Clearing the previous search results
-        if(currentMode === "Εξεταστική"){
+        if (currentMode === "Εξεταστική") {
             examsBox.style.display = "flex" // if we're in exam mode we also show the examsbox
         }
         // Only bringing these back if we are not in exam mode since the user needs to choose make up exams or normal exams for the semesters to show up
         else {
             semesters.style.display = "block" // If the searchbar is null then the semesters reappear
-            
+
         }
     }
 
 })
 
-filterBtn.addEventListener("click", function(){
+filterBtn.addEventListener("click", async function () {
     filterOn = !filterOn; // Enabling/Disabling
 
     search = searchbar.value;
 
+    const semesters = document.getElementById("semesters"); // Getting the semesters from the documment so we can show or hide them
+    const matchingCourses = document.getElementById("matchingCourses") // Getting the new div we made so we can add the matching classes there
+    const examsBox = document.getElementById("examsBox"); // Also getting the examsbox so we can show or hide it
+
     // Only showing the menu if the searchbar is empty to avoid conflicts and making a mess in the sidebar
-    if(filterOn && !search) {
-        filterMenu.style.display = "flex"
+    if (filterOn && !search) {
+        filterMenu.style.display = "flex" // Making the menu visible
+
+        // Fetching teachers and rooms
+        const res = await fetch("/getTeachersAndRooms", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mode: currentMode }), // One argument, the mode
+        });
+
+        const data = await res.json(); //we save the data here
+        teachersArray = data.teachers//and the teachers in an array
+        roomsArray = data.rooms //and the rooms in an array
+
+        //append each teacher to the box
+        teachersArray.forEach((teacher) => {
+            const option = document.createElement("option");
+            option.value = teacher;
+            option.textContent = teacher;
+            teacherSelect.appendChild(option);
+        });
+
+        //append each room to the box
+        roomsArray.forEach((room) => {
+            const option = document.createElement("option");
+            option.value = room;
+            option.textContent = room;
+            roomSelect.appendChild(option);
+        });
     } else {
-        filterMenu.style.display = "none"
+        if (!search) {
+            filterMenu.style.display = "none" // Making the menu invisible
+            teacherSelect.innerHTML = "<option disabled selected>Καθηγητής</option>" // Returning the selction boxes to their starting state
+            roomSelect.innerHTML = "<option disabled selected>Αίθουσα</option>"
+
+            matchingCourses.innerHTML = ''; // Clearing the previous search results
+            if (currentMode === "Εξεταστική") {
+                examsBox.style.display = "flex" // if we're in exam mode we also show the examsbox
+            }
+            // Only bringing these back if we are not in exam mode since the user needs to choose make up exams or normal exams for the semesters to show up
+            else {
+                semesters.style.display = "block" // bring back the semesters
+
+            }
+        }
     }
-    
+
+
 })
 
+filterSubmit.addEventListener("click", async function () {
+
+    teacher = teacherSelect.value;
+    room = roomSelect.value;
+
+    if (teacher != "Καθηγητής" || room != "Αίθουσα") {
+
+        const semesters = document.getElementById("semesters"); // Getting the semesters from the documment so we can show or hide them
+        const matchingCourses = document.getElementById("matchingCourses") // Getting the new div we made so we can add the matching classes there
+        const examsBox = document.getElementById("examsBox"); // Also getting the examsbox so we can show or hide it
+        var titlesArray = {} // Creating this here so it can be used in all modes
+        const savedClasses = getSavedSchedule(); // Same for this
+
+        matchingCourses.innerHTML = ''; // Clearing the previous searches 
+        matchingCourses.style.display = "block" // Making sure its visible
+        semesters.style.display = "none" // We remove the semesters so the sidebar does not get cluttered and ugly
+        examsBox.style.display = "none" // Hiding the examsbox
+
+        // Fetching matching classes
+        const res = await fetch("/getFiltered", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ teacher: teacher,room: room, mode: currentMode }), // Three arguments, the teacher, the room and the current mode
+        });
+        const data = await res.json(); //we save the data here
+        titlesArray = data.titles //and the titles in an array
+
+        // In case the search mathes no title we inform the user by creating a div containing a message
+        if (titlesArray.length === 0) {
+            const div = document.createElement("div");
+
+            div.style.textAlign = "center"
+
+            const p = document.createElement("p");
+            p.textContent = "Δεν βρέθηκε μάθημα που να αντιστοιχεί σε '" + String(teacher) + " και " + String(room) +" :(";
+            p.style.color = "white"
+            p.style.fontFamily = "sans-serif"
+
+            div.append(p);
+            matchingCourses.appendChild(div);
+
+            return // We stop the function from doing anything else
+        }
+
+        //creates for each title in title array a div with a pargaraph and a checkbox in it so it generates everything dinamicly
+        titlesArray.forEach((title, i) => {
+            const div = document.createElement("div");
+            div.className = "course";
+
+            const p = document.createElement("p");
+            p.textContent = title;
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "checkbox";
+            checkbox.checked = savedClasses.some(
+                (saved) => saved.title === title,
+            );
+
+            div.append(p, checkbox);
+            matchingCourses.appendChild(div);
+
+            setTimeout(() => div.classList.add("visible"), i * 50);
+
+            div.onclick = (e) => {
+                //ckeckbox logic on the div
+                if (checkbox.disabled || e.target === checkbox) return;
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event("change"));
+            };
+
+            checkbox.onchange = () =>
+                handleCourseToggle(checkbox, title, sem);
+        });
+
+    }
+
+})
