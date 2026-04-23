@@ -7,25 +7,19 @@ async function parseExcelToJson() {
     await workbook.xlsx.readFile('./uploads/labs.xlsx'); 
     const worksheet = workbook.worksheets[0];
 
-    // Initialize with fallbacks for plain black text
-    const colorMap = {
-        'FF000000': "General", 
-        'Theme-7':  "General"  
-    };
-
+    // Αφαιρέθηκαν τα fallbacks του "General"
+    const colorMap = {};
     
     // AUTO-DETECT COLORS FROM LEGEND
     worksheet.eachRow((row) => {
         row.eachCell((cell) => {
             const text = cell.text || '';
-            // Look for cells that say "2ο εξάμηνο", "4ο εξάμηνο", etc.
             const match = text.match(/^(\d+)ο εξάμηνο/i);
             
             if (match) {
                 const semester = match[1]; // Extracts the number
                 let detectedColor = null;
 
-                // Extract the color just like we do for the classes
                 if (cell.font && cell.font.color) {
                     if (cell.font.color.argb) detectedColor = cell.font.color.argb;
                     else if (cell.font.color.theme !== undefined) detectedColor = `Theme-${cell.font.color.theme}`;
@@ -86,7 +80,6 @@ async function parseExcelToJson() {
             const startTime = rowTimes[rowNumber].time.split('-')[0];
             const endTime = rowTimes[endRow].time.split('-')[1];
             
-            
             let detectedColor = "None";
             
             if (cell.font && cell.font.color) {
@@ -101,16 +94,14 @@ async function parseExcelToJson() {
                 else if (rc.theme !== undefined) detectedColor = `Theme-${rc.theme}`;
             }
 
-            let semester = colorMap[detectedColor] || `Unknown (${detectedColor})`;
+            let semester = colorMap[detectedColor];
+
+            // ΑΝ ΤΟ ΕΡΓΑΣΤΗΡΙΟ ΔΕΝ ΕΧΕΙ ΧΡΩΜΑ ΠΟΥ ΑΝΤΙΣΤΟΙΧΕΙ ΣΕ ΕΞΑΜΗΝΟ, ΑΓΝΟΗΣΕ ΤΟ ΕΝΤΕΛΩΣ
+            if (!semester) continue;
 
             // Initialize the course if it doesn't exist
             if (!courses[name]) {
                 courses[name] = { name: name, semester: semester, data: [] };
-            } else {
-                // Update semester if we found a colored instance of a class that was previously marked General/Unknown
-                if ((courses[name].semester === "General" || courses[name].semester.startsWith('Unknown')) && !semester.startsWith('Unknown') && semester !== "General") {
-                    courses[name].semester = semester;
-                }
             }
 
             courses[name].data.push({
@@ -121,18 +112,31 @@ async function parseExcelToJson() {
         }
     });
 
-    // // 4. Save to JSON
-    // const finalJson = Object.values(courses);
-    // fs.writeFileSync('jsonData/labs.json', JSON.stringify(finalJson, null, 4));
-    // console.log("Successfully extracted lab schedule to jsonData/labs.json");
+    let finalJson = Object.values(courses);
 
+    // dictionary mapping semesters to colors (Χωρίς το General)
+    const semesterColors = {
+        1: "#d90429", 
+        2: "#d90429", 
+        3: "#0077b6", 
+        4: "#0077b6", 
+        5: "#38b000", 
+        6: "#38b000", 
+        7: "#7b2cbf", 
+        8: "#7b2cbf"
+    };
 
-// 4. Prepare the final data
-    const finalJson = Object.values(courses);
+    // maps each lab to itself with a color attribute
+    finalJson = finalJson.map(singleLab => {
+        const classColor = semesterColors[singleLab.semester] || "#2bff00";
+        return {
+            ...singleLab, 
+            color: classColor 
+        };
+    });
 
     if (finalJson.length > 0) { 
         // Logic to determine if it's spring or winter based on the first course's semester
-        // We handle "General" or numeric semesters
         const firstSem = finalJson[0].semester;
         const isNumeric = !isNaN(parseInt(firstSem));
         
@@ -140,15 +144,12 @@ async function parseExcelToJson() {
         if (isNumeric && parseInt(firstSem) % 2 === 0) {
             outputPath = "./jsonData/spring_labs.json";
         } else {
-            // Defaults to winter for General or odd numbers
             outputPath = "./jsonData/winter_labs.json";
         }
 
         fs.writeFileSync(outputPath, JSON.stringify(finalJson, null, 4), 'utf-8');
         console.log(`Successfully extracted lab schedule to ${outputPath}`);
         
-        // Also save to a generic labs.json if your frontend specifically looks for that
-        fs.writeFileSync("./jsonData/labs.json", JSON.stringify(finalJson, null, 4), 'utf-8');
     } else {
         console.log("No lab data extracted.");
     }

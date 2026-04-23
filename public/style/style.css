@@ -484,6 +484,58 @@ footer {
     background: #a83042;
 }
 
+
+/* --- Styling για το Warning Popup --- */
+#labWarningPopup {
+    font-family: sans-serif; 
+    color: #ffffff; 
+    background-color: #2f385f; 
+    border: 3px solid #0d0f1e; 
+    border-radius: 8px; 
+    padding: 20px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+    width: 500px;
+    max-width: 90vw; /* Για να μην χαλάει σε μικρές οθόνες */
+}
+
+#labWarningPopup h3 {
+    margin-top: 0;
+    color: #e74c3c; /* Κρατάμε το κόκκινο του Warning για έμφαση */
+}
+
+#labWarningPopup .warning-buttons {
+    display: flex; 
+    gap: 10px; 
+    justify-content: flex-end; 
+    margin-top: 20px;
+}
+
+#labWarningNeverAgain {
+    padding: 5px 10px;
+    color: rgb(0, 0, 0); 
+    background-color: rgb(198, 197, 203);
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+
+#labWarningNeverAgain:hover {
+    background-color: rgb(169, 168, 176);
+}
+
+#labWarningGotIt {
+    padding: 5px 10px; 
+    background: #8c2635; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+}
+
+#labWarningGotIt:hover {
+    background: #a83042;
+}
+
 .labRadioButton {
   
     appearance: none;
@@ -662,4 +714,48 @@ footer {
         justify-self: end;
     }
 
+}
+
+/* --- Legal Disclaimer Banner --- */
+.legal-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2f385f; /* Το μπλε του header σου */
+    color: white;
+    padding: 15px 10px;
+    text-align: center;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+    z-index: 10001; /* Πάνω από το sidebar και το ημερολόγιο */
+    display: none; /* Κρυφό μέχρι να ελέγξει η JS */
+    font-family: sans-serif;
+}
+
+.legal-content p {
+    display: inline-block;
+    margin: 0 15px 10px 15px;
+    font-size: 0.9em;
+    vertical-align: middle;
+}
+
+.legal-content a {
+    color: #bec6ea;
+    text-decoration: underline;
+}
+
+.legal-content button {
+    background-color: #8c2635; /* Το μπορντό των κουμπιών σου */
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.2s;
+    vertical-align: middle;
+}
+
+.legal-content button:hover {
+    background-color: #a83042;
 }

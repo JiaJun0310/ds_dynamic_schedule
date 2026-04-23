@@ -56,13 +56,6 @@ const getSemesterDates = (semesterNum) => {
     //finds start and end of semester based on if semester is odd or even
     if (!academicData || !semesterNum) return null;
 
-    if (semesterNum === "General") {
-        return {
-            start: formatJSONDate(academicData.semesters[0].classes_start),
-            end: formatJSONDate(academicData.semesters[1].classes_end),
-        };
-    }
-
     const isOdd = parseInt(semesterNum) % 2 !== 0;
     const semData = academicData.semesters[isOdd ? 0 : 1];
     return {
@@ -230,7 +223,6 @@ async function examOptions() {
     const examsBox = document.getElementById("examsBox");
     const normalExam = document.getElementById("normalExam");
     const embolimExam = document.getElementById("embolimExam");
-    const generalSem = document.querySelector('.semesterButtonDivWrapper[data-semester="General"]');
 
     //This handless the simple options of disapearing and apearing the divs depending on the radio buttons clicked 
     if (currentMode === "Εξεταστική") {
@@ -251,10 +243,6 @@ async function examOptions() {
 
         semesters.style.display = "flex";
         examsBox.style.display = "none";
-
-        if (generalSem) {
-            generalSem.style.display = currentMode === "Εργαστήρια" ? "block" : "none";
-        }
     }
 
     let isWinter = 0;
@@ -349,6 +337,20 @@ async function examOptions() {
 document.querySelectorAll('input[name="choice"]').forEach((radio) => {
     radio.addEventListener("change", (e) => {
         currentMode = e.target.value;
+
+        if (currentMode === "Εργαστήρια") {
+            const hideWarning = localStorage.getItem("hideLabWarning");
+            if (!hideWarning) {
+                const warningPopup = document.getElementById("labWarningPopup");
+                warningPopup.showModal();
+
+                document.getElementById("labWarningGotIt").onclick = () => warningPopup.close();
+                document.getElementById("labWarningNeverAgain").onclick = () => {
+                    localStorage.setItem("hideLabWarning", "true");
+                    warningPopup.close();
+                };
+            }
+        }
 
         const semesters = document.getElementById("semesters"); // Getting the semesters from the documment so we can show or hide them
         const matchingCourses = document.getElementById("matchingCourses") // Getting the new div we made so we can add the matching classes there
@@ -532,8 +534,8 @@ function handleLabToggle(checkbox, labData, sem) {
     });
 }
 
-function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
-    const eventColor = "#27ae60";
+function addSpecificLabToCalendar(labName, slot, sem, color, isRestoring = false) {
+    const eventColor = color || "#27ae60"; // Διαβάζει το χρώμα κατευθείαν!
     const dates = getSemesterDates(sem);
 
     if (!eventTracker[labName]) eventTracker[labName] = [];
@@ -563,7 +565,7 @@ function addSpecificLabToCalendar(labName, slot, sem, isRestoring = false) {
     if (!isRestoring) {
         let saved = getSavedLabs();
         if (!saved.some((l) => l.name === labName)) {
-            saved.push({ name: labName, slot, sem });
+            saved.push({ name: labName, slot, sem, color });
             saveLabs(saved);
         }
     }
@@ -717,7 +719,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const savedLabs = getSavedLabs();
     for (const lab of savedLabs) {
-        addSpecificLabToCalendar(lab.name, lab.slot, lab.sem || "General", true);
+        addSpecificLabToCalendar(lab.name, lab.slot, lab.sem, lab.color, true);
     }
 
     appearCalendar(); //refresh calendar to show events
@@ -1120,6 +1122,35 @@ function resizeWrapper() {
         sidebar.style.width = "280px";
     }
 }
+
+// --- Legal Disclaimer Logic με Session Cookie ---
+// make cookie for legal things maybe 
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for(let i=0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+function checkDisclaimer() {
+    if (!getCookie("legalAcceptedSession")) {
+        const banner = document.getElementById("legal-disclaimer");
+        if (banner) banner.style.display = "block";
+    }
+}
+
+function acceptDisclaimer() {
+    document.cookie = "legalAcceptedSession=true; path=/; SameSite=Lax";
+    
+    const banner = document.getElementById("legal-disclaimer");
+    if (banner) banner.style.display = "none";
+}
+
+window.addEventListener("load", checkDisclaimer);
 
 document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.getElementById("semesterWrapper");
