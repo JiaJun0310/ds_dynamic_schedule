@@ -15,13 +15,11 @@ body {
     color: white;
     display: flex;
     align-items: center;
-    padding: 0 20px;
 }
 
 .unipi-logo {
-    height: 70px;
+    height: 100%;
     width: auto;
-    margin-right: 20px;
 }
 
 .header-text {
