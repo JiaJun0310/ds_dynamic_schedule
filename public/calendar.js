@@ -347,6 +347,20 @@ document.querySelectorAll('input[name="choice"]').forEach((radio) => {
     radio.addEventListener("change", (e) => {
         currentMode = e.target.value;
 
+        if (currentMode === "Εργαστήρια") {
+            const hideWarning = localStorage.getItem("hideLabWarning");
+            if (!hideWarning) {
+                const warningPopup = document.getElementById("labWarningPopup");
+                warningPopup.showModal();
+
+                document.getElementById("labWarningGotIt").onclick = () => warningPopup.close();
+                document.getElementById("labWarningNeverAgain").onclick = () => {
+                    localStorage.setItem("hideLabWarning", "true");
+                    warningPopup.close();
+                };
+            }
+        }
+
         const semesters = document.getElementById("semesters"); // Getting the semesters from the documment so we can show or hide them
         const matchingCourses = document.getElementById("matchingCourses") // Getting the new div we made so we can add the matching classes there
         const searchbar = document.getElementById("searchbar"); // Getting the searchbar 
