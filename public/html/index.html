@@ -37,7 +37,8 @@
                         <button onclick="document.getElementById('eventPopup').close()"
                             style="font: sans-serif; cursor: pointer; background: #eee; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px;">Κλείσιμο</button>
 
-                        <button onclick="document.getElementById('eventPopup').close()" id="colorBtn" style="background: none; border: none; cursor: pointer; 
+                        <button onclick="document.getElementById('eventPopup').close()" id="colorBtn"
+                            style="background: none; border: none; cursor: pointer; 
                                                                                                             display: flex; align-items: center; justify-content: center; 
                                                                                                             width: 35px; height: 35px; min-width: 35px; min-height: 35px; 
                                                                                                             flex-shrink: 0; padding: 0;">
@@ -54,11 +55,12 @@
                 <dialog id="labSlotPopup" style="padding: 20px; border-radius: 8px; border: 1px solid #ccc;">
                     <h3 style="margin-top: 0;">Επιλογή Ώρας Εργαστηρίου</h3>
                     <p id="labSlotTitle" style="font-weight: bold;"></p>
-                    <div id="labSlotOptions" style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
-                        </div>
+                    <div id="labSlotOptions"
+                        style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
+                    </div>
                     <div style="display: flex; gap: 10px; justify-content: flex-end;">
                         <button id="labSlotCancel">Ακύρωση</button>
-                        <button id="labSlotConfirm" >Αποθήκευση</button>
+                        <button id="labSlotConfirm">Αποθήκευση</button>
                     </div>
                 </dialog>
             </div>
@@ -71,11 +73,11 @@
                     <label>
                         <input type="radio" name="choice" value="Μαθήματα" autocomplete="off" checked> ΜΑΘΗΜΑΤΑ
                     </label>
-    
+
                     <label>
-                        <input type="radio" name="choice" value="Εργαστήρια" autocomplete="off"> ΕΡΓΑΣΤΗΡΙΑ 
+                        <input type="radio" name="choice" value="Εργαστήρια" autocomplete="off"> ΕΡΓΑΣΤΗΡΙΑ
                     </label>
-    
+
                     <label>
                         <input type="radio" name="choice" value="Εξεταστική" autocomplete="off"> ΕΞΕΤΑΣΤΙΚΗ
                     </label>
@@ -83,91 +85,104 @@
                 </div>
 
 
-                <div id = search>
-                    <textarea id = "searchbar" rows="1"></textarea>
-                    <button id = "filter">
+                <div id=search>
+                    <textarea id="searchbar" rows="1"></textarea>
+                    <button id="filter">
                         <img src="../images/filter.svg" alt="icon"
-                                    style="width: 22px; height: 22px; display: block; pointer-events: none;">
+                            style="width: 22px; height: 22px; display: block; pointer-events: none;">
+
                     </button>
 
+
                 </div>
-                <div id = "matchingCourses"></div>
+
+                <div id = filterMenu>
+                    <select class = "filterParam">
+                        <option autocomplete="off" disabled selected>Καθηγητής</option> 
+                    </select>
+                    <select class = "filterParam">
+                        <option autocomplete="off" disabled selected>Αίθουσα</option> 
+                    </select>
+                    <button id = "filterSubmit">OK</button>
+                </div>
+
+                <div id="matchingCourses"></div>
 
                 <div id="examsBox">
 
-                    <input id="normalExam" type="button" value="Εξεταστική"> 
+                    <input id="normalExam" type="button" value="Εξεταστική">
                     <div id="normalExamDiv"></div>
-    
-                    <input id="embolimExam" type="button" value="Εμβόλιμη Εξεταστική"> 
+
+                    <input id="embolimExam" type="button" value="Εμβόλιμη Εξεταστική">
                     <div id="embolimExamDiv"></div>
 
                 </div>
 
                 <div id='semesters'>
 
-                    <div data-index ="1" class="winterSemesters semesterButtonDivWrapper">
+                    <div data-index="1" class="winterSemesters semesterButtonDivWrapper">
                         <div class="buttonDiv">
                             <p class="semesterButtons">Εξάμηνο 1</p>
                             <img class="pointer" src="../images/right_pointer.svg"></img>
                         </div>
                         <div id="Semester1"></div>
                     </div>
-                
-                    <div data-index ="2" class="springSemesters semesterButtonDivWrapper">
+
+                    <div data-index="2" class="springSemesters semesterButtonDivWrapper">
                         <div class="buttonDiv">
                             <p class="semesterButtons">Εξάμηνο 2</p>
                             <img class="pointer" src="../images/right_pointer.svg"></img>
                         </div>
                         <div id="Semester2"></div>
                     </div>
-                    
 
-                    <div data-index ="3" class="winterSemesters semesterButtonDivWrapper">
+
+                    <div data-index="3" class="winterSemesters semesterButtonDivWrapper">
                         <div class="buttonDiv">
                             <p class="semesterButtons">Εξάμηνο 3</p>
                             <img class="pointer" src="../images/right_pointer.svg"></img>
                         </div>
                         <div id="Semester3"></div>
                     </div>
-                    
 
-                    <div data-index ="4" class="springSemesters semesterButtonDivWrapper">
+
+                    <div data-index="4" class="springSemesters semesterButtonDivWrapper">
                         <div class="buttonDiv">
                             <p class="semesterButtons">Εξάμηνο 4</p>
                             <img class="pointer" src="../images/right_pointer.svg"></img>
                         </div>
                         <div id="Semester4"></div>
                     </div>
-                    
 
-                    <div data-index ="5" class="winterSemesters semesterButtonDivWrapper">
+
+                    <div data-index="5" class="winterSemesters semesterButtonDivWrapper">
                         <div class="buttonDiv">
                             <p class="semesterButtons">Εξάμηνο 5</p>
                             <img class="pointer" src="../images/right_pointer.svg"></img>
                         </div>
                         <div id="Semester5"></div>
-    
+
                     </div>
-                   
-                    <div data-index ="6" class="springSemesters semesterButtonDivWrapper">
+
+                    <div data-index="6" class="springSemesters semesterButtonDivWrapper">
                         <div class="buttonDiv">
                             <p class="semesterButtons">Εξάμηνο 6</p>
                             <img class="pointer" src="../images/right_pointer.svg"></img>
                         </div>
                         <div id="Semester6"></div>
                     </div>
-                    
 
-                    <div data-index ="7" class="winterSemesters semesterButtonDivWrapper">
+
+                    <div data-index="7" class="winterSemesters semesterButtonDivWrapper">
                         <div class="buttonDiv">
                             <p class="semesterButtons">Εξάμηνο 7</p>
                             <img class="pointer" src="../images/right_pointer.svg"></img>
                         </div>
                         <div id="Semester7"></div>
                     </div>
-                    
 
-                    <div data-index ="8" class="springSemesters semesterButtonDivWrapper">
+
+                    <div data-index="8" class="springSemesters semesterButtonDivWrapper">
                         <div class="buttonDiv">
                             <p class="semesterButtons">Εξάμηνο 8</p>
                             <img class="pointer" src="../images/right_pointer.svg"></img>
@@ -182,7 +197,7 @@
                         </div>
                         <div id="SemesterGeneral"></div>
                     </div>
-                    
+
 
                 </div>
                 <div id="clearDiv">

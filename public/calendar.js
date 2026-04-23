@@ -7,6 +7,7 @@ let professorLinks = {};
 let titleLinks = {};
 let normalizedTitleLinks = {};
 let isSeptember = false;
+let filterOn = false; // Filtering is disabled at the start
 
 //DOM ELEMENTS
 const popup = document.getElementById("eventPopup"); //pop up for when you click on an event
@@ -20,6 +21,7 @@ const clearSelectionBtn = document.getElementById("clearSelection");
 const toggleScreenBtn = document.getElementById("toggleScreen");
 const searchbar = document.getElementById("searchbar"); // The searchbar where the user will search for specific classes
 const filterBtn = document.getElementById("filter"); // The filter button next to the searchbar 
+const filterMenu = document.getElementById("filterMenu"); //The menu containing the options for teachers and classrooms when the filter is clicked
 
 // Lab Popup Elements
 const labSlotPopup = document.getElementById("labSlotPopup");
@@ -1179,6 +1181,11 @@ searchbar.addEventListener("keyup", async function (e) {
 
     // If it is not null we move on to show the user the matched courses
     if (search) {
+        // If the filter menu is visible we hide it
+        if (filterOn){
+            filterOn = !filterOn;
+            filterMenu.style.display = "none"
+        }
         matchingCourses.innerHTML = ''; // Clearing the previous searches 
         matchingCourses.style.display = "block" // Making sure its visible
         console.log(search)
@@ -1258,5 +1265,16 @@ searchbar.addEventListener("keyup", async function (e) {
 })
 
 filterBtn.addEventListener("click", function(){
+    filterOn = !filterOn; // Enabling/Disabling
 
+    search = searchbar.value;
+
+    // Only showing the menu if the searchbar is empty to avoid conflicts and making a mess in the sidebar
+    if(filterOn && !search) {
+        filterMenu.style.display = "flex"
+    } else {
+        filterMenu.style.display = "none"
+    }
+    
 })
+
