@@ -1115,6 +1115,35 @@ function resizeWrapper() {
     }
 }
 
+// --- Legal Disclaimer Logic με Session Cookie ---
+// make cookie for legal things maybe 
+function getCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for(let i=0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+function checkDisclaimer() {
+    if (!getCookie("legalAcceptedSession")) {
+        const banner = document.getElementById("legal-disclaimer");
+        if (banner) banner.style.display = "block";
+    }
+}
+
+function acceptDisclaimer() {
+    document.cookie = "legalAcceptedSession=true; path=/; SameSite=Lax";
+    
+    const banner = document.getElementById("legal-disclaimer");
+    if (banner) banner.style.display = "none";
+}
+
+window.addEventListener("load", checkDisclaimer);
+
 document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.getElementById("semesterWrapper");
     const resizer = document.getElementById("dragHandle");
