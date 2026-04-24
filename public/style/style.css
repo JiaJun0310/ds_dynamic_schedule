@@ -581,13 +581,17 @@ footer {
 #filterSubmit{
     padding-left: 7px;
     width: 20%;
-    height: 100%;
-    background: #8c2635; 
-    border: 1px solid rgb(107, 6, 6);
-    color: white; 
+    height: 90%;
+    background-color: #242b4a;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     
     border-radius: 4px; 
     cursor: pointer; 
+}
+
+#filterSubmit:hover{
+    background-color: #1a1f37;
 }
 
 

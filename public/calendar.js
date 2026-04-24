@@ -1322,6 +1322,9 @@ filterBtn.addEventListener("click", async function () {
         teachersArray = data.teachers//and the teachers in an array
         roomsArray = data.rooms //and the rooms in an array
 
+        teachersArray.sort() // Sorting the arrays
+        roomsArray.sort()
+
         //append each teacher to the box
         teachersArray.forEach((teacher) => {
             const option = document.createElement("option");
@@ -1384,6 +1387,7 @@ filterSubmit.addEventListener("click", async function () {
         });
         const data = await res.json(); //we save the data here
         titlesArray = data.titles //and the titles in an array
+        
 
         // In case the search mathes no title we inform the user by creating a div containing a message
         if (titlesArray.length === 0) {
