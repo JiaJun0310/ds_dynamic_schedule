@@ -10,7 +10,22 @@
 <body>
 
     <header class="unipi-header">
-        <img src="../images/logo_unipi.svg" alt="Λογότυπο Πανεπιστημίου Πειραιώς" class="unipi-logo">
+        <div class="header-left">
+            <img src="../images/logo_unipi.svg" alt="Λογότυπο Πανεπιστημίου Πειραιώς" class="unipi-logo">
+        </div>
+
+        <div class="header-center" id="ModeDuck">
+            <p class="duck-text">Ducky Mode:</p>
+            <div class="duck-btn-group">
+                <button id="btn-click" class="duck-btn">Click</button>
+                <button id="btn-follow" class="duck-btn">Follow</button>
+                <button id="btn-stop" class="duck-btn active">Stop</button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <button id="btn-toggle" class="duck-btn">Hide Ducky</button>
+        </div>
     </header>
 
     <main class="error-container">
@@ -20,12 +35,6 @@
             <p>Μάλλον χάθηκες στα εξάμηνα!</p>
             
             <a href="/" class="home-btn">Επιστροφή στο Ημερολόγιο</a>
-        </div>
-        <div id="ModeDuck">
-            <p>Choose the movement mode of Ducky!</p>
-            <button id="btn-click" class="active">Click</button>
-            <button id="btn-follow">Follow</button>
-            <button id="btn-stop">Stop</button>
         </div>
         <div id="Ducky"></div>
         <script src="/chase.js"></script>

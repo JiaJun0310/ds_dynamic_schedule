@@ -4,15 +4,16 @@ const ducky = document.getElementById("Ducky");
 const btnClick = document.getElementById("btn-click")
 const btnFollow = document.getElementById("btn-follow")
 const btnStop = document.getElementById("btn-stop")
+const btnToggle = document.getElementById("btn-toggle")
 // set the movement mode to default
-let duckyMode = "click"
+let duckyMode = "stop"
 // set the ducky coordinates
 let duckyX = window.innerWidth / 2;
 let duckyY = window.innerHeight / 2;
 
 // toggle buttons
 btnClick.addEventListener("click", (event) => {
-    // We add this to stop the button click from also triggering the document click below
+    // this stops event bubbling (limits the click to this element, click doesent reach underneath)
     event.stopPropagation(); 
     
     // update button classes
@@ -32,7 +33,7 @@ btnClick.addEventListener("click", (event) => {
 });
 
 btnFollow.addEventListener("click", (event) => {
-    // We add this to stop the button click from also triggering the document click below
+    // this stops event bubbling (limits the click to this element, click doesent reach underneath)
     event.stopPropagation();
     
     // update button classes
@@ -52,7 +53,7 @@ btnFollow.addEventListener("click", (event) => {
 });
 
 btnStop.addEventListener("click", (event) => {
-    // We add this to stop the button click from also triggering the document click below
+    // this stops event bubbling (limits the click to this element, click doesent reach underneath)
     event.stopPropagation();
 
     // update button classes
@@ -70,6 +71,61 @@ btnStop.addEventListener("click", (event) => {
 
     // set duckyMode
     duckyMode = "stop"
+})
+
+btnToggle.addEventListener("click", (event) => {
+    // this stops event bubbling (limits the click to this element, click doesent reach underneath)
+    event.stopPropagation();
+
+    // Check if Ducky is currently hidden
+    if (ducky.style.opacity === "0") {
+        // if hidden, show ducky
+        ducky.style.opacity = "1";
+        btnToggle.textContent = "Hide Ducky";
+        btnToggle.classList.remove("active"); 
+        
+        // Re-enable the movement buttons
+        btnClick.disabled = false;
+        btnFollow.disabled = false;
+        btnStop.disabled = false;
+        
+    } else {
+        // if not hidden, hide him
+        ducky.style.opacity = "0";
+        btnToggle.textContent = "Show Ducky";
+        btnToggle.classList.add("active");
+        
+        // Force Ducky into "stop" mode so he doesn't move while invisible
+        duckyMode = "stop";
+        
+        // Update the button visuals to reflect that he is stopped
+        btnStop.classList.add("active");
+        btnClick.classList.remove("active");
+        btnFollow.classList.remove("active");
+        
+        // Disable the movement buttons so they cannot be clicked
+        btnClick.disabled = true;
+        btnFollow.disabled = true;
+        btnStop.disabled = true;
+
+        setTimeout(() => {
+            // Temporarily turn off his movement transition
+            ducky.style.transition = "none"; 
+            
+            // Calculate the center and teleport him instantly
+            duckyX = window.innerWidth / 2;
+            duckyY = window.innerHeight / 2;
+            ducky.style.left = duckyX + "px";
+            ducky.style.top = duckyY + "px";
+
+            // Wait a tiny fraction of a second for the browser to register the move,
+            // then remove the "none" so he gets his smooth CSS transitions back
+            setTimeout(() => {
+                ducky.style.transition = ""; 
+            }, 50);
+            
+        }, 300);
+    }
 })
 
 // movement logic

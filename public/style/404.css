@@ -12,9 +12,10 @@ body {
     height: 100px;
     width: 100%;
     box-sizing: border-box;
-    color: white;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    padding: 0 25px;
 }
 
 .unipi-logo {
@@ -98,10 +99,13 @@ body {
     background-repeat: no-repeat; /* Draws the duck only once */
     background-position: center; /* Centers the image perfectly in its box */
 
+    top: 50%;
+    left: 50%;
+
     /* 4. The **ESSENTIALS** from before (must keep these): */
     position: absolute;
     transform: translate(-50%, -50%);
-    transition: all 0.2s ease-out; /* The classic glide for click/stop mode */
+    transition: all 0.4s ease-out; /* The classic glide for click/stop mode */
     pointer-events: none; /* Essential "ghost mode" so you can click the buttons! */
 }
 
@@ -122,25 +126,51 @@ button.active {
     border-color: darkred;
 }
 
-#ModeDuck {
-    /* 1. Position the box relative to the whole page */
-    position: absolute;
-    top: 20px; 
-    left: 50%; 
-    
-    /* 2. Pull the box back left by half of its own width to perfectly center it */
-    transform: translateX(-50%); 
-    
-    /* 3. Center the text and buttons INSIDE the box */
-    text-align: center; 
-    
-    /* 4. Guarantee the menu stays visibly on top of Ducky if they cross paths */
-    z-index: 10; 
+.duck-text {
+    color: white;
+    margin: 0 10px 0 0;
+    font-weight: bold;
+}
 
-    /* === OPTIONAL: Styling to make it look like a nice floating menu === */
-    background-color: white;
-    padding: 15px 30px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    font-family: sans-serif;
+.duck-btn {
+    background-color: #465286;
+    color: white;
+    border: 2px solid #252d4f;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.duck-btn:hover {
+    background-color: #525f98;
+}
+
+.duck-btn.active {
+    background-color: #8c2635; 
+    border-color: #a22538;
+}
+
+.header-left, .header-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    height: 100%; 
+}
+
+.header-right {
+    justify-content: flex-end;
+}
+
+#btn-toggle {
+    margin-right: 20px; 
+}
+
+.header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
