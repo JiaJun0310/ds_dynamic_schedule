@@ -86,3 +86,61 @@ body {
 .home-btn:hover {
     background-color: #7a151a;
 }
+
+#Ducky {
+    /* 1. Ducky size */
+    width: 80px;
+    height: 80px;
+
+    /* 3. Apply the image as the background */
+    background-image: url("../images/Ducky.png"); /* We use the exact filename provided */
+    background-size: contain; /* Shrinks the image to fit *inside* the 80x80 box without stretching */
+    background-repeat: no-repeat; /* Draws the duck only once */
+    background-position: center; /* Centers the image perfectly in its box */
+
+    /* 4. The **ESSENTIALS** from before (must keep these): */
+    position: absolute;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease-out; /* The classic glide for click/stop mode */
+    pointer-events: none; /* Essential "ghost mode" so you can click the buttons! */
+}
+
+/* Basic styling for all buttons */
+button {
+    padding: 8px 16px;
+    margin: 4px;
+    cursor: pointer;
+    background-color: #e0e0e0;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styling ONLY for the button that is currently selected */
+button.active {
+    background-color: red; /* Matches Ducky */
+    color: white;
+    border-color: darkred;
+}
+
+#ModeDuck {
+    /* 1. Position the box relative to the whole page */
+    position: absolute;
+    top: 20px; 
+    left: 50%; 
+    
+    /* 2. Pull the box back left by half of its own width to perfectly center it */
+    transform: translateX(-50%); 
+    
+    /* 3. Center the text and buttons INSIDE the box */
+    text-align: center; 
+    
+    /* 4. Guarantee the menu stays visibly on top of Ducky if they cross paths */
+    z-index: 10; 
+
+    /* === OPTIONAL: Styling to make it look like a nice floating menu === */
+    background-color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    font-family: sans-serif;
+}
