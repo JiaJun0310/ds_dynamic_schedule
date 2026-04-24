@@ -18,7 +18,18 @@
         <a href="https://www.ds.unipi.gr/">
             <img id="logo" src="../images/logo_unipi.svg" alt="unipi logo"></img>
         </a>
-        <img id="settings" src="../images/settings.svg" alt="settings"></img>
+        <div class="dropdown">
+            <img id="settings" src="../images/settings.svg" alt="settings" class="dropdown-button">
+            
+            <div id="settings-menu" class="dropdown-content">
+                <a href="#">Account Details</a>
+                <a href="#">Preferences</a>
+                <label class="dropdown-checkbox">
+                    Dark Theme
+                    <input type="checkbox" id="dark-mode-toggle">                 
+                </label>
+            </div>
+            </div>
     </header>
 
     <!-- Main section of the page (schedule and course selection) -->

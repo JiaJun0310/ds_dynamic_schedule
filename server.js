@@ -728,6 +728,32 @@ app.post("/updateLab", async (req, res) => {
     }
 });
 
+app.get('/download-schedule', (req, res) => {
+    // Safely construct the exact path to the single file
+    const file = path.join(__dirname, 'uploads', 'schedule.pdf');
+    
+    // res.download() forces the browser to download it with a specific name
+    res.download(file, 'University_Schedule.pdf', (err) => {
+        if (err) {
+            console.error("Error downloading file:", err);
+            res.status(404).send("File not found.");
+        }
+    });
+});
+
+app.get('/download-exams', (req, res) => {
+    // Safely construct the exact path to the single file
+    const file = path.join(__dirname, 'uploads', 'exams.pdf');
+    
+    // res.download() forces the browser to download it with a specific name
+    res.download(file, 'University_Exams.pdf', (err) => {
+        if (err) {
+            console.error("Error downloading file:", err);
+            res.status(404).send("File not found.");
+        }
+    });
+});
+
 
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', 'html', '404.html'));

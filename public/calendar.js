@@ -26,6 +26,10 @@ const filterSubmit = document.getElementById("filterSubmit"); // The "ok" button
 const teacherSelect = document.getElementById("teacherSelect"); // The menu for teachers in the filter menu
 const roomSelect = document.getElementById("roomSelect"); // The menu for teachers in the filter menu
 
+// Settings Dropdown Elements
+const settingsBtn = document.getElementById("settings");
+const settingsMenu = document.getElementById("settings-menu");
+
 // Lab Popup Elements
 const labSlotPopup = document.getElementById("labSlotPopup");
 const labSlotOptions = document.getElementById("labSlotOptions");
@@ -228,6 +232,20 @@ async function examOptions() {
     if (currentMode === "Εξεταστική") {
         semesters.style.display = "none";
         examsBox.style.display = "flex";
+
+        if (!document.getElementById("exam-pdf-wrapper")) {
+            const pdfWrapper = document.createElement("div");
+            pdfWrapper.id = "exam-pdf-wrapper"; // Give it a unique ID to check later
+
+            const pdfLink = document.createElement("a");
+            pdfLink.href = "/download-exams"; 
+            pdfLink.download = "exams.pdf"; 
+            pdfLink.textContent = "Λήψη Εξεταστικής (PDF)";
+            pdfLink.id = "pdf-download-link"; // Reuses your existing CSS
+
+            pdfWrapper.appendChild(pdfLink);
+            examsBox.appendChild(pdfWrapper);
+        }
     }
 
     if (currentMode === "Μαθήματα" || currentMode === "Εργαστήρια") {   //this re apears everything when pressing Μαθήματα
@@ -240,6 +258,23 @@ async function examOptions() {
         semesterWrappers.forEach((semester) => {
             semesters.append(semester);
         });
+        if (currentMode === "Μαθήματα") {
+            const pdfWrapper = document.createElement("div");
+            pdfWrapper.id = "pdf-wrapper"; 
+
+            const pdfLink = document.createElement("a");
+            pdfLink.href = "/download-schedule"; 
+            pdfLink.download = "shedule.pdf"; 
+            pdfLink.textContent = "Λήψη Προγράμματος (PDF)";
+            pdfLink.id = "pdf-download-link"; 
+
+            pdfWrapper.appendChild(pdfLink);
+            semesters.appendChild(pdfWrapper);
+        }
+
+        
+
+    
 
         semesters.style.display = "flex";
         examsBox.style.display = "none";
@@ -277,9 +312,9 @@ async function examOptions() {
         isSeptember = false;
     }
 
-    let isNormalClicked = false;
+    let isNormalClicked = false;    //by default the normal exams are shown and the embolim are not, so we set the normal to true and the embolim to false
     let isEmbolimClicked = false;   //tracked what tabs are open and which are closed 
-
+    
     normalExam.onclick = async () => {  //this button apears the div below the normal exams
         isNormalClicked = !isNormalClicked;
         const normalExamDiv = document.getElementById("normalExamDiv");
@@ -330,7 +365,13 @@ async function examOptions() {
             embolimExamDiv.style.display = "none";
             embolimExam.classList.remove("active"); //returns the button to its default state
         }
+        
     };
+    if (currentMode === "Εξεταστική") {
+        normalExam.click();
+        embolimExam.click();
+    }
+    
 }
 
 // Listen for clicks on the radio buttons
@@ -753,6 +794,27 @@ clearSelectionBtn.onclick = () => {
 
 };
 
+// --- SETTINGS MENU LOGIC ADDED HERE ---
+if (settingsBtn && settingsMenu) {
+    // Toggle the menu when clicking the settings icon
+    settingsBtn.addEventListener("click", function(event) {
+        settingsMenu.classList.toggle("show");
+        event.stopPropagation(); // Stops the click from bubbling up to the window listener
+    });
+
+    // Close the dropdown if the user clicks anywhere outside of it
+    window.addEventListener("click", function(event) {
+        // If the menu is currently showing, close it
+        if (settingsMenu.classList.contains('show')) {
+            // Only close if the click wasn't inside the menu itself and wasn't the settings button
+            if (!settingsMenu.contains(event.target) && event.target !== settingsBtn) {
+                settingsMenu.classList.remove('show');
+            }
+        }
+    });
+}
+// --------------------------------------
+
 document.querySelectorAll(".buttonDiv").forEach((button) => {
     button.dataset.open = "false";
 
@@ -1091,7 +1153,7 @@ toggleScreenBtn.onclick = function () {
         calEl.style.setProperty("display", "flex", "important");
         calendar.updateSize();
     }
-};
+}
 
 //this just resizes the calendar (refresh's it)
 function resize() {
@@ -1455,3 +1517,28 @@ filterSubmit.addEventListener("click", async function () {
     }
 
 })
+
+
+const darkModeToggle = document.getElementById("dark-mode-toggle");
+  
+  if (darkModeToggle) {
+      // Check what the user saved last time they visited
+      const savedTheme = localStorage.getItem("userTheme");
+      
+      // If they saved "dark", apply the theme AND check the box
+      if (savedTheme === "dark") {
+          document.body.classList.add("dark-theme");
+          darkModeToggle.checked = true;
+      }
+
+      // Listen for clicks and save the new choice
+      darkModeToggle.addEventListener("change", function(event) {
+          if (event.target.checked) {
+              document.body.classList.add("dark-theme");
+              localStorage.setItem("userTheme", "dark");
+          } else {
+              document.body.classList.remove("dark-theme");
+              localStorage.setItem("userTheme", "light");
+          }
+      });
+  }

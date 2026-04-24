@@ -32,6 +32,8 @@ header {
     height: 100px;
     width: 100%;
     position: relative;
+    overflow: visible;
+    z-index: 1000;
 }
 
 /* Main container */
@@ -219,14 +221,7 @@ footer {
     width: auto;
 }
 
-/* Settings image */
-#settings {
-    height: 50%;
-    position: absolute;
-    right: 25px; /* Aligns it to the right edge */
-    top: 50%; /* Optional: Vertically centers it */
-    transform: translateY(-50%); /* Fixes the vertical centering offset */
-}
+
 
 /* Calendar button spacing */
 .fc .fc-button {
@@ -602,6 +597,208 @@ footer {
 
 #filterSubmit:hover{
     background-color: #1a1f37;
+}
+
+
+/* 1. MOVE positioning to the new wrapper container */
+.dropdown {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 50%; /* Keep your original height logic here */
+  display: inline-block;
+}
+
+/* 2. ADJUST the settings image to fit inside the wrapper */
+#settings {
+  height: 100%; /* Fills the height of the .dropdown container */
+  width: auto;  /* Maintains the aspect ratio of the SVG */
+  cursor: pointer;
+  display: block; /* Removes any weird spacing below the image */
+}
+
+/* 3. The actual menu (same as before, but aligns perfectly now) */
+.dropdown-content {
+  display: none; /* Hidden by default */
+  position: absolute; 
+  top: 100%; /* Pushes it exactly below the image */
+  right: 0; /* Aligns the menu to the right edge of the icon */
+  background-color: white;
+  min-width: 150px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  z-index: 100;
+  overflow: hidden;
+  margin-top: 10px; /* Optional: adds a little breathing room below the icon */
+}
+
+/* Styling for the links inside the menu */
+.dropdown-content a {
+  color: #333;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+/* Hover effect on links */
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Class added by JavaScript to make the menu visible */
+.show {
+  display: block;
+}
+
+/* Styling for the checkbox container */
+.dropdown-checkbox {
+  color: #333;
+  padding: 12px 16px;
+  display: flex;       /* Aligns box and text in a row */
+  align-items: center; /* Centers them vertically */
+  gap: 10px;           /* Adds space between the box and the text */
+  font-family: sans-serif;
+  font-size: 14px;
+  cursor: pointer;     /* Shows the pointer finger on hover */
+}
+
+/* Match the hover effect of the links */
+.dropdown-checkbox:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+
+
+
+/* --- Bulletproof FullCalendar Dark Theme --- */
+body.dark-theme .fc {
+  /* Override FullCalendar's native CSS variables */
+  --fc-page-bg-color: #1e1e1e;
+  --fc-neutral-bg-color: #2a2a2a;
+  --fc-neutral-text-color: #ffffff;
+  --fc-border-color: #444444;
+  --fc-today-bg-color: #4400ff !important;
+  --fc-button-text-color: #ffffff;
+  --fc-button-bg-color: #333333;
+  --fc-button-border-color: #555555;
+  --fc-button-hover-bg-color: #444444;
+  --fc-button-hover-border-color: #666666;
+  --fc-button-active-bg-color: #555555;
+  --fc-button-active-border-color: #777777;
+
+  /* Force the text color */
+  color: #ffffff;
+}
+
+/* Force the backgrounds of the grids, tables, and cells to be dark */
+body.dark-theme .fc-theme-standard .fc-scrollgrid,
+body.dark-theme .fc-theme-standard td,
+body.dark-theme .fc-theme-standard th,
+body.dark-theme .fc-view-harness,
+body.dark-theme .fc-view {
+  background-color: #1e1e1e !important;
+  border-color: #444444 !important;
+}
+
+/* Keep header links (like days/times) readable */
+body.dark-theme .fc a {
+  color: #dddddd !important;
+}
+
+/* Fix the color of the "more" popover if events stack up */
+body.dark-theme .fc-popover {
+  background-color: #2a2a2a !important;
+  border-color: #444444 !important;
+}
+body.dark-theme .fc-popover-header {
+  background-color: #333333 !important;
+}
+
+/* FullCalendar Header & Buttons to Dark Mode */
+
+/* 1. Fix the Calendar Title Text */
+body.dark-theme .fc .fc-toolbar-title {
+  color: #ffffff !important;
+
+}
+
+body.dark-theme .fc .fc-timegrid-col.fc-day-today {
+  background-color: #00668332 !important;
+  z-index: 1000;
+}
+
+body.dark-theme .fc-header-toolbar {
+  background-color: #1e1e1e !important;
+  margin: 0px !important;
+  padding-bottom: 24px !important;
+}
+
+/* 2. Fix the Header Buttons (Today, Arrows, View options) */
+body.dark-theme .fc .fc-button-primary {
+  background-color: #333333 !important;
+  border-color: #555555 !important;
+  color: #ffffff !important;
+  box-shadow: none !important; /* Removes any weird Bootstrap glowing borders */
+}
+
+/* 3. Hover state for buttons */
+body.dark-theme .fc .fc-button-primary:hover {
+  background-color: #4a4a4a !important;
+  border-color: #666666 !important;
+  color: #ffffff !important;
+}
+
+/* 4. Active/Clicked state for buttons */
+body.dark-theme .fc .fc-button-primary:not(:disabled):active,
+body.dark-theme .fc .fc-button-primary.fc-button-active {
+  background-color: #555555 !important;
+  border-color: #777777 !important;
+  color: #ffffff !important;
+}
+
+/* 5. Fix the little arrow icons inside the prev/next buttons */
+body.dark-theme .fc .fc-icon {
+  color: #ffffff !important;
+}
+
+
+/* --- Dark Mode for the Settings Dropdown --- */
+body.dark-theme .dropdown-content {
+  background-color: #2a2a2a; /* Matches your dark theme */
+  border: 1px solid #444444;
+}
+
+body.dark-theme .dropdown-content a,
+body.dark-theme .dropdown-checkbox {
+  color: #ffffff;
+}
+
+body.dark-theme .dropdown-content a:hover,
+body.dark-theme .dropdown-checkbox:hover {
+  background-color: #444444;
+}
+
+/* --- PDF Download Link in Sidebar --- */
+#pdf-wrapper, #exam-pdf-wrapper {
+    text-align: center;
+    margin: 20px 0; /* Gives it some breathing room at the bottom of the list */
+}
+
+#pdf-download-link {
+    color: #bec6ea; /* Soft blue matching your existing links */
+    text-decoration: underline;
+    font-size: 0.85em; /* Keeps it small and subtle */
+    font-family: sans-serif;
+    transition: color 0.2s ease;
+}
+
+#pdf-download-link:hover {
+    color: #ffffff; /* Brightens up when the user hovers over it */
 }
 
 
