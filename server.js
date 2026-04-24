@@ -321,7 +321,7 @@ app.post("/getFiltered", async (req, res) => {
 
                 if (mode === "Μαθήματα") {
                     // Check if the teacher is in the teacher array of the item
-                    if (teacher != "Καθηγητής") {
+                    if (teacher != "Διδάσκων") {
                         matchTeacher = item.professor && item.professor.includes(teacher);
                     }
                          

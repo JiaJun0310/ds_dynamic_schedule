@@ -373,8 +373,8 @@ document.querySelectorAll('input[name="choice"]').forEach((radio) => {
         searchbar.value = "" // Bar is cleared
         filterMenu.style.display = "none" // hiding the filtermenu
         filterOn = false;
-        teacherSelect.innerHTML = "<option disabled selected>Καθηγητής</option>" // Returning the selction boxes to their starting state
-        roomSelect.innerHTML = "<option disabled selected>Αίθουσα</option>"
+        teacherSelect.innerHTML = "<option>Διδάσκων</option>" // Returning the selction boxes to their starting state
+        roomSelect.innerHTML = "<option>Αίθουσα</option>"
 
         examOptions(); //this function haddles apearance of the exam page
     });
@@ -1128,7 +1128,7 @@ function resizeWrapper() {
 function getCookie(name) {
     let nameEQ = name + "=";
     let ca = document.cookie.split(';');
-    for(let i=0; i < ca.length; i++) {
+    for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == ' ') c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
@@ -1145,7 +1145,7 @@ function checkDisclaimer() {
 
 function acceptDisclaimer() {
     document.cookie = "legalAcceptedSession=true; path=/; SameSite=Lax";
-    
+
     const banner = document.getElementById("legal-disclaimer");
     if (banner) banner.style.display = "none";
 }
@@ -1343,7 +1343,7 @@ filterBtn.addEventListener("click", async function () {
     } else {
         if (!search) {
             filterMenu.style.display = "none" // Making the menu invisible
-            teacherSelect.innerHTML = "<option disabled selected>Καθηγητής</option>" // Returning the selction boxes to their starting state
+            teacherSelect.innerHTML = "<option disabled selected>Διδάσκων</option>" // Returning the selction boxes to their starting state
             roomSelect.innerHTML = "<option disabled selected>Αίθουσα</option>"
 
             matchingCourses.innerHTML = ''; // Clearing the previous search results
@@ -1366,7 +1366,7 @@ filterSubmit.addEventListener("click", async function () {
     teacher = teacherSelect.value;
     room = roomSelect.value;
 
-    if (teacher != "Καθηγητής" || room != "Αίθουσα") {
+    if (teacher != "Διδάσκων" || room != "Αίθουσα") {
 
         const semesters = document.getElementById("semesters"); // Getting the semesters from the documment so we can show or hide them
         const matchingCourses = document.getElementById("matchingCourses") // Getting the new div we made so we can add the matching classes there
@@ -1383,11 +1383,11 @@ filterSubmit.addEventListener("click", async function () {
         const res = await fetch("/getFiltered", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ teacher: teacher,room: room, mode: currentMode }), // Three arguments, the teacher, the room and the current mode
+            body: JSON.stringify({ teacher: teacher, room: room, mode: currentMode }), // Three arguments, the teacher, the room and the current mode
         });
         const data = await res.json(); //we save the data here
         titlesArray = data.titles //and the titles in an array
-        
+
 
         // In case the search mathes no title we inform the user by creating a div containing a message
         if (titlesArray.length === 0) {
@@ -1396,7 +1396,7 @@ filterSubmit.addEventListener("click", async function () {
             div.style.textAlign = "center"
 
             const p = document.createElement("p");
-            p.textContent = "Δεν βρέθηκε μάθημα που να αντιστοιχεί σε '" + String(teacher) + " και " + String(room) +" :(";
+            p.textContent = "Δεν βρέθηκε μάθημα που να αντιστοιχεί σε '" + String(teacher) + " και " + String(room) + " :(";
             p.style.color = "white"
             p.style.fontFamily = "sans-serif"
 
@@ -1437,6 +1437,21 @@ filterSubmit.addEventListener("click", async function () {
                 handleCourseToggle(checkbox, title, sem);
         });
 
+    }
+    else if (teacher === "Διδάσκων" || room === "Αίθουσα") {
+        filterMenu.style.display = "none" // Making the menu invisible
+        teacherSelect.innerHTML = "<option disabled selected>Καθηγητής</option>" // Returning the selction boxes to their starting state
+        roomSelect.innerHTML = "<option disabled selected>Αίθουσα</option>"
+
+        matchingCourses.innerHTML = ''; // Clearing the previous search results
+        if (currentMode === "Εξεταστική") {
+            examsBox.style.display = "flex" // if we're in exam mode we also show the examsbox
+        }
+        // Only bringing these back if we are not in exam mode since the user needs to choose make up exams or normal exams for the semesters to show up
+        else {
+            semesters.style.display = "block" // bring back the semesters
+
+        }
     }
 
 })
