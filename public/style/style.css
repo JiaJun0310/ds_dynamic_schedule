@@ -723,13 +723,13 @@ body.dark-theme .fc-popover-header {
 
 /* 1. Fix the Calendar Title Text */
 body.dark-theme .fc .fc-toolbar-title {
-  color: #ffffff !important;
-
+    color: #ffffff !important;
 }
 
-body.dark-theme .fc .fc-timegrid-col .fc-day-today {
-  background-color: #00668332 !important;
-  z-index: 1000;
+body.dark-theme .fc .fc-timegrid-col.fc-day-today {
+    background-color: #00668332 !important;
+    position: relative;
+    z-index: 1000;
 }
 
 body.dark-theme .fc-timegrid-col-frame {
@@ -738,9 +738,9 @@ body.dark-theme .fc-timegrid-col-frame {
 }
 
 body.dark-theme .fc-header-toolbar {
-  background-color: #1e1e1e !important;
-  margin: 0px !important;
-  padding-bottom: 24px !important;
+    background-color: #1e1e1e !important;
+    margin: 0px !important;
+    padding-bottom: 24px !important;
 }
 
 /* 2. Fix the Header Buttons (Today, Arrows, View options) */
