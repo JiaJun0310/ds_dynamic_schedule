@@ -66,7 +66,7 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                     );
                     const extractData = await extractResponse.text();
                     alert("Ολοκληρώθηκε: " + extractData); //Extraction complite and file saved as academic_calendar.json
-                } 
+                }
                 else if (id === "labs") {
                     const extractResponse = await fetch(
                         "/run_labs_extractor",
@@ -87,7 +87,7 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                         "\n2. Files: " +
                         (syncResult.message || "Updated"),
                     );
-                } 
+                }
                 else if (id === "exams") {
                     const extractResponse = await fetch(
                         "/run_exams_extractor",
@@ -332,7 +332,7 @@ courseSelect.addEventListener("change", async () => {
                 </label><br>
             </form>
         `;
-        
+
         editWrapper.appendChild(generalDiv);
 
         //generate the lecture info dynamically
@@ -426,9 +426,9 @@ editWrapper.addEventListener("click", async (e) => {
     });
 
     //if time not valid stop 
-    if (!validTime){
+    if (!validTime) {
         return;
-    } 
+    }
 
     //collect lecture data into arrays
     lectureForms.forEach(form => {
@@ -440,7 +440,7 @@ editWrapper.addEventListener("click", async (e) => {
         updatedCourse.lectureHall.push(formData.get("lectureHall"));
     });
 
-   try {
+    try {
         const response = await fetch("/updateCourse", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -523,7 +523,7 @@ examsCourseSelect.addEventListener("change", async () => {
         }
 
         const data = await response.json();
-        
+
         // 1. Create a safe exam title by replacing double quotes with HTML entities
         const safeExamTitle = data.exam.title.replace(/"/g, '&quot;');
 
@@ -582,7 +582,7 @@ examsCourseSelect.addEventListener("change", async () => {
 
             </form>
         `;
-        
+
         examsEditWrapper.appendChild(examsDiv);
 
         //create the save button dynamically
@@ -635,9 +635,9 @@ examsEditWrapper.addEventListener("click", async (e) => {
     }
 
     //if time not valid stop 
-    if (!validTime){
+    if (!validTime) {
         return;
-    } 
+    }
 
     try {
         const response = await fetch("/updateExamCourse", {
@@ -657,6 +657,7 @@ examsEditWrapper.addEventListener("click", async (e) => {
     }
 });
 
+let labsData;
 
 //loads the corresponding labs of the semester based on the json for the labs
 labsSemesterSelect.addEventListener("change", async () => {
@@ -676,8 +677,8 @@ labsSemesterSelect.addEventListener("change", async () => {
             throw new Error("Failed to fetch labs");
         }
 
-        const data = await response.json();
-        const labs = data.map(lab => lab.name);
+        labsData = await response.json();
+        const labs = labsData.map(lab => lab.name);
 
         //clears the previous data in order to load the new ones
         labsCourseSelect.innerHTML = "";
@@ -709,22 +710,12 @@ labsCourseSelect.addEventListener("change", async () => {
 
     //getting the value of the selected lab
     const labs = labsCourseSelect.value;
+    const selectedLab = labsData.find(lab => lab.name === labs)
 
     try {
-        const response = await fetch("/getLabs", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title: labs }),
-        });
-
-        if (!response.ok) {
-            throw new Error("Failed to fetch labs information");
-        }
-
-        const data = await response.json();
 
         // 1. Create a safe title by replacing double quotes with HTML entities
-        const safeTitle = data.schedules[0].name.replace(/"/g, '&quot;');
+        const safeTitle = selectedLab.name.replace(/"/g, '&quot;');
 
         //clear the previous content 
         labsEditWrapper.innerHTML = "";
@@ -737,11 +728,11 @@ labsCourseSelect.addEventListener("change", async () => {
             <form id="generalForm">
                 <h2>Γενικά Στοιχεία</h2>
 
-                <label class="title">Όνομα Μαθήματος:
+                <label class="labTitle">Όνομα Εργαστηρίου:
                     <input type="text" name="title" value="${safeTitle}" readonly>
                 </label><br>
 
-                <label class="Semesters">Εξάμηνο:
+                <label class="labSemesters">Εξάμηνο:
                  
                     <select name="semester">
                         ${[1, 2, 3, 4, 5, 6, 7, 8].map(s => `
@@ -755,26 +746,27 @@ labsCourseSelect.addEventListener("change", async () => {
 
             </form>
         `;
-        
+
         labsEditWrapper.appendChild(generalDiv);
 
         //generate the lab info dynamically
-        data.schedules.forEach((lab, i) => {
+        selectedLab.data.forEach((lab, i) => {
+
+            const [startTime, endTime] = lab.time.split("-");
 
             const div = document.createElement("div");
             div.classList.add("editCourse");
 
-            // MAYBE I WILL PLACE IT
-            // <h3>Διάλεξη ${i + 1}</h3>
-
             div.innerHTML = `
-                <form class="lectureForm">
+                <h3>Εργαστήριο ${i + 1}</h3>
 
-                    <label class="labhall">Αμφιθέατρο:
+                <form class="labsForm">
+
+                    <label class="labHall">Αμφιθέατρο:
                         <input type="text" name="labhall" value="${lab.labhall}">
                     </label><br>
 
-                    <label class="daysOfWeek">Ημέρα:
+                    <label class="labDaysOfWeek">Ημέρα:
 
                         <select name="day">
                             ${[1, 2, 3, 4, 5].map(d => `
@@ -786,12 +778,12 @@ labsCourseSelect.addEventListener("change", async () => {
                        
                     </label><br>
 
-                    <label class="startTime">Ώρα Έναρξης:
-                        <input type="time" name="start" value="${lab.start ? lab.start.slice(0, 5) : ""}">
+                    <label class="labStartTime">Ώρα Έναρξης:
+                        <input type="time" name="start" value="${startTime ? startTime.slice(0, 5) : ""}">
                     </label><br>
 
-                    <label class="endTime">Ώρα Λήξης:
-                        <input type="time" name="end" value="${lab.end ? lab.end.slice(0, 5) : ""}">
+                    <label class="labEndTime">Ώρα Λήξης:
+                        <input type="time" name="end" value="${endTime ? endTime.slice(0, 5) : ""}">
                     </label><br>
                 </form>
             `;
@@ -813,59 +805,119 @@ labsCourseSelect.addEventListener("change", async () => {
 });
 
 //when save button is pressed it changes the data on the json for the labs
+// labsEditWrapper.addEventListener("click", async (e) => {
+
+//     //Only run if save button was pressed
+//     if (e.target.id !== "labSaveButton") return;
+
+//     const generalForm = document.getElementById("generalForm");
+//     const labsForm = editWrapper.querySelectorAll(".labsForm");
+
+//     const generalData = new FormData(generalForm);
+
+//     //final object sent to backend
+//     const updatedCourse = {
+//         name: generalData.get("title"),
+//         semester: parseInt(generalData.get("semester")),
+//         daysOfWeek: [],
+//         startTime: [],
+//         endTime: [],
+//         labhall: []
+//     };
+
+//     //check if time is valid(start time < end time)
+//     let validTime = true;
+
+//     labsForm.forEach(form => {
+//         const formData = new FormData(form);
+
+//         const start = formData.get("start");
+//         const end = formData.get("end");
+
+//         if (start >= end) {
+//             alert("Η ώρα έναρξης πρέπει να είναι πριν την ώρα λήξης!");
+//             validTime = false;
+//             return;
+//         }
+//     });
+
+//     //if time not valid stop 
+//     if (!validTime) {
+//         return;
+//     }
+
+//     //collect lecture data into arrays
+//     labsForm.forEach(form => {
+//         const formData = new FormData(form);
+
+//         updatedCourse.daysOfWeek.push(parseInt(formData.get("day")));
+//         updatedCourse.startTime.push(formData.get("start"));
+//         updatedCourse.endTime.push(formData.get("end"));
+//         updatedCourse.lectureHall.push(formData.get("lectureHall"));
+//     });
+
+//     try {
+//         const response = await fetch("/updateCourse", {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify(updatedCourse),
+//         });
+
+//         if (!response.ok) throw new Error("Failed");
+
+//         const result = await response.json();
+//         alert(result.message || "Saved!");
+
+//     } catch (error) {
+//         console.error(error);
+//         alert("Failed to update course.");
+//     }
+// });
+
 labsEditWrapper.addEventListener("click", async (e) => {
 
-    //Only run if save button was pressed
     if (e.target.id !== "labSaveButton") return;
 
     const generalForm = document.getElementById("generalForm");
-    const lectureForms = editWrapper.querySelectorAll(".lectureForm");
+    const labsForm = labsEditWrapper.querySelectorAll(".labsForm");
 
     const generalData = new FormData(generalForm);
 
-    //final object sent to backend
     const updatedCourse = {
-        title: generalData.get("title"),
+        name: generalData.get("title"),
         semester: parseInt(generalData.get("semester")),
-        daysOfWeek: [],
-        startTime: [],
-        endTime: [],
-        lectureHall: []
+        data: [],
     };
 
-    //check if time is valid(start time < end time)
     let validTime = true;
 
-    lectureForms.forEach(form => {
+    labsForm.forEach(form => {
         const formData = new FormData(form);
 
+        const day = formData.get("day");
         const start = formData.get("start");
         const end = formData.get("end");
+        const labhall = formData.get("labhall");
 
+        // validate time
         if (start >= end) {
             alert("Η ώρα έναρξης πρέπει να είναι πριν την ώρα λήξης!");
             validTime = false;
             return;
         }
+
+        // build time string like your JSON format
+        updatedCourse.data.push({
+            day: day,
+            time: `${start}-${end}`,
+            labhall: labhall
+        });
     });
 
-    //if time not valid stop 
-    if (!validTime){
-        return;
-    } 
+    if (!validTime) return;
 
-    //collect lecture data into arrays
-    lectureForms.forEach(form => {
-        const formData = new FormData(form);
-
-        updatedCourse.daysOfWeek.push(parseInt(formData.get("day")));
-        updatedCourse.startTime.push(formData.get("start"));
-        updatedCourse.endTime.push(formData.get("end"));
-        updatedCourse.lectureHall.push(formData.get("lectureHall"));
-    });
-
-   try {
-        const response = await fetch("/updateCourse", {
+    try {
+        const response = await fetch("/updateLab", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedCourse),
@@ -881,4 +933,3 @@ labsEditWrapper.addEventListener("click", async (e) => {
         alert("Failed to update course.");
     }
 });
-
