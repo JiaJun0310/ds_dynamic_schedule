@@ -689,6 +689,46 @@ app.post("/updateExamCourse", async (req, res) => {
     }
 });
 
+
+//gets the new data of the lab and updates the lab json file
+app.post("/updateLab", async (req, res) => {
+    try {
+        const {
+            name,
+            semester,
+            data
+        } = req.body;
+
+        const mergedPath = path.join(__dirname, 'jsonData', 'merged_labs.json');
+
+        const labs = JSON.parse(fs.readFileSync(mergedPath, 'utf8'));
+
+        //find the specific course 
+        const labIndex = labs.findIndex(lab => lab.name === name);
+
+        if (labIndex === -1) {
+            return res.status(404).json({ message: "Labs not found" });
+        }
+
+        //replace course data 
+        labs[labIndex] = {
+            ...labs[labIndex],
+            name,
+            semester,
+            data,
+        };
+
+        fs.writeFileSync(mergedPath, JSON.stringify(data, null, 2), 'utf8');
+
+        res.json({ message: "Labs updated successfully!" });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', 'html', '404.html'));
 });
