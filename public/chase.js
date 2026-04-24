@@ -6,7 +6,7 @@ const btnFollow = document.getElementById("btn-follow")
 const btnStop = document.getElementById("btn-stop")
 const btnToggle = document.getElementById("btn-toggle")
 // set the movement mode to default
-let duckyMode = "stop"
+let duckyMode = "follow"
 // set the ducky coordinates
 let duckyX = window.innerWidth / 2;
 let duckyY = window.innerHeight / 2;
