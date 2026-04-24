@@ -1343,8 +1343,8 @@ filterBtn.addEventListener("click", async function () {
     } else {
         if (!search) {
             filterMenu.style.display = "none" // Making the menu invisible
-            teacherSelect.innerHTML = "<option disabled selected>Διδάσκων</option>" // Returning the selction boxes to their starting state
-            roomSelect.innerHTML = "<option disabled selected>Αίθουσα</option>"
+            teacherSelect.innerHTML = "<option>Διδάσκων</option>" // Returning the selction boxes to their starting state
+            roomSelect.innerHTML = "<option>Αίθουσα</option>"
 
             matchingCourses.innerHTML = ''; // Clearing the previous search results
             if (currentMode === "Εξεταστική") {
@@ -1440,8 +1440,8 @@ filterSubmit.addEventListener("click", async function () {
     }
     else if (teacher === "Διδάσκων" || room === "Αίθουσα") {
         filterMenu.style.display = "none" // Making the menu invisible
-        teacherSelect.innerHTML = "<option disabled selected>Καθηγητής</option>" // Returning the selction boxes to their starting state
-        roomSelect.innerHTML = "<option disabled selected>Αίθουσα</option>"
+        teacherSelect.innerHTML = "<option >Καθηγητής</option>" // Returning the selction boxes to their starting state
+        roomSelect.innerHTML = "<option >Αίθουσα</option>"
 
         matchingCourses.innerHTML = ''; // Clearing the previous search results
         if (currentMode === "Εξεταστική") {
