@@ -152,6 +152,25 @@ const labsSemesterSelect = document.getElementById("labsSemester");
 const labsCourseSelect = document.getElementById("labsCourses");
 const labsEditWrapper = document.getElementById("labsEditWrapper")
 
+//for academic calendar
+const editAcademicCalendar = document.getElementById("editAcademicCalendar")
+const AcademicCalendarWrapper = document.getElementById("AcademicCalendarWrapper")
+const AcademicCalendarBackButton = document.getElementById("AcademicCalendarBackButton")
+const AcademicCalendarEditWrapper = document.getElementById("AcademicCalendarEditWrapper")
+
+
+//When the edit button is clicked it over writes the admin page and loads the academic calendar edit page
+editAcademicCalendar.onclick = async () => {
+
+    adminPage.style.display = "none";
+    editButtonWrapper.style.display = "none";
+
+    AcademicCalendarWrapper.style.display = "flex";
+
+    await loadAcademicCalendar();
+};
+
+
 //When the edit button is clicked it over writes the admin page and loads the program edit page
 editProgramButton.onclick = () => {
 
@@ -186,6 +205,18 @@ editLabButton.onclick = () => {
 };
 
 
+//When the back button is pressed it clears the content of the academic calendar edit page and overwrites it with the admin page
+AcademicCalendarBackButton.onclick = () => {
+    
+    AcademicCalendarEditWrapper.innerHTML = "";
+
+    adminPage.style.display = "flex";
+    editButtonWrapper.style.display = "grid";
+
+    AcademicCalendarWrapper.style.display = "none";
+}
+
+
 //When the back button is pressed it clears the content of the program edit page and overwrites it with the admin page
 backButton.onclick = () => {
 
@@ -195,7 +226,7 @@ backButton.onclick = () => {
 
 
     adminPage.style.display = "flex";
-    editButtonWrapper.style.display = "flex";
+    editButtonWrapper.style.display = "grid";
 
     programSelectWrapper.style.display = "none";
     editWrapper.style.display = "none";
@@ -210,7 +241,7 @@ examsBackButton.onclick = () => {
 
 
     adminPage.style.display = "flex";
-    editButtonWrapper.style.display = "flex";
+    editButtonWrapper.style.display = "grid";
 
     examsSelectWrapper.style.display = "none";
     examsEditWrapper.style.display = "none";
@@ -225,7 +256,7 @@ labsBackButton.onclick = () => {
 
 
     adminPage.style.display = "flex";
-    editButtonWrapper.style.display = "flex";
+    editButtonWrapper.style.display = "grid";
 
     labsSelectWrapper.style.display = "none";
     labsEditWrapper.style.display = "none";
@@ -804,76 +835,8 @@ labsCourseSelect.addEventListener("change", async () => {
     }
 });
 
+
 //when save button is pressed it changes the data on the json for the labs
-// labsEditWrapper.addEventListener("click", async (e) => {
-
-//     //Only run if save button was pressed
-//     if (e.target.id !== "labSaveButton") return;
-
-//     const generalForm = document.getElementById("generalForm");
-//     const labsForm = editWrapper.querySelectorAll(".labsForm");
-
-//     const generalData = new FormData(generalForm);
-
-//     //final object sent to backend
-//     const updatedCourse = {
-//         name: generalData.get("title"),
-//         semester: parseInt(generalData.get("semester")),
-//         daysOfWeek: [],
-//         startTime: [],
-//         endTime: [],
-//         labhall: []
-//     };
-
-//     //check if time is valid(start time < end time)
-//     let validTime = true;
-
-//     labsForm.forEach(form => {
-//         const formData = new FormData(form);
-
-//         const start = formData.get("start");
-//         const end = formData.get("end");
-
-//         if (start >= end) {
-//             alert("Η ώρα έναρξης πρέπει να είναι πριν την ώρα λήξης!");
-//             validTime = false;
-//             return;
-//         }
-//     });
-
-//     //if time not valid stop 
-//     if (!validTime) {
-//         return;
-//     }
-
-//     //collect lecture data into arrays
-//     labsForm.forEach(form => {
-//         const formData = new FormData(form);
-
-//         updatedCourse.daysOfWeek.push(parseInt(formData.get("day")));
-//         updatedCourse.startTime.push(formData.get("start"));
-//         updatedCourse.endTime.push(formData.get("end"));
-//         updatedCourse.lectureHall.push(formData.get("lectureHall"));
-//     });
-
-//     try {
-//         const response = await fetch("/updateCourse", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify(updatedCourse),
-//         });
-
-//         if (!response.ok) throw new Error("Failed");
-
-//         const result = await response.json();
-//         alert(result.message || "Saved!");
-
-//     } catch (error) {
-//         console.error(error);
-//         alert("Failed to update course.");
-//     }
-// });
-
 labsEditWrapper.addEventListener("click", async (e) => {
 
     if (e.target.id !== "labSaveButton") return;
@@ -931,5 +894,226 @@ labsEditWrapper.addEventListener("click", async (e) => {
     } catch (error) {
         console.error(error);
         alert("Failed to update lab.");
+    }
+});
+
+//fuction that transforms the date to the format needed
+function toISO(dateStr) {
+    if (!dateStr) return "";
+
+    dateStr = dateStr.trim();
+
+    // DD/MM/YYYY → YYYY-MM-DD
+    if (dateStr.includes("/")) {
+        const [day, month, year] = dateStr.split("/");
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    }
+
+    // already ISO
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        return dateStr;
+    }
+
+    return "";
+}
+
+//fuction that checks if date is a range or not
+//if yes it splits it into two 
+function parseDateField(dateStr) {
+    if (!dateStr) return { isRange: false, start: "", end: "" };
+
+    dateStr = dateStr.trim();
+
+    //check if it is a range
+    if (dateStr.includes(" - ")) {
+        const [start, end] = dateStr.split(" - ").map(d => d.trim());
+
+        return {
+            isRange: true,
+            start: toISO(start),
+            end: toISO(end)
+        };
+    }
+
+    return {
+        isRange: false,
+        start: toISO(dateStr),
+        end: ""
+    };
+}
+
+//load the academic calendar
+async function loadAcademicCalendar() {
+
+    const res = await fetch("/getAcademicCalendar");
+    const data = await res.json();
+
+    AcademicCalendarEditWrapper.innerHTML = `
+        <div class="editCourse">
+
+            <h2>Ακαδημαϊκό Έτος</h2>
+            <label>
+                Έτος:
+                <input type="text" id="academicYear" value="${data.academic_year}">
+            </label>
+
+            <h2>Εξάμηνα</h2>
+
+            ${data.semesters.map(semester => `
+                <div class="semesterBox">
+
+                    <label>
+                        Όνομα:
+                        <input class="semesterName" value="${semester.name}">
+                    </label>
+
+                    <label>
+                        Έναρξη:
+                        <input type="date" class="semesterStart" value="${toISO(semester.classes_start)}">
+                    </label>
+
+                    <label>
+                        Λήξη:
+                        <input type="date" class="semesterEnd" value="${toISO(semester.classes_end)}">
+                    </label>
+
+                </div>
+            `).join("")}
+
+            <h2>Αργίες</h2>
+
+            ${data.holidays.map(holiday => {
+                const date = parseDateField(holiday.date);
+
+                return `
+                    <div class="holidayBox">
+
+                        <label>
+                            Όνομα:
+                            <input class="holidayName" value="${holiday.name}">
+                        </label>
+
+                        ${
+                            date.isRange
+                                ? `
+                                    <label>
+                                        Από:
+                                        <input type="date" class="holidayStart" value="${date.start}">
+                                    </label>
+
+                                    <label>
+                                        Έως:
+                                        <input type="date" class="holidayEnd" value="${date.end}">
+                                    </label>
+                                `
+                                : `
+                                    <label>
+                                        Ημερομηνία:
+                                        <input type="date" class="holidayDate" value="${date.start}">
+                                    </label>
+                                `
+                        }
+
+                    </div>
+                `;
+            }).join("")}
+
+            <h2>Εξεταστικές</h2>
+
+            ${data.exam_periods.map(exam => `
+                <div class="examBox">
+
+                    <label>
+                        Από:
+                        <input type="date" class="examStart" value="${toISO(exam.exams_start)}">
+                    </label>
+
+                    <label>
+                        Έως:
+                        <input type="date" class="examEnd" value="${toISO(exam.exams_end)}">
+                    </label>
+
+                </div>
+            `).join("")}
+
+        </div>
+    `;
+
+    //create the save button dynamically
+    const button = document.createElement("button");
+    button.id = "saveCalendar";
+    button.textContent = "Αποθήκευση";
+
+    AcademicCalendarEditWrapper.appendChild(button);
+}
+
+//saves the changes of the academic calendar
+AcademicCalendarEditWrapper.addEventListener("click", async (e) => {
+
+    if (e.target.id !== "saveCalendar") return;
+
+    const updated = {
+        academic_year: document.getElementById("academicYear").value,
+        semesters: [],
+        holidays: [],
+        exam_periods: []
+    };
+
+    // semesters (BACK TO ORIGINAL FORMAT NOT ISO)
+    document.querySelectorAll(".semesterBox").forEach(box => {
+        updated.semesters.push({
+            name: box.querySelector(".semesterName").value,
+            classes_start: box.querySelector(".semesterStart").value.split("-").reverse().join("/"),
+            classes_end: box.querySelector(".semesterEnd").value.split("-").reverse().join("/")
+        });
+    });
+
+    // holidays (single OR range preserved)
+    document.querySelectorAll(".holidayBox").forEach(box => {
+
+        const name = box.querySelector(".holidayName").value;
+
+        const single = box.querySelector(".holidayDate");
+        const start = box.querySelector(".holidayStart");
+        const end = box.querySelector(".holidayEnd");
+
+        let date = "";
+
+        //range
+        if (start && end) {
+            date =
+                `${start.value.split("-").reverse().join("/")} - ` +
+                `${end.value.split("-").reverse().join("/")}`;
+        } 
+        //single
+        else if (single) {
+            date = single.value.split("-").reverse().join("/");
+        }
+
+        updated.holidays.push({ name, date });
+    });
+
+    // exams (back to DD/MM/YYYY)
+    document.querySelectorAll(".examBox").forEach(box => {
+        updated.exam_periods.push({
+            exams_start: box.querySelector(".examStart").value.split("-").reverse().join("/"),
+            exams_end: box.querySelector(".examEnd").value.split("-").reverse().join("/")
+        });
+    });
+
+    //sent to backend
+    try {
+        const res = await fetch("/updateAcademicCalendar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updated)
+        });
+
+        if (!res.ok) throw new Error("Save failed");
+
+        alert("Saved!");
+    } catch (err) {
+        console.error(err);
+        alert("Error saving calendar");
     }
 });

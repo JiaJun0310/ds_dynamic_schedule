@@ -297,7 +297,7 @@ app.post("/getFiltered", async (req, res) => {
 
         var titles = []; // storing the titles
         var dataPath; // Declaring this here so it can be used for every mode
-        var data; 
+        var data;
 
         // Depending on the mode we pull data from the respective json file
         if (mode === "Μαθήματα") {
@@ -324,24 +324,24 @@ app.post("/getFiltered", async (req, res) => {
                     if (teacher != "Διδάσκων") {
                         matchTeacher = item.professor && item.professor.includes(teacher);
                     }
-                         
+
                     //Check if the room is in the room array of the item
                     if (room != "Αίθουσα") {
                         matchRoom = item.lectureHall && item.lectureHall.includes(room);
                     }
-                } 
+                }
                 else if (mode === "Εξεταστική") {
                     //Check if the room is in the room array of the item
                     if (room != "Αίθουσα") {
                         matchRoom = item.lectureHall && item.lectureHall.includes(room);
                     }
-                } 
+                }
                 else if (mode === "Εργαστήρια") {
                     //Check if the room is in the room array of the item, here the rooms are nested inthe item we use .some(). Even if one room matches the item is kept
                     if (room) {
                         matchRoom = item.data && item.data.some(d => d.labhall === room);
-                    } 
-                        
+                    }
+
                 }
                 // Only keeping the class if both are true
                 return matchTeacher && matchRoom;
@@ -752,6 +752,65 @@ app.get('/download-exams', (req, res) => {
             res.status(404).send("File not found.");
         }
     });
+});
+
+
+// Used in admin.js to get all the data for the academic calendar
+app.get("/getAcademicCalendar", (req, res) => {
+
+    try {
+
+        const filePath = path.join(__dirname,"jsonData","academic_calendar.json");
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({message: "Academic calendar file not found"});
+        }
+
+        const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+        res.status(200).json(data);
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to load academic calendar"
+        });
+    }
+
+});
+
+
+//gets the new data of the academic calendar and updates the academic calendar json file
+app.post("/updateAcademicCalendar", (req, res) => {
+
+    try {
+
+        const updatedCalendar = req.body;
+
+        const filePath = path.join(__dirname,"jsonData","academic_calendar.json");
+
+        if (
+            !updatedCalendar.academic_year ||
+            !Array.isArray(updatedCalendar.semesters) ||
+            !Array.isArray(updatedCalendar.holidays) ||
+            !Array.isArray(updatedCalendar.exam_periods)
+        ) {
+            return res.status(400).json({message: "Invalid academic calendar format"});
+        }
+
+        fs.writeFileSync(filePath,JSON.stringify(updatedCalendar, null, 2),"utf8");
+
+        res.status(200).json({message: "Academic calendar updated successfully!"});
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({message: "Failed to save academic calendar"});
+
+    }
+
 });
 
 
