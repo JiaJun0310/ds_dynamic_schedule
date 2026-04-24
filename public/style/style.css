@@ -975,3 +975,17 @@ body.dark-theme .dropdown-checkbox:hover {
 .legal-content button:hover {
     background-color: #a83042;
 }
+
+@media (max-width: 400px){
+    #settings {
+        height: 40px;
+        width: 40px;
+    }
+    #logo{
+        width: 260px;
+    }
+    header{
+        height: 80px;
+    }
+
+}
