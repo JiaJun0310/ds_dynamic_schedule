@@ -883,9 +883,9 @@ labsEditWrapper.addEventListener("click", async (e) => {
 
     const generalData = new FormData(generalForm);
 
-    const updatedCourse = {
+    const updatedLab = {
         name: generalData.get("title"),
-        semester: parseInt(generalData.get("semester")),
+        semester: generalData.get("semester"),
         data: [],
     };
 
@@ -907,7 +907,7 @@ labsEditWrapper.addEventListener("click", async (e) => {
         }
 
         // build time string like your JSON format
-        updatedCourse.data.push({
+        updatedLab.data.push({
             day: day,
             time: `${start}-${end}`,
             labhall: labhall
@@ -920,7 +920,7 @@ labsEditWrapper.addEventListener("click", async (e) => {
         const response = await fetch("/updateLab", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedCourse),
+            body: JSON.stringify(updatedLab),
         });
 
         if (!response.ok) throw new Error("Failed");
@@ -930,6 +930,6 @@ labsEditWrapper.addEventListener("click", async (e) => {
 
     } catch (error) {
         console.error(error);
-        alert("Failed to update course.");
+        alert("Failed to update lab.");
     }
 });

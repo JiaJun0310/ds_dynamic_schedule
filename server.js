@@ -715,10 +715,10 @@ app.post("/updateLab", async (req, res) => {
             ...labs[labIndex],
             name,
             semester,
-            data,
+            data
         };
 
-        fs.writeFileSync(mergedPath, JSON.stringify(data, null, 2), 'utf8');
+        fs.writeFileSync(mergedPath, JSON.stringify(labs, null, 2), 'utf8');
 
         res.json({ message: "Labs updated successfully!" });
 
