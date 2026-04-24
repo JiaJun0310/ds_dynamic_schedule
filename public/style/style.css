@@ -31,6 +31,7 @@ header {
     background-color: #2f385f;
     height: 100px;
     width: 100%;
+    position: relative;
 }
 
 /* Main container */
@@ -216,6 +217,15 @@ footer {
 #logo {
     height: 100%;
     width: auto;
+}
+
+/* Settings image */
+#settings {
+    height: 50%;
+    position: absolute;
+    right: 25px; /* Aligns it to the right edge */
+    top: 50%; /* Optional: Vertically centers it */
+    transform: translateY(-50%); /* Fixes the vertical centering offset */
 }
 
 /* Calendar button spacing */
