@@ -6,36 +6,44 @@ The system works by allowing the administrator to upload the academic calendar, 
 
 ## Features
 
-- Feature 1
-- Feature 2
-- Feature 3
+- Upload academic calendar
+- Upload course and lab schedules
+- Upload exam schedules
+- Generate personal student timetable
+- Generate personal exam schedule
+- Easy course/lab selection
+- Centralized schedule management
+- Automatic data extraction with pipelines
 
 ## Installation
 
-Steps to install dependencies.
-
-## Usage
-
-How to run the project.
+To install all dependencies, open the terminal and run the command "npm i"
 
 ## Configuration
 
-Environment variables or settings.
+Used in pipelines to extract data. API keys are required for use.
+- LlamaCloud 
+- ChatGoogleGenerativeAI
 
-## File Upload Rules
-
-Accepted file types: .xls, .xlsx
+Used to force Gemini to follow a schema
+- ChatPromptTemplate 
 
 ## Tech Stack
 
-- React
+Languages
+- HTML
+- JAVASCRIPT
 - Node.js
+
+Framework
 - Express
-- MongoDB
 
-## Screenshots
-
-(Add images if useful)
+Libraries
+- Bcrypt
+- jsonwebtoken
+- cookie-parser
+- multer
+- child_process
 
 ## Future Improvements
 
@@ -45,4 +53,7 @@ Accepted file types: .xls, .xlsx
 ## Author
 
 Your name
+
+
+
 
