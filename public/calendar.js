@@ -880,7 +880,7 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
 
         // 2. CREATE SELECT ALL BUTTON
         const selectAllDiv = document.createElement("div");
-        selectAllDiv.className = "course select-all-wrapper visible";
+        selectAllDiv.className = "course select-all-wrapper"; 
 
         const selectAllText = document.createElement("p");
         selectAllText.textContent = "Επιλογή Όλων";
@@ -892,6 +892,8 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
 
         selectAllDiv.append(selectAllText, selectAllCheckbox);
         SemesterDiv.appendChild(selectAllDiv);
+
+        setTimeout(() => selectAllDiv.classList.add("visible"), 0);
 
         const itemCheckboxes = [];
         const savedClasses = getSavedSchedule();
@@ -937,8 +939,14 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                 } else if (isLabMode) {
                     handleLabToggle(checkbox, item.original, sem);
                 } else if (isExamMode) {
+                    // Disable the checkbox to prevent spamming
+                    checkbox.disabled = true;
+                    
                     if (checkbox.checked) addStandaloneExam(item.original);
                     else removeStandaloneExam(item.title);
+                    
+                    // Re-enable after 0.25 seconds
+                    setTimeout(() => (checkbox.disabled = false), 250);
                 }
                 selectAllCheckbox.checked = itemCheckboxes.every(cb => cb.checked);
             };
@@ -948,32 +956,44 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
         selectAllCheckbox.checked = itemCheckboxes.length > 0 && itemCheckboxes.every(cb => cb.checked);
 
         // Select All Click Logic
+        // Select All Click Logic
         selectAllDiv.onclick = (e) => {
-            if (e.target === selectAllCheckbox) return;
+            // Ignore the click if the button is currently on cooldown
+            if (selectAllCheckbox.disabled || e.target === selectAllCheckbox) return;
             selectAllCheckbox.checked = !selectAllCheckbox.checked;
             selectAllCheckbox.dispatchEvent(new Event("change"));
         };
 
         selectAllCheckbox.onchange = async () => {
-            const isChecked = selectAllCheckbox.checked;
+            // Disable the checkbox and div interactions immediately
+            selectAllCheckbox.disabled = true;
+            selectAllDiv.style.pointerEvents = "none";
 
+            try {
+                const isChecked = selectAllCheckbox.checked;
 
-            for (let index = 0; index < itemCheckboxes.length; index++) {
-                const cb = itemCheckboxes[index];
+                for (let index = 0; index < itemCheckboxes.length; index++) {
+                    const cb = itemCheckboxes[index];
 
-                if (cb.checked !== isChecked) {
-                    cb.checked = isChecked;
+                    if (cb.checked !== isChecked) {
+                        cb.checked = isChecked;
 
-                    if (currentMode === "Μαθήματα") {
-                        await handleCourseToggle(cb, dataArray[index].title, sem);
-                    } else if (isLabMode) {
-
-                        await handleLabToggle(cb, dataArray[index].original, sem);
-                    } else if (isExamMode) {
-                        if (cb.checked) addStandaloneExam(dataArray[index].original);
-                        else removeStandaloneExam(dataArray[index].title);
+                        if (currentMode === "Μαθήματα") {
+                            await handleCourseToggle(cb, dataArray[index].title, sem);
+                        } else if (isLabMode) {
+                            await handleLabToggle(cb, dataArray[index].original, sem);
+                        } else if (isExamMode) {
+                            if (cb.checked) addStandaloneExam(dataArray[index].original);
+                            else removeStandaloneExam(dataArray[index].title);
+                        }
                     }
                 }
+            } finally {
+                // Re-enable everything after 250ms (0.25s)
+                setTimeout(() => {
+                    selectAllCheckbox.disabled = false;
+                    selectAllDiv.style.pointerEvents = "auto";
+                }, 250);
             }
         };
     };
