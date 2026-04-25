@@ -5,7 +5,7 @@
     "main": "server.js",
     "dependencies": {
         "@langchain/core": "^1.1.38",
-        "@langchain/google-genai": "^0.2.1",
+        "@langchain/google-genai": "^2.1.28",
         "@llamaindex/llama-cloud": "^1.8.0",
         "bcrypt": "^6.0.0",
         "cookie-parser": "^1.4.7",
