@@ -670,12 +670,72 @@ footer {
   background-color: #f1f1f1;
 }
 
+.slider{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    background-color: #83d2ff;
+    border: 4px solid #83d2ff;
+    border-radius:50px;
+    transition: background-color 0.5s ease;
+    transition: var(--fc-border-color) 0.5s ease;
+    margin-left: auto;
+}
 
+#dark-mode-toggle {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
 
+}
 
+#sun{
+    height: 17px;
+    width: 17px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
+#moon{
+    opacity: 0;
+    height: 0px;
+    width: 0px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
 /* --- Bulletproof FullCalendar Dark Theme --- */
+
+body.dark-theme .slider{
+    
+    height: 30px;
+    width: 30px;
+    background-color: #1c184b;
+    border: 4px solid #1c184b;
+    border-radius: 17px;
+
+    transition: background-color 0.5s ease;
+    transition: var(--fc-border-color) 0.5s ease;
+    margin-left: auto;
+}
+
+body.dark-theme #sun{
+    opacity: 0;
+    height: 0px;
+    width: 0px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+body.dark-theme #moon{
+    opacity: 1;
+    height: 15px;
+    width: 15px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
 body.dark-theme .fc {
   /* Override FullCalendar's native CSS variables */
   --fc-page-bg-color: #1e1e1e;
