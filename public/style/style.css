@@ -212,7 +212,7 @@ footer {
 
 /* Calendar slot height */
 .fc-timegrid-slot {
-    height: 2.5em !important;
+    height: max(4vh, 2.5em) !important;
 }
 
 /* Logo image */
