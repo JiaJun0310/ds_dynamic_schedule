@@ -238,8 +238,8 @@ async function examOptions() {
             pdfWrapper.id = "exam-pdf-wrapper"; // Give it a unique ID to check later
 
             const pdfLink = document.createElement("a");
-            pdfLink.href = "/download-exams"; 
-            pdfLink.download = "exams.pdf"; 
+            pdfLink.href = "/download-exams";
+            pdfLink.download = "exams.pdf";
             pdfLink.textContent = "Λήψη Εξεταστικής (PDF)";
             pdfLink.id = "pdf-download-link"; // Reuses your existing CSS
 
@@ -260,21 +260,21 @@ async function examOptions() {
         });
         if (currentMode === "Μαθήματα") {
             const pdfWrapper = document.createElement("div");
-            pdfWrapper.id = "pdf-wrapper"; 
+            pdfWrapper.id = "pdf-wrapper";
 
             const pdfLink = document.createElement("a");
-            pdfLink.href = "/download-schedule"; 
-            pdfLink.download = "shedule.pdf"; 
+            pdfLink.href = "/download-schedule";
+            pdfLink.download = "shedule.pdf";
             pdfLink.textContent = "Λήψη Προγράμματος (PDF)";
-            pdfLink.id = "pdf-download-link"; 
+            pdfLink.id = "pdf-download-link";
 
             pdfWrapper.appendChild(pdfLink);
             semesters.appendChild(pdfWrapper);
         }
 
-        
 
-    
+
+
 
         semesters.style.display = "flex";
         examsBox.style.display = "none";
@@ -314,7 +314,7 @@ async function examOptions() {
 
     let isNormalClicked = false;    //by default the normal exams are shown and the embolim are not, so we set the normal to true and the embolim to false
     let isEmbolimClicked = false;   //tracked what tabs are open and which are closed 
-    
+
     normalExam.onclick = async () => {  //this button apears the div below the normal exams
         isNormalClicked = !isNormalClicked;
         const normalExamDiv = document.getElementById("normalExamDiv");
@@ -365,13 +365,13 @@ async function examOptions() {
             embolimExamDiv.style.display = "none";
             embolimExam.classList.remove("active"); //returns the button to its default state
         }
-        
+
     };
     if (currentMode === "Εξεταστική") {
         normalExam.click();
         embolimExam.click();
     }
-    
+
 }
 
 // Listen for clicks on the radio buttons
@@ -444,12 +444,12 @@ function updateCourseColor(subjectTitle, newColor) {
     });
 }
 
-async function handleCourseToggle(checkbox, targetTitle, sem) {
+async function handleCourseToggle(checkbox, targetTitle) {
     //new function to clear up callback hell, just does the toggling for the checkboxes
     checkbox.disabled = true;
     try {
         if (checkbox.checked) {
-            await addCourseToCalendar(targetTitle, sem);
+            await addCourseToCalendar(targetTitle);
         } else {
             removeCourseFromCalendar(targetTitle);
         }
@@ -460,9 +460,13 @@ async function handleCourseToggle(checkbox, targetTitle, sem) {
     }
 }
 
-async function addCourseToCalendar(targetTitle, sem) {
+async function addCourseToCalendar(targetTitle) {
     //new function, again, does the whole adding stuff to the calendar just made cleaner with a function
     const courseData = await fetchCourseData(targetTitle);
+
+    let sem;
+    sem = courseData.schedules[0].semester
+    console.log(courseData)
 
     const dates = getSemesterDates(sem);
     if (!eventTracker[targetTitle]) eventTracker[targetTitle] = [];
@@ -500,7 +504,7 @@ async function addCourseToCalendar(targetTitle, sem) {
                 professor: item.professor,
                 lectureHall: item.lectureHall,
                 subjectTitle: targetTitle,
-                semester: sem,
+                semester: item.semester,
                 rawStart: item.startTime || item.start,
                 rawEnd: item.endTime || item.end,
             },
@@ -519,11 +523,13 @@ function removeCourseFromCalendar(targetTitle) {
     saveSchedule(saved.filter((c) => c.title !== targetTitle));
 }
 
-function handleLabToggle(checkbox, labData, sem) {
+function handleLabToggle(checkbox, labData) {
+    let sem;
     return new Promise((resolve) => {
         if (checkbox.checked) {
             checkbox.checked = false;
 
+            sem = labData.semester;
             labSlotTitle.textContent = labData.name;
             labSlotOptions.innerHTML = "";
 
@@ -623,6 +629,7 @@ function removeLabFromCalendar(labName) {
 }
 
 function addStandaloneExam(examData) {
+    console.log(examData)
     const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
 
     // 1. Convert the DD/MM/YYYY date to YYYY-MM-DD using your existing helper
@@ -797,13 +804,13 @@ clearSelectionBtn.onclick = () => {
 // --- SETTINGS MENU LOGIC ADDED HERE ---
 if (settingsBtn && settingsMenu) {
     // Toggle the menu when clicking the settings icon
-    settingsBtn.addEventListener("click", function(event) {
+    settingsBtn.addEventListener("click", function (event) {
         settingsMenu.classList.toggle("show");
         event.stopPropagation(); // Stops the click from bubbling up to the window listener
     });
 
     // Close the dropdown if the user clicks anywhere outside of it
-    window.addEventListener("click", function(event) {
+    window.addEventListener("click", function (event) {
         // If the menu is currently showing, close it
         if (settingsMenu.classList.contains('show')) {
             // Only close if the click wasn't inside the menu itself and wasn't the settings button
@@ -880,7 +887,7 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
 
         // 2. CREATE SELECT ALL BUTTON
         const selectAllDiv = document.createElement("div");
-        selectAllDiv.className = "course select-all-wrapper"; 
+        selectAllDiv.className = "course select-all-wrapper";
 
         const selectAllText = document.createElement("p");
         selectAllText.textContent = "Επιλογή Όλων";
@@ -935,16 +942,16 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
 
             checkbox.onchange = () => {
                 if (currentMode === "Μαθήματα") {
-                    handleCourseToggle(checkbox, item.title, sem);
+                    handleCourseToggle(checkbox, item.title);
                 } else if (isLabMode) {
-                    handleLabToggle(checkbox, item.original, sem);
+                    handleLabToggle(checkbox, item.original);
                 } else if (isExamMode) {
                     // Disable the checkbox to prevent spamming
                     checkbox.disabled = true;
-                    
+
                     if (checkbox.checked) addStandaloneExam(item.original);
                     else removeStandaloneExam(item.title);
-                    
+
                     // Re-enable after 0.25 seconds
                     setTimeout(() => (checkbox.disabled = false), 250);
                 }
@@ -979,9 +986,9 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
                         cb.checked = isChecked;
 
                         if (currentMode === "Μαθήματα") {
-                            await handleCourseToggle(cb, dataArray[index].title, sem);
+                            await handleCourseToggle(cb, dataArray[index].title);
                         } else if (isLabMode) {
-                            await handleLabToggle(cb, dataArray[index].original, sem);
+                            await handleLabToggle(cb, dataArray[index].original);
                         } else if (isExamMode) {
                             if (cb.checked) addStandaloneExam(dataArray[index].original);
                             else removeStandaloneExam(dataArray[index].title);
@@ -1361,8 +1368,38 @@ searchbar.addEventListener("keyup", async function (e) {
                 checkbox.dispatchEvent(new Event("change"));
             };
 
-            checkbox.onchange = () =>
-                handleCourseToggle(checkbox, title, sem);
+            checkbox.onchange = async () => {
+                if (currentMode === "Μαθήματα") {
+                    handleCourseToggle(checkbox, title);
+                } else if (currentMode === "Εργαστήρια") {
+
+                    const res = await fetch("/getLab", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ title: title })
+                    })
+                    const lab = await res.json();
+
+                    if (checkbox.checked) handleLabToggle(checkbox, lab);
+                    else removeLabFromCalendar(title)
+                } else if (currentMode === "Εξεταστική") {
+                   
+                    const res = await fetch("/getExam", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ title: title })
+                    })
+
+                    const examData = await res.json();
+               
+
+                    if (checkbox.checked) addStandaloneExam(examData.exam);
+                    else removeStandaloneExam(examData.exam.title);
+
+                }
+
+            }
+
         });
     }
     else {
@@ -1515,8 +1552,38 @@ filterSubmit.addEventListener("click", async function () {
                 checkbox.dispatchEvent(new Event("change"));
             };
 
-            checkbox.onchange = () =>
-                handleCourseToggle(checkbox, title, sem);
+            checkbox.onchange = async () => {
+                if (currentMode === "Μαθήματα") {
+                    handleCourseToggle(checkbox, title);
+                } else if (currentMode === "Εργαστήρια") {
+
+                    const res = await fetch("/getLab", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ title: title })
+                    })
+                    const lab = await res.json();
+
+                    if (checkbox.checked) handleLabToggle(checkbox, lab);
+                    else removeLabFromCalendar(title)
+                } else if (currentMode === "Εξεταστική") {
+                   
+                    const res = await fetch("/getExam", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ title: title })
+                    })
+
+                    const examData = await res.json();
+               
+
+                    if (checkbox.checked) addStandaloneExam(examData.exam);
+                    else removeStandaloneExam(examData.exam.title);
+
+                }
+
+            }
+
         });
 
     }
@@ -1540,25 +1607,25 @@ filterSubmit.addEventListener("click", async function () {
 
 
 const darkModeToggle = document.getElementById("dark-mode-toggle");
-  
-  if (darkModeToggle) {
-      // Check what the user saved last time they visited
-      const savedTheme = localStorage.getItem("userTheme");
-      
-      // If they saved "dark", apply the theme AND check the box
-      if (savedTheme === "dark") {
-          document.body.classList.add("dark-theme");
-          darkModeToggle.checked = true;
-      }
 
-      // Listen for clicks and save the new choice
-      darkModeToggle.addEventListener("change", function(event) {
-          if (event.target.checked) {
-              document.body.classList.add("dark-theme");
-              localStorage.setItem("userTheme", "dark");
-          } else {
-              document.body.classList.remove("dark-theme");
-              localStorage.setItem("userTheme", "light");
-          }
-      });
-  }
+if (darkModeToggle) {
+    // Check what the user saved last time they visited
+    const savedTheme = localStorage.getItem("userTheme");
+
+    // If they saved "dark", apply the theme AND check the box
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-theme");
+        darkModeToggle.checked = true;
+    }
+
+    // Listen for clicks and save the new choice
+    darkModeToggle.addEventListener("change", function (event) {
+        if (event.target.checked) {
+            document.body.classList.add("dark-theme");
+            localStorage.setItem("userTheme", "dark");
+        } else {
+            document.body.classList.remove("dark-theme");
+            localStorage.setItem("userTheme", "light");
+        }
+    });
+}

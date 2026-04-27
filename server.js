@@ -383,6 +383,7 @@ app.post("/getClass", async (req, res) => {
                 end: scheduleData.endTime[index],
                 color: scheduleData.color,
                 professor: scheduleData.professor,
+                semester: scheduleData.semester
             };
         });
 
@@ -391,6 +392,31 @@ app.post("/getClass", async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 });
+
+// Gets one specific lab
+app.post("/getLab", async(req,res) => {
+
+    try{
+        const { title } = req.body;
+
+        console.log(title)
+
+        const mergedPath = path.join(__dirname, 'jsonData', 'merged_labs.json');
+
+        console.log(mergedPath)
+        const data = JSON.parse(fs.readFileSync(mergedPath, 'utf8'));
+
+        console.log(data)
+        const lab = data.find(lab => lab.name === title);
+        console.log(lab)
+
+        res.status(200).json(lab)
+
+    }catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+
+})
 
 // Used in calendar.js to get all the data for an exam tied to a specific course
 app.post("/getExam", async (req, res) => {
