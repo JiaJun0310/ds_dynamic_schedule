@@ -1287,9 +1287,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 addEventListener("resize", () => {
-    appearCalendar();
-    resize();
-    resizeWrapper();
+    if (window.innerWidth > 767) {
+        appearCalendar();
+        resize();
+        resizeWrapper();
+    }
+    
 });
 
 // Event listener for the searchbar
