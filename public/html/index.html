@@ -38,6 +38,16 @@
 
     <!-- Main section of the page (schedule and course selection) -->
     <main>
+
+        <dialog id="labWarningPopup">
+            <h3>⚠️ Προσοχή</h3>
+            <p>Τα εργαστήρια που διδάσκονται εβδομάδα παρά εβδομάδα ενδέχεται να μην αναπαρίστανται με ακρίβεια σε αυτό το ημερολόγιο. Η εναλλαγή των εβδομάδων, καθώς και οι ακριβείς ημερομηνίες έναρξης/λήξης τους, δεν υποστηρίζονται πλήρως.</p>
+            <div class="warning-buttons">
+                <button id="labWarningNeverAgain">Μην μου το ξαναδείξεις</button>
+                <button id="labWarningGotIt">Το κατάλαβα</button>
+            </div>
+        </dialog>
+        
         <div id='wrapper'>
 
             <div id='calendar'>
@@ -77,14 +87,7 @@
                         <button id="labSlotConfirm">Αποθήκευση</button>
                     </div>
                 </dialog>
-                <dialog id="labWarningPopup">
-                    <h3>⚠️ Προσοχή</h3>
-                    <p>Τα εργαστήρια που διδάσκονται εβδομάδα παρά εβδομάδα ενδέχεται να μην αναπαρίστανται με ακρίβεια σε αυτό το ημερολόγιο. Η εναλλαγή των εβδομάδων, καθώς και οι ακριβείς ημερομηνίες έναρξης/λήξης τους, δεν υποστηρίζονται πλήρως.</p>
-                    <div class="warning-buttons">
-                        <button id="labWarningNeverAgain">Μην μου το ξαναδείξεις</button>
-                        <button id="labWarningGotIt">Το κατάλαβα</button>
-                    </div>
-                </dialog>
+                
             </div>
             <div id="semesterWrapper">
 
