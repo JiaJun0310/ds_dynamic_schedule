@@ -554,9 +554,9 @@ app.post('/upload', verifyToken, upload.single('uploadedFile'), (req, res) => {
     });
 });
 
-//----------THE AGIA TRIADA OF PIPELINES------------------
+//----------THE AGIA TETRADA OF PIPELINES------------------
 
-//request used in admin.js to run extractor afte uploading a schedule
+//request used in admin.js to run extractor after uploading a schedule
 app.post(`/run_schedule_extractor`, verifyToken, (req, res) => {
     exec('node schedule_extractor.js', (error, stdout, stderr) => {
         if (error) {
@@ -568,8 +568,9 @@ app.post(`/run_schedule_extractor`, verifyToken, (req, res) => {
     });
 });
 
+//request used in admin.js to run extractor after uploading labs
 app.post(`/run_labs_extractor`, verifyToken, (req, res) => {
-    exec('node lab_extractor.js', (error, stdout, stderr) => {
+    exec('node labs_extractor.js', (error, stdout, stderr) => {
         if (error) {
             console.error(`Error: ${error.message}`);
             return res.status(500).send('Extraction failed');

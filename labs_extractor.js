@@ -210,7 +210,7 @@ function extractData(virtualGrid, officialSubjects) {
 // =====================================================================
 
 // initialisation of paths
-const excelPath = 'uploads/LAB_TIMETABLE_XEIM_2025_06_10_2025.xlsx';
+const excelPath = 'uploads/labs.xlsx';
 // const excelPath = 'uploads/LAB_TIMETABLE_EARINO_2026.xls';
 const jsonPath = 'jsonData/merged_schedule.json';
 
@@ -265,3 +265,10 @@ try {
 } catch (error) {
     console.error("Error during extraction:", error.message);
 }
+
+/* 
+TODO:
+labs.xls svinei xlsx kai to antitheto
+ergastiria svinoun mathimata kai prothetontai polles fores
+ekeino to bug me thn protomagia
+*/
