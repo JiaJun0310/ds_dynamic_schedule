@@ -92,6 +92,7 @@ function cleanGreekString(str) {
         .replace(/[\u0300-\u036f]/g, "")    // Remove accents
         .replace(/\\n/g, " ")               // Replace literal "\n"
         .replace(/\s+/g, " ")               // Collapse all whitespaces/real newlines
+        .replace(/["'\u2019]/g, "")         // Remove any quotes
         .trim()                             // delete whitespace from start and end
         .toUpperCase();
 }
