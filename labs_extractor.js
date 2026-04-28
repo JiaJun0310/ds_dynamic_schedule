@@ -179,9 +179,9 @@ function extractData(virtualGrid, officialSubjects) {
                     if (!existingCourse) { // if it has not been found yet
                         finalResults.push({
                             name: match.title,
-                            semester: `${match.semester}`,
+                            semester: match.semester,
                             data: [{
-                                day: `${col}`,
+                                day: col,
                                 time: `${pendingStartTime}-${endTime}`,
                                 labhall: currentRoom
                             }]
@@ -189,10 +189,10 @@ function extractData(virtualGrid, officialSubjects) {
                     } else { // if it has been found before
                         // create newData object
                         const newData = {
-                            day: `${col}`,
-                            time: `${pendingStartTime}-${endTime}`,
-                            labhall: currentRoom
-                        };
+                                day: col,
+                                time: `${pendingStartTime}-${endTime}`,
+                                labhall: currentRoom
+                            };
 
                         // push newData to data array of object
                         existingCourse.data.push(newData);
@@ -215,24 +215,31 @@ const excelPath = 'uploads/LAB_TIMETABLE_XEIM_2025_06_10_2025.xlsx';
 const jsonPath = 'jsonData/merged_schedule.json';
 
 try {
+    // get subject names and semesters from json data
     const officialSubjects = extractSemestersFromJSON(jsonPath);
+
+    // create 2D array of excel
     const grid = createFullVirtualGrid(excelPath);
 
+    // create array of courses
     let finalResult = extractData(grid, officialSubjects);
 
+    // initialize output path variabl
     let outputPath = ''
 
+    // if the array with courses is not empty
     if (finalResult){
 
+        // initialize semester to color dictionary
         const semesterColors = {
-        "1": "#d90429", 
-        "2": "#d90429", 
-        "3": "#0077b6", 
-        "4": "#0077b6", 
-        "5": "#38b000", 
-        "6": "#38b000", 
-        "7": "#7b2cbf", 
-        "8": "#7b2cbf"
+        1: "#d90429", 
+        2: "#d90429", 
+        3: "#0077b6", 
+        4: "#0077b6", 
+        5: "#38b000", 
+        6: "#38b000", 
+        7: "#7b2cbf", 
+        8: "#7b2cbf"
         };
 
         // maps each lab to itself with a color attribute
@@ -244,9 +251,9 @@ try {
             };
         });
 
-        if (Number(finalResult[0].semester) % 2 === 0){
+        if (finalResult[0].semester % 2 === 0){ // if semester is even its spring
             outputPath = 'jsonData/spring_labs.json';
-        } else {
+        } else { // if semester is odd its winter
             outputPath = 'jsonData/winter_labs.json';
         }
 
@@ -255,8 +262,6 @@ try {
     }
 
     fs.writeFileSync(outputPath, JSON.stringify(finalResult, null, 2), 'utf8');
-    console.log(`Success! Extracted ${finalResult.length} lab sessions to ${outputPath}`);
-    console.log(finalResult)
 } catch (error) {
     console.error("Error during extraction:", error.message);
 }
