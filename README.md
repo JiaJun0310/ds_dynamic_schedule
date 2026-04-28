@@ -59,8 +59,7 @@ Open Source Calendar
 
 ## Future Improvements
 
-- Add authentication
-- Add export to PDF
+- Fuctionable for all the departments of our university
 
 ## Author
 
