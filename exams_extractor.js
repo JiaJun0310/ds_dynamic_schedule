@@ -133,7 +133,30 @@ var super_json = await runExtractionPipeline()
 
 // unpacks the information and checks if the exams are emvolimi or kanoniki. names accordingly.
 if (super_json) {
+    // unpack the exam array
     let examArray = super_json.exams || super_json
+
+    const semesterColors = {
+        1: "#a22323", // semester 1 = dark red
+        2: "#a22323", // semester 2 = dark red
+        3: "#10436e", // semester 3 = dark blue
+        4: "#10436e", // semester 4 = dark blue
+        5: "#4e4e4d", // semester 5 = gray
+        6: "#4e4e4d", // semester 6 = gray
+        7: "#5e226e",  // semester 7 = nice purple
+        8: "#5e226e"  // semester 8 = nice purple
+    };
+
+    const mappedExams = examArray.map(exam => {
+        return {
+            ...exam,
+            // Overwrite the existing 'title' with the cleaned version
+            title: `ΕΞΕΤΑΣΗ: ${exam.title.split('-').at(-1).trim()}`,
+            
+            // Add the new attribute
+            color: semesterColors[exam.semester] || "#2bff00",
+        };
+    });
 
     // write zod object (final dictionary) to a json file with line breaks and 2 tabs
     const finalJsonString = JSON.stringify(examArray, null, 2);
