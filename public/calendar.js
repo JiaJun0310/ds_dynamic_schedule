@@ -214,7 +214,7 @@ function handleEventClick(info) {
     timeEl.innerText = `${start} - ${end}`;
 
     const targetSubject =
-        props.subjectTitle || event.title.replace("ΕΞΕΤΑΣΗ: ", "").trim(); //something to do with exams and dialog (I don't think it does anything)
+        props.subjectTitle  //something to do with exams and dialog (I don't think it does anything)
 
     hiddenPicker.oninput = () =>
         updateCourseColor(targetSubject, hiddenPicker.value);
@@ -434,8 +434,8 @@ function updateCourseColor(subjectTitle, newColor) {
 
     calendar.getEvents().forEach((e) => {
         const eventSubject =
-            e.extendedProps.subjectTitle ||
-            e.title.replace("ΕΞΕΤΑΣΗ: ", "").trim(); //I think this is supposed to change the colors of courses as well as the exam course but
+            e.extendedProps.subjectTitle;
+             //I think this is supposed to change the colors of courses as well as the exam course but
         if (eventSubject === subjectTitle) {
             //I don't think it works corectly because it uses forEach .getEvent that only takes events currently on screen
             e.setProp("backgroundColor", newColor);
@@ -590,7 +590,7 @@ function addSpecificLabToCalendar(labName, slot, sem, color, isRestoring = false
     const [startTime, endTime] = slot.time.split("-");
 
     let addedEvent = calendar.addEvent({
-        title: `ΕΡΓΑΣΤ.: ${labName}`,
+        title: labName,
         daysOfWeek: [parseInt(slot.day)],
         startTime: startTime.trim(),
         endTime: endTime.trim(),
@@ -630,7 +630,7 @@ function removeLabFromCalendar(labName) {
 
 function addStandaloneExam(examData) {
     console.log(examData)
-    const examTitleStr = "ΕΞΕΤΑΣΗ: " + examData.title;
+    const examTitleStr = examData.title;
 
     // 1. Convert the DD/MM/YYYY date to YYYY-MM-DD using your existing helper
     const formattedDate = formatJSONDate(examData.date);
@@ -674,7 +674,7 @@ function addStandaloneExam(examData) {
 }
 
 function removeStandaloneExam(title) {
-    const examTitleStr = "ΕΞΕΤΑΣΗ: " + title;
+    const examTitleStr = title;
 
     // Remove from visual calendar and tracker
     if (eventTracker[examTitleStr]) {
@@ -924,7 +924,7 @@ document.querySelectorAll(".buttonDiv").forEach((button) => {
             } else if (isLabMode) {
                 checkbox.checked = !!eventTracker[item.title];
             } else if (isExamMode) {
-                const examTitleStr = "ΕΞΕΤΑΣΗ: " + item.title;
+                const examTitleStr = item.title;
                 checkbox.checked = currentlySavedExams.some(s => s.title === item.title) ||
                     calendar.getEvents().some(e => e.title === examTitleStr);
             }
@@ -1084,7 +1084,6 @@ function downloadCalendar() {
     const uniqueExams = new Set();
     events.forEach((event) => {
         if (
-            event.title.startsWith("ΕΞΕΤΑΣΗ:") &&
             !uniqueExams.has(event.title)
         ) {
             cal.addEvent(
