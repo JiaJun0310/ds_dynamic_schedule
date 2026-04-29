@@ -615,6 +615,10 @@ app.get("/admin", verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'private', 'admin.html'));
 })
 
+app.get("/admin-css.css", verifyToken, (req, res) => {
+    res.sendFile(path.join(__dirname, 'private', 'admin.css'));
+})
+
 //admin.js made private using verifyToken only accesable after login in
 app.get("/secure-admin-script.js", verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'private', 'admin.js'));
