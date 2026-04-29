@@ -12,14 +12,91 @@
         <div class="header-left">
             <img src="../images/logo_unipi.svg" alt="Λογότυπο Πανεπιστημίου Πειραιώς" class="unipi-logo">
         </div>
+
+        <div class="dropdown">
+            <img id="settings" src="../images/settings.svg" alt="settings" class="dropdown-button">
+            
+            <div id="settings-menu" class="dropdown-content">
+                <label class="dropdown-checkbox" for="dark-mode-toggle">
+                    <span>Theme</span>
+                    <input type="checkbox" id="dark-mode-toggle">   
+                    <div class="slider">
+                        <img id="sun" src="../images/sun.svg" alt="sun"/>
+                        <img id="moon" src="../images/moon.svg" alt="moon"/>
+                    </div>              
+                </label>
+            </div>
+        </div>
     </header>
 
     <main>
-        
+        <div class="legal-container">
+            <h1>Πολιτική Cookies & Αποποίηση Ευθύνης</h1>
+            
+            <section class="legal-section">
+                <h2>Αποποίηση Ευθύνης</h2>
+                <p>Το παρόν εργαλείο είναι ανεπίσημο...</p>
+            </section>
+
+            <section class="legal-section">
+                <h2>Δεδομένα & Cookies</h2>
+                <p>Δεν αποθηκεύουμε τίποτα στους servers μας. Όλα μένουν στο Local Storage σας...</p>
+            </section>
+
+            <section class="legal-section">
+                <h2>Επικοινωνία</h2>
+                <p>Για ερωτήσεις ή/και σχόλια σχετικά με την Πολιτική cookies μας και αυτή τη δήλωση, παρακαλώ επικοινωνήστε μαζί μας χρησιμοποιώντας τα παρακάτω στοιχεία επικοινωνίας:<br>University of Piraeus<br>Karaoli & Dimitriou 80, Piraeus 18534, Greece<br>Ελλάδα<br>Ιστότοπος: https://www.unipi.gr<br>Email: rg.ipinu@ofni<br>Αριθμός τηλεφώνου: -<br></p>
+            </section>
+        </div>
     </main>
 
     <footer>
-        </footer>
+    </footer>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const settingsBtn = document.getElementById("settings");
+            const settingsMenu = document.getElementById("settings-menu");
+            const darkModeToggle = document.getElementById("dark-mode-toggle");
+
+            // 1. Λειτουργία Dropdown
+            if (settingsBtn && settingsMenu) {
+                settingsBtn.addEventListener("click", function (e) {
+                    settingsMenu.classList.toggle("show");
+                    e.stopPropagation();
+                });
+
+                // Αποτροπή κλεισίματος όταν πατάς μέσα στο μενού (π.χ. πάνω στο slider)
+                settingsMenu.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                });
+
+                // Κλείσιμο αν πατήσεις οπουδήποτε αλλού στη σελίδα
+                window.addEventListener("click", function () {
+                    settingsMenu.classList.remove('show');
+                });
+            }
+
+            // 2. Λειτουργία Dark Mode
+            if (darkModeToggle) {
+                const savedTheme = localStorage.getItem("userTheme");
+
+                if (savedTheme === "dark") {
+                    document.body.classList.add("dark-theme");
+                    darkModeToggle.checked = true;
+                }
+
+                darkModeToggle.addEventListener("change", function () {
+                    if (this.checked) {
+                        document.body.classList.add("dark-theme");
+                        localStorage.setItem("userTheme", "dark");
+                    } else {
+                        document.body.classList.remove("dark-theme");
+                        localStorage.setItem("userTheme", "light");
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
