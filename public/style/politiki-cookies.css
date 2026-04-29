@@ -1,0 +1,31 @@
+/* Body layout - Ίδιο με το 404 */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header bar - Ίδιο με το 404 */
+.unipi-header {
+    background-color: #2f385f;
+    height: 100px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.unipi-logo {
+    height: 100%; 
+    width: auto;
+}

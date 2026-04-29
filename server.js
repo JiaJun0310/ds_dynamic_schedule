@@ -55,6 +55,10 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'index.html')); // localhost::xxxx/ is index.html
 });
 
+app.get("/politiki-cookies", (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'politiki-cookies.html')); // localhost::xxxx/politiki-cookies takes you to politiki-cookies
+});
+
 app.get("/loginForAdmin", (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'login.html')); // localhost::xxxx/loginForAdmin takes you to login.admin
 });
