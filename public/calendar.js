@@ -564,7 +564,7 @@ function handleLabToggle(checkbox, labData) {
                     const selectedSlot = labData.data[selectedIndex];
 
                     checkbox.checked = true;
-                    addSpecificLabToCalendar(labData.name, selectedSlot, sem);
+                    addSpecificLabToCalendar(labData.name, selectedSlot, sem, labData.color);
                 }
                 labSlotPopup.close(); // This will trigger the onClose event
             };
@@ -582,7 +582,7 @@ function handleLabToggle(checkbox, labData) {
 }
 
 function addSpecificLabToCalendar(labName, slot, sem, color, isRestoring = false) {
-    const eventColor = color || "#27ae60"; // Διαβάζει το χρώμα κατευθείαν!
+    const eventColor = color; // Διαβάζει το χρώμα κατευθείαν!
     const dates = getSemesterDates(sem);
 
     if (!eventTracker[labName]) eventTracker[labName] = [];
@@ -648,14 +648,17 @@ function addStandaloneExam(examData) {
     let existing = calendar.getEvents().find((e) => e.title === examTitleStr);
 
     if (!existing) {
+        // Read the color from the JSON, or default to red
+        const eventColor = examData.color ? examData.color : "#e74c3c";
+
         let addedExam = calendar.addEvent({
             title: examTitleStr,
-            start: startISO,  // Now using the formatted string
-            end: endISO,      // Now using the formatted string
-            color: "#e74c3c",
+            start: startISO,
+            end: endISO,
+            color: eventColor, // Assign the dynamic color here
             extendedProps: {
-                lectureHall: hallString, // Now using the joined array
-                description: examData.division ? `Κλιμάκιο: ${examData.division}` : "", // Using division for the description
+                lectureHall: hallString,
+                description: examData.division ? `Κλιμάκιο: ${examData.division}` : "",
                 isExam: true,
             },
         });
@@ -664,7 +667,7 @@ function addStandaloneExam(examData) {
         if (!eventTracker[examTitleStr]) eventTracker[examTitleStr] = [];
         eventTracker[examTitleStr].push(addedExam);
 
-        //Save to Local Storage
+        // Save to Local Storage
         let saved = getSavedExams();
         if (!saved.some((e) => e.title === examData.title)) {
             saved.push(examData);

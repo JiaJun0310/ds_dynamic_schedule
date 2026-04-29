@@ -174,11 +174,11 @@ function extractData(virtualGrid, officialSubjects) {
                     const endTime = timeCell.split('-')[1].trim();
 
                     // search if the match already exist
-                    let existingCourse = finalResults.find(course => course.name === match.title);
+                    let existingCourse = finalResults.find(course => course.name === `ΕΡΓΑΣΤ.: ${match.title.split('-').at(-1).trim()}`);
 
                     if (!existingCourse) { // if it has not been found yet
                         finalResults.push({
-                            name: match.title,
+                            name: `ΕΡΓΑΣΤ.: ${match.title.split('-').at(-1).trim()}`,
                             semester: match.semester,
                             data: [{
                                 day: col,
@@ -210,7 +210,7 @@ function extractData(virtualGrid, officialSubjects) {
 // =====================================================================
 
 // initialisation of paths
-const excelPath = 'uploads/labs.xlsx';
+const excelPath = 'uploads/labs.xls';
 // const excelPath = 'uploads/LAB_TIMETABLE_EARINO_2026.xls';
 const jsonPath = 'jsonData/merged_schedule.json';
 
@@ -232,14 +232,14 @@ try {
 
         // initialize semester to color dictionary
         const semesterColors = {
-        1: "#d90429", 
-        2: "#d90429", 
-        3: "#0077b6", 
-        4: "#0077b6", 
-        5: "#38b000", 
-        6: "#38b000", 
-        7: "#7b2cbf", 
-        8: "#7b2cbf"
+            1: "#741818", // semester 1 = dark red
+            2: "#741818", // semester 2 = dark red
+            3: "#0c3455", // semester 3 = dark blue
+            4: "#0c3455", // semester 4 = dark blue
+            5: "#353534", // semester 5 = gray
+            6: "#353534", // semester 6 = gray
+            7: "#461b54",  // semester 7 = nice purple
+            8: "#461b54"  // semester 8 = nice purple
         };
 
         // maps each lab to itself with a color attribute
@@ -269,6 +269,5 @@ try {
 /* 
 TODO:
 labs.xls svinei xlsx kai to antitheto
-ergastiria svinoun mathimata kai prothetontai polles fores
 ekeino to bug me thn protomagia
 */

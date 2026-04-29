@@ -6,7 +6,7 @@ import { ChatPromptTemplate } from '@langchain/core/prompts'; // used for forcin
 
 // CREATE SCHEMA FOR SUBJECTS IN EXAM PERIOD
 
-import { number, z } from "zod";
+import { map, number, z } from "zod";
 import { error } from 'console';
 const subjectSchema = z.object({
     title: z.string().describe("The name of the course (e.g., 'ΨΣ-002-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ', 'ΨΣ-004-ΔΙΑΚΡΙΤΑ ΜΑΘΗΜΑΤΙΚΑ (Φροντιστήριο)')"),
@@ -133,12 +133,36 @@ var super_json = await runExtractionPipeline()
 
 // unpacks the information and checks if the exams are emvolimi or kanoniki. names accordingly.
 if (super_json) {
+    // unpack the exam array
     let examArray = super_json.exams || super_json
 
-    // write zod object (final dictionary) to a json file with line breaks and 2 tabs
-    const finalJsonString = JSON.stringify(examArray, null, 2);
+    const semesterColors = {
+        1: "#a22323", // semester 1 = dark red
+        2: "#a22323", // semester 2 = dark red
+        3: "#10436e", // semester 3 = dark blue
+        4: "#10436e", // semester 4 = dark blue
+        5: "#4e4e4d", // semester 5 = gray
+        6: "#4e4e4d", // semester 6 = gray
+        7: "#5e226e", // semester 7 = nice purple
+        8: "#5e226e"  // semester 8 = nice purple
+    };
 
-    if (examArray.length > 0) { // if there was an output
+    const mappedExams = examArray.map(exam => {
+        return {
+            ...exam,
+            // Overwrite the existing 'title' with the cleaned version
+            title: `ΕΞΕΤΑΣΗ: ${exam.title.split('-').at(-1).trim()}`,
+            
+            // Add color
+            color: semesterColors[exam.semester] || "#2bff00",
+        };
+    });
+
+    console.log(mappedExams)
+    // write zod object (final dictionary) to a json file with line breaks and 2 tabs
+    const finalJsonString = JSON.stringify(mappedExams, null, 2);
+
+    if (mappedExams.length > 0) { // if there was an output
         if (super_json.isEmvolimi) { // if it is emvolimi
             // path where the json will be saved
             const outputPath = "./jsonData/make_up_exams.json";
@@ -189,7 +213,7 @@ if (super_json) {
                     // if it is not empty
                     if (oldMakeUpExams.length > 0) {
                         // if the files have subjects of same semesters
-                        if ((oldMakeUpExams[0].semester % 2) === (examArray[0].semester % 2)) {
+                        if ((oldMakeUpExams[0].semester % 2) === (mappedExams[0].semester % 2)) {
                             // delete the file
                             fs.unlinkSync("./jsonData/make_up_exams.json");
                         }
