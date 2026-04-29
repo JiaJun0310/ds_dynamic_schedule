@@ -171,3 +171,47 @@ function updateDucky() {
 }
 // run the loop when the page first loads
 updateDucky();
+
+document.addEventListener("DOMContentLoaded", function () {
+    
+    const settingsBtn = document.getElementById("settings");
+    const settingsMenu = document.getElementById("settings-menu");
+    const darkModeToggle = document.getElementById("dark-mode-toggle");
+
+    
+    if (settingsBtn && settingsMenu) {
+        settingsBtn.addEventListener("click", function (event) {
+            settingsMenu.classList.toggle("show");
+            event.stopPropagation(); // Εμποδίζει το κλείσιμο την ώρα που το ανοίγεις
+        });
+
+        
+        window.addEventListener("click", function (event) {
+            if (!settingsMenu.contains(event.target) && event.target !== settingsBtn) {
+                settingsMenu.classList.remove('show');
+            }
+        });
+    }
+
+    
+    if (darkModeToggle) {
+        
+        const savedTheme = localStorage.getItem("userTheme");
+
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark-theme");
+            darkModeToggle.checked = true;
+        }
+
+        
+        darkModeToggle.addEventListener("change", function () {
+            if (this.checked) {
+                document.body.classList.add("dark-theme");
+                localStorage.setItem("userTheme", "dark");
+            } else {
+                document.body.classList.remove("dark-theme");
+                localStorage.setItem("userTheme", "light");
+            }
+        });
+    }
+});

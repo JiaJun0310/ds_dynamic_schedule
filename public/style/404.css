@@ -15,6 +15,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative; 
 }
 
 .unipi-logo {
@@ -88,27 +89,20 @@ body {
 }
 
 #Ducky {
-    /* 1. Ducky size */
     width: 80px;
     height: 80px;
-
-    /* 3. Apply the image as the background */
-    background-image: url("../images/Ducky.png"); /* We use the exact filename provided */
-    background-size: contain; /* Shrinks the image to fit *inside* the 80x80 box without stretching */
-    background-repeat: no-repeat; /* Draws the duck only once */
-    background-position: center; /* Centers the image perfectly in its box */
-
+    background-image: url("../images/Ducky.png"); 
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center; 
     top: 50%;
     left: 50%;
-
-    /* 4. The **ESSENTIALS** from before (must keep these): */
     position: absolute;
     transform: translate(-50%, -50%);
-    transition: all 0.4s ease-out; /* The classic glide for click/stop mode */
-    pointer-events: none; /* Essential "ghost mode" so you can click the buttons! */
+    transition: all 0.4s ease-out; 
+    pointer-events: none; 
 }
 
-/* Basic styling for all buttons */
 button {
     padding: 8px 16px;
     margin: 4px;
@@ -118,17 +112,17 @@ button {
     border-radius: 4px;
 }
 
-/* Styling ONLY for the button that is currently selected */
 button.active {
-    background-color: red; /* Matches Ducky */
+    background-color: red; 
     color: white;
     border-color: darkred;
 }
 
 .duck-text {
     color: white;
-    margin: 0 10px 0 0;
+    margin: 0; 
     font-weight: bold;
+    transform: translateX(50px); 
 }
 
 .duck-btn {
@@ -159,11 +153,12 @@ button.active {
 }
 
 .header-right {
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 #btn-toggle {
-    margin-right: 20px; 
+    margin-left: 4px; 
+    transform: translate(-50px, 13px); 
 }
 
 .header-center {
@@ -172,4 +167,116 @@ button.active {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    transform: translateX(-50px); 
 }
+
+/* --- ΔΟΜΗ DROPDOWN --- */
+.dropdown {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%); 
+    display: inline-block;
+}
+
+#settings {
+    height: 35px;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#settings:hover {
+    transform: rotate(45deg);
+}
+
+
+.dropdown-content {
+    display: none; 
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background-color: white;
+    min-width: 180px;
+    border-radius: 15px; 
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    padding: 10px 15px;
+}
+
+
+.dropdown-content.show {
+    display: block;
+}
+
+
+.dropdown-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-weight: 500;
+    color: #333;
+}
+
+
+.slider {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #87CEEB; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.slider img {
+    width: 25px;
+    height: 25px;
+}
+
+#dark-mode-toggle {
+    display: none; 
+}
+
+/* --- DARK MODE LOGIC --- */
+
+body.dark-theme {
+    background-color: #121212 !important;
+}
+
+
+body.dark-theme .error-box {
+    background-color: #1e1e1e !important;
+    color: white !important;
+    border: 1px solid #333;
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+}
+
+
+body.dark-theme .error-box h1,
+body.dark-theme .error-box h2,
+body.dark-theme .error-box p {
+    color: #ffffff !important;
+}
+
+
+body.dark-theme .dropdown-content {
+    background-color: #252525;
+}
+
+body.dark-theme .dropdown-checkbox {
+    color: white;
+}
+
+
+body.dark-theme .slider {
+    background-color: #1a1a40;
+}
+
+
+#moon { display: none; }
+body.dark-theme #moon { display: block; }
+body.dark-theme #sun { display: none; }

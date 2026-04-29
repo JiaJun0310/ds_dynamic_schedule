@@ -26,6 +26,21 @@
         <div class="header-right">
             <button id="btn-toggle" class="duck-btn">Hide Ducky</button>
         </div>
+
+        <div class="dropdown">
+            <img id="settings" src="../images/settings.svg" alt="settings" class="dropdown-button">
+            
+            <div id="settings-menu" class="dropdown-content">
+                <label class="dropdown-checkbox">
+                    Theme
+                    <input type="checkbox" id="dark-mode-toggle">   
+                    <div class="slider">
+                        <img id = "sun" src="../images/sun.svg"/>
+                        <img id = "moon" src="../images/moon.svg"/>
+                    </div>              
+                </label>
+            </div>
+        </div>
     </header>
 
     <main class="error-container">
@@ -37,7 +52,8 @@
             <a href="/" class="home-btn">Επιστροφή στο Ημερολόγιο</a>
         </div>
         <div id="Ducky"></div>
-        <script src="/chase.js"></script>
+        
+        <script src="/chase.js"></script> 
     </main>
 </body>
 </html>
