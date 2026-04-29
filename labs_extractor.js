@@ -174,11 +174,11 @@ function extractData(virtualGrid, officialSubjects) {
                     const endTime = timeCell.split('-')[1].trim();
 
                     // search if the match already exist
-                    let existingCourse = finalResults.find(course => course.name === `ΕΡΓΑΣΤ.: ${match.title.split('-').at(-1).trim()}`);
+                    let existingCourse = finalResults.find(course => course.name === `ΕΡΓΑΣΤ.: ${cellValue.split("_")[0]}`);
 
                     if (!existingCourse) { // if it has not been found yet
                         finalResults.push({
-                            name: `ΕΡΓΑΣΤ.: ${match.title.split('-').at(-1).trim()}`,
+                            name: `ΕΡΓΑΣΤ.: ${cellValue.split("_")[0]}`,
                             semester: match.semester,
                             data: [{
                                 day: col,
@@ -210,7 +210,7 @@ function extractData(virtualGrid, officialSubjects) {
 // =====================================================================
 
 // initialisation of paths
-const excelPath = 'uploads/labs.xls';
+const excelPath = 'uploads/labs.xlsx';
 // const excelPath = 'uploads/LAB_TIMETABLE_EARINO_2026.xls';
 const jsonPath = 'jsonData/merged_schedule.json';
 
