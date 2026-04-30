@@ -1,3 +1,18 @@
+body, 
+main, 
+h1, h2, p, 
+ul, li, 
+table, th, td, code, 
+a, 
+.top-notice, 
+.dropdown-content,
+.slider {
+    transition: background-color 0.5s ease, 
+                color 0.5s ease, 
+                border-color 0.5s ease, 
+                box-shadow 0.5s ease;
+}
+
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -5,7 +20,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .unipi-header {
@@ -30,7 +44,6 @@ body {
     width: auto;
 }
 
-/* --- DROPDOWN STRUCTURE --- */
 .dropdown {
     position: absolute;
     right: 25px;
@@ -79,7 +92,6 @@ body {
     user-select: none;
 }
 
-/* SLIDER */
 .slider {
     width: 45px;
     height: 45px;
@@ -89,7 +101,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    pointer-events: none; /* Επιτρέπει στο κλικ να περάσει στο checkbox */
+    pointer-events: none;
 }
 
 .slider img {
@@ -101,10 +113,145 @@ body {
     display: none; 
 }
 
-/* --- DARK MODE LOGIC --- */
+
+#moon { display: none; }
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    background-color: #ffffff; 
+    padding: 40px 20px;
+}
+
+main > div {
+    max-width: 900px;
+    width: 100%;
+}
+
+h1 {
+    color: #2f385f;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.top-notice {
+    font-style: italic;
+    color: #555;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+    margin-bottom: 40px;
+}
+
+h2 {
+    color: #333;
+    font-size: 22px;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+p {
+    color: #444;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    font-weight: 400;
+}
+
+
+ul {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+li {
+    color: #444;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+li strong {
+    color: #2f385f;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 15px;
+}
+
+table th, table td {
+    border: 1px solid #eee;
+    padding: 12px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f9f9f9;
+    color: #2f385f;
+    font-weight: 600;
+}
+
+table td code {
+    background-color: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+
+main a {
+    color: #2f385f;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(47, 56, 95, 0.2);
+    transition: border-color 0.3s;
+}
+
+main a:hover {
+    border-bottom-color: #2f385f;
+}
+
+
 body.dark-theme {
     background-color: #121212 !important;
-    color: white;
+    color: #e0e0e0;
+}
+
+body.dark-theme main {
+    background-color: #121212;
+}
+
+body.dark-theme h1, 
+body.dark-theme h2,
+body.dark-theme li strong,
+body.dark-theme table th,
+body.dark-theme table td code,
+body.dark-theme main a {
+    color: #87CEEB; 
+}
+
+body.dark-theme p, 
+body.dark-theme li,
+body.dark-theme .top-notice,
+body.dark-theme .dropdown-checkbox {
+    color: #ccc;
+}
+
+body.dark-theme .top-notice,
+body.dark-theme table th, 
+body.dark-theme table td {
+    border-color: #444;
+}
+
+body.dark-theme table th {
+    background-color: #1a1a1a;
+}
+
+body.dark-theme table td code {
+    background-color: #252525;
 }
 
 body.dark-theme .dropdown-content {
@@ -112,15 +259,9 @@ body.dark-theme .dropdown-content {
     box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
 }
 
-body.dark-theme .dropdown-checkbox {
-    color: white;
-}
-
 body.dark-theme .slider {
     background-color: #1a1a40;
 }
 
-/* Icons toggle */
-#moon { display: none; }
 body.dark-theme #moon { display: block; }
 body.dark-theme #sun { display: none; }

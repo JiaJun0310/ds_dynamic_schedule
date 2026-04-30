@@ -1,3 +1,21 @@
+/* Universal Smooth Transition for 404 Page */
+body, 
+.unipi-header, 
+.error-box, 
+.error-box h1, 
+.error-box h2, 
+.error-box p, 
+.home-btn, 
+.duck-btn, 
+.dropdown-content, 
+.slider,
+a {
+    transition: background-color 0.5s ease, 
+                color 0.5s ease, 
+                border-color 0.5s ease, 
+                box-shadow 0.5s ease;
+}
+
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -5,7 +23,6 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 .unipi-header {
