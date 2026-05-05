@@ -214,6 +214,10 @@ AcademicCalendarBackButton.onclick = () => {
     editButtonWrapper.style.display = "grid";
 
     AcademicCalendarWrapper.style.display = "none";
+
+    if (window.innerWidth <= 767) {
+        editButtonWrapper.style.display = "flex";
+    } 
 }
 
 
@@ -230,6 +234,10 @@ backButton.onclick = () => {
 
     programSelectWrapper.style.display = "none";
     editWrapper.style.display = "none";
+
+    if (window.innerWidth <= 767) {
+        editButtonWrapper.style.display = "flex";
+    } 
 }
 
 //When the back button is pressed it clears the content of the exam edit page and overwrites it with the admin page
@@ -245,6 +253,10 @@ examsBackButton.onclick = () => {
 
     examsSelectWrapper.style.display = "none";
     examsEditWrapper.style.display = "none";
+
+    if (window.innerWidth <= 767) {
+        editButtonWrapper.style.display = "flex";
+    } 
 }
 
 //When the back button is pressed it clears the content of the lab edit page and overwrites it with the admin page
@@ -260,6 +272,10 @@ labsBackButton.onclick = () => {
 
     labsSelectWrapper.style.display = "none";
     labsEditWrapper.style.display = "none";
+
+    if (window.innerWidth <= 767) {
+        editButtonWrapper.style.display = "flex";
+    } 
 }
 
 
@@ -289,7 +305,7 @@ semesterSelect.addEventListener("change", async () => {
 
         //set a default option so that it does not show a course at first
         const defaultOption = document.createElement("option");
-        defaultOption.textContent = "Επέλεξε Μάθημα:";
+        defaultOption.textContent = "Επιλέξτε Μάθημα:";
         defaultOption.disabled = true;
         defaultOption.selected = true;
 
@@ -516,7 +532,7 @@ examsSemesterSelect.addEventListener("change", async () => {
 
         //set a default option so that it does not show a exams at first
         const defaultOption = document.createElement("option");
-        defaultOption.textContent = "Επέλεξε Μάθημα:";
+        defaultOption.textContent = "Επιλέξτε Μάθημα:";
         defaultOption.disabled = true;
         defaultOption.selected = true;
 
@@ -716,7 +732,7 @@ labsSemesterSelect.addEventListener("change", async () => {
 
         //set a default option so that it does not show a lab at first
         const defaultOption = document.createElement("option");
-        defaultOption.textContent = "Επέλεξε Μάθημα:";
+        defaultOption.textContent = "Επιλέξτε Μάθημα:";
         defaultOption.disabled = true;
         defaultOption.selected = true;
 
