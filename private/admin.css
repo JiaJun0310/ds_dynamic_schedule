@@ -550,6 +550,16 @@ select {
 
 @media (max-width: 767px) {
 
+    .semesterBox,
+    .holidayBox
+     {
+        grid-template-columns: none !important;
+     }
+
+    /* .examBox {
+        grid-template-columns: none !important;             TODO: fix the exam box for mobile view
+    } */
+
     .editButtonWrapper {
         display: flex;
         flex-direction: column;
