@@ -612,10 +612,17 @@ footer {
 
 /* 2. ADJUST the settings image to fit inside the wrapper */
 #settings {
-  height: 100%; /* Fills the height of the .dropdown container */
-  width: auto;  /* Maintains the aspect ratio of the SVG */
-  cursor: pointer;
-  display: block; /* Removes any weird spacing below the image */
+    margin-top: 6px;
+    height: 35px;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+#settings:hover {
+    transform: rotate(45deg);
 }
 
 /* 3. The actual menu (same as before, but aligns perfectly now) */
