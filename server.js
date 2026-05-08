@@ -42,25 +42,12 @@ const upload = multer({ storage: storage });
 
 // connectDB(); //connect to db through db.js
 
-app.use(cors()); //use the middlewere
+// CHANGED: Allow frontend on port 1234 to talk to backend and send cookies
+app.use(cors({ origin: 'http://localhost:1234', credentials: true })); 
 app.use(express.json()); //use json option with express
 app.use(cookieParser()); //use http cookie
 
-app.use(express.static(path.join(__dirname, "public"))); //express will use the public folder as public domain
-
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "html", "index.html")); // localhost::xxxx/ is index.html
-});
-
-app.get("/politiki-cookies", (req, res) => {
-    res.sendFile(
-        path.join(__dirname, "public", "html", "politiki-cookies.html"),
-    ); // localhost::xxxx/politiki-cookies takes you to politiki-cookies
-});
-
-app.get("/loginForAdmin", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "html", "login.html")); // localhost::xxxx/loginForAdmin takes you to login.admin
-});
+// CHANGED: Removed express.static for "public" and removed the HTML routes for /, /politiki-cookies, and /loginForAdmin
 
 app.use("/jsonData", express.static(path.join(__dirname, "jsonData"))); // Possible vaulnerabily may need fixing, makes /jsonData static public domain
 
@@ -80,7 +67,8 @@ const verifyToken = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return res.redirect("/loginForAdmin");
+        // CHANGED: Send error code instead of redirecting to HTML
+        return res.status(401).json({ error: "Unauthorized" }); 
     }
 
     try {
@@ -88,7 +76,8 @@ const verifyToken = (req, res, next) => {
         next();
     } catch (err) {
         res.clearCookie("token");
-        res.redirect("/loginForAdmin");
+        // CHANGED: Send error code instead of redirecting to HTML
+        return res.status(401).json({ error: "Unauthorized" }); 
     }
 };
 
@@ -572,11 +561,11 @@ app.post("/login", async (req, res) => {
         );
 
         res.cookie("token", token, {
-            //saves token in http only cookie so token doesn't get stored in local history and storage (better for security)
-            httpOnly: true,
-            secure: false,
-            maxAge: 3600000,
-        });
+    httpOnly: true,
+    secure: false, // Set to true only if using HTTPS
+    sameSite: 'lax', // Required for cross-port redirects
+    maxAge: 3600000,
+});
 
         return res
             .status(200)
@@ -651,19 +640,7 @@ app.post(`/run_exams_extractor`, verifyToken, (req, res) => {
 
 //-------------------------------------------------------------------------
 
-//admin.html made private using verifyToken only accesable after login in
-app.get("/admin", verifyToken, (req, res) => {
-    res.sendFile(path.join(__dirname, "private", "admin.html"));
-});
-
-app.get("/admin-css.css", verifyToken, (req, res) => {
-    res.sendFile(path.join(__dirname, "private", "admin.css"));
-});
-
-//admin.js made private using verifyToken only accesable after login in
-app.get("/secure-admin-script.js", verifyToken, (req, res) => {
-    res.sendFile(path.join(__dirname, "private", "admin.js"));
-});
+// CHANGED: Removed the HTML routes for /admin, /admin-css.css, and /secure-admin-script.js
 
 //eniciates app listening on port 8000
 const PORT = 8000;
@@ -893,8 +870,42 @@ app.post("/updateAcademicCalendar", (req, res) => {
     }
 });
 
+
+// Special security check just for accessing the admin HTML page
+const verifyAdminPage = (req, res, next) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        // Redirect back to your frontend Parcel server's login page
+        return res.redirect("http://localhost:1234/login.html");
+    }
+
+    try {
+        jwt.verify(token, "mfmfx123");
+        next();
+    } catch (err) {
+        res.clearCookie("token");
+        return res.redirect("http://localhost:1234/login.html");
+    }
+};
+
+// Secure routes for the admin dashboard
+// Secure routes for the admin dashboard
+app.get("/admin", verifyAdminPage, (req, res) => {
+    res.sendFile(path.join(__dirname, "private", "admin.html"));
+});
+
+// Changed this back to match your HTML
+app.get("/admin-css.css", verifyAdminPage, (req, res) => {
+    res.sendFile(path.join(__dirname, "private", "admin.css"));
+});
+
+// Changed this back to match your HTML
+app.get("/secure-admin-script.js", verifyAdminPage, (req, res) => {
+    res.sendFile(path.join(__dirname, "private", "admin.js")); 
+});
+
+// CHANGED: Send JSON error instead of 404 HTML page
 app.use((req, res) => {
-    res.status(404).sendFile(
-        path.join(__dirname, "public", "html", "404.html"),
-    );
+    res.status(404).json({ error: "API Endpoint not found" });
 });
