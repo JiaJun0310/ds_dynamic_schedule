@@ -871,6 +871,57 @@ app.post("/updateAcademicCalendar", (req, res) => {
 });
 
 
+// Merges all primary calendar, class, exam, lab, schedule, and teacher data into one master JSON file
+app.post("/mergeAll", verifyToken, async (req, res) => {
+    try {
+        const jsonDir = path.join(__dirname, "jsonData");
+        const masterPath = path.join(jsonDir, "allData.json");
+
+        // Define the target files to include in the bundle
+        const filesToMerge = {
+            academicCalendar: "academic_calendar.json",
+            courses: "courses.json",
+            exams: "merged_exams.json",
+            labs: "merged_labs.json",
+            schedule: "merged_schedule.json",
+            teachers: "teachers.json"
+        };
+
+        const masterData = {};
+
+        // Iterate through each file and append its contents to the master object
+        for (const [key, fileName] of Object.entries(filesToMerge)) {
+            const filePath = path.join(jsonDir, fileName);
+
+            if (fs.existsSync(filePath)) {
+                try {
+                    const fileContent = fs.readFileSync(filePath, "utf8");
+                    masterData[key] = JSON.parse(fileContent);
+                } catch (parseErr) {
+                    // Fallback if the file exists but contains invalid or empty JSON text
+                    console.error(`Error parsing file ${fileName}:`, parseErr.message);
+                    masterData[key] = [];
+                }
+            } else {
+                // Keep the key present in the final object so the frontend structure stays predictable
+                masterData[key] = []; 
+            }
+        }
+
+        // Write the compiled data back out locally
+        fs.writeFileSync(masterPath, JSON.stringify(masterData, null, 2), "utf8");
+
+        res.status(200).json({
+            message: "All datasets successfully unified into allData.json",
+            savedTo: masterPath
+        });
+
+    } catch (err) {
+        res.status(500).json({ error: "Failed to compile datasets: " + err.message });
+    }
+});
+
+
 // Special security check just for accessing the admin HTML page
 const verifyAdminPage = (req, res, next) => {
     const token = req.cookies.token;

@@ -54,27 +54,9 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                         method: "POST",
                     });
                     const syncResult = await syncResponse.json();
-                    
-                    try {
-                        // Fetch the file from the server
-                        const downloadRes = await fetch(
-                            "/jsonData/schedule_labs.json",
-                        );
-                        if (downloadRes.ok) {
-                            const blob = await downloadRes.blob();
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement("a");
-                            a.style.display = "none";
-                            a.href = url;
-                            a.download = "schedule_labs.json"; 
-                            document.body.appendChild(a);
-                            a.click();
-                            window.URL.revokeObjectURL(url);
-                            document.body.removeChild(a);
-                        }
-                    } catch (downloadError) {
-                        console.error("Download failed:", downloadError);
-                    }
+
+
+                    await triggerGlobalMerge();
 
                     alert(
                         //If everything goes correct (which it will because it's an amazing pipeline) this alert will apear
@@ -93,26 +75,9 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                     );
                     const extractData = await extractResponse.text();
 
-                    try {
-                        // Fetch the file from the server
-                        const downloadRes = await fetch(
-                            "/jsonData/academic_calendar.json",
-                        );
-                        if (downloadRes.ok) {
-                            const blob = await downloadRes.blob();
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement("a");
-                            a.style.display = "none";
-                            a.href = url;
-                            a.download = "academic_calendar.json"; 
-                            document.body.appendChild(a);
-                            a.click();
-                            window.URL.revokeObjectURL(url);
-                            document.body.removeChild(a);
-                        }
-                    } catch (downloadError) {
-                        console.error("Download failed:", downloadError);
-                    }
+
+
+                    await triggerGlobalMerge();
 
                     alert("Ολοκληρώθηκε: " + extractData); //Extraction complite and file saved as academic_calendar.json
                 } else if (id === "labs") {
@@ -127,26 +92,9 @@ document.querySelectorAll(".fileBox").forEach((box) => {
 
                     const syncResult = await syncResponse.json();
 
-                    try {
-                        // Fetch the file from the server
-                        const downloadRes = await fetch(
-                            "/jsonData/merged_labs.json",
-                        );
-                        if (downloadRes.ok) {
-                            const blob = await downloadRes.blob();
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement("a");
-                            a.style.display = "none";
-                            a.href = url;
-                            a.download = "merged_labs.json"; 
-                            document.body.appendChild(a);
-                            a.click();
-                            window.URL.revokeObjectURL(url);
-                            document.body.removeChild(a);
-                        }
-                    } catch (downloadError) {
-                        console.error("Download failed:", downloadError);
-                    }
+                   
+
+                    await triggerGlobalMerge();
 
                     alert(
                         "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
@@ -170,26 +118,7 @@ document.querySelectorAll(".fileBox").forEach((box) => {
 
                     const syncResult = await syncResponse.json();
 
-                    try {
-                        // Fetch the file from the server
-                        const downloadRes = await fetch(
-                            "/jsonData/merged_exams.json",
-                        );
-                        if (downloadRes.ok) {
-                            const blob = await downloadRes.blob();
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement("a");
-                            a.style.display = "none";
-                            a.href = url;
-                            a.download = "merged_exams.json"; 
-                            document.body.appendChild(a);
-                            a.click();
-                            window.URL.revokeObjectURL(url);
-                            document.body.removeChild(a);
-                        }
-                    } catch (downloadError) {
-                        console.error("Download failed:", downloadError);
-                    }
+                    await triggerGlobalMerge();
 
                     alert(
                         //If everything goes correct (which it will because it's an amazing pipeline) this alert will apear
@@ -577,6 +506,7 @@ editWrapper.addEventListener("click", async (e) => {
         if (!response.ok) throw new Error("Failed");
 
         const result = await response.json();
+        await triggerGlobalMerge();
         alert(result.message || "Saved!");
     } catch (error) {
         console.error(error);
@@ -773,6 +703,7 @@ examsEditWrapper.addEventListener("click", async (e) => {
         if (!response.ok) throw new Error("Failed");
 
         const result = await response.json();
+        await triggerGlobalMerge();
         alert(result.message || "Saved!");
     } catch (error) {
         console.error(error);
@@ -982,6 +913,7 @@ labsEditWrapper.addEventListener("click", async (e) => {
         if (!response.ok) throw new Error("Failed");
 
         const result = await response.json();
+        await triggerGlobalMerge();
         alert(result.message || "Saved!");
     } catch (error) {
         console.error(error);
@@ -1226,9 +1158,53 @@ AcademicCalendarEditWrapper.addEventListener("click", async (e) => {
 
         if (!res.ok) throw new Error("Save failed");
 
+        await triggerGlobalMerge();
         alert("Saved!");
     } catch (err) {
         console.error(err);
         alert("Error saving calendar");
     }
 });
+
+
+
+// Background helper to keep the unified master JSON updated
+// Background helper to update the master dataset and download it in the browser
+async function triggerGlobalMerge() {
+    try {
+        // 1. Tell the backend to rebuild allData.json
+        const mergeResponse = await fetch("/mergeAll", { method: "POST" });
+        
+        if (!mergeResponse.ok) {
+            throw new Error("Failed to compile master dataset on the server.");
+        }
+
+        console.log("Master dataset (allData.json) updated on server. Starting download...");
+
+        // 2. Fetch the newly created file from the static folder
+        const downloadRes = await fetch("/jsonData/allData.json");
+        
+        if (downloadRes.ok) {
+            const blob = await downloadRes.blob();
+            const url = window.URL.createObjectURL(blob);
+            
+            // 3. Create a temporary anchor element to force the browser download
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = "allData.json"; // The filename it will save as
+            
+            document.body.appendChild(a);
+            a.click();
+            
+            // 4. Clean up memory and remove the temporary element
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } else {
+            console.error("Could not find the generated allData.json file on the server.");
+        }
+    } catch (err) {
+        console.error("Data merge or download failed:", err);
+        alert("Παρουσιάστηκε σφάλμα κατά την ενημέρωση και λήψη των συνολικών δεδομένων.");
+    }
+}

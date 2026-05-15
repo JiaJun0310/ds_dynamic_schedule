@@ -1,0 +1,4112 @@
+{
+  "academicCalendar": {
+    "academic_year": "2025-2026",
+    "semesters": [
+      {
+        "name": "ΧΕΙΜΕΡΙΝΟ ΕΞΑΜΗΝΟ",
+        "classes_start": "6/10/2025",
+        "classes_end": "17/1/2026"
+      },
+      {
+        "name": "ΕΑΡΙΝΟ ΕΞΑΜΗΝΟ",
+        "classes_start": "24/2/2026",
+        "classes_end": "6/6/2026"
+      }
+    ],
+    "holidays": [
+      {
+        "date": "28/10/2025",
+        "name": "Εθνική Επέτειος 28ης Οκτωβρίου"
+      },
+      {
+        "date": "17/11/2025",
+        "name": "Επέτειος του Πολυτεχνείου"
+      },
+      {
+        "date": "12/12/2025",
+        "name": "Αγ. Σπυρίδωνα, Πολιούχος Πειραιά"
+      },
+      {
+        "date": "24/12/2025 - 7/1/2026",
+        "name": "Διακοπές Χριστουγέννων"
+      },
+      {
+        "date": "30/1/2026",
+        "name": "Τριών Ιεραρχών"
+      },
+      {
+        "date": "23/2/2026",
+        "name": "Καθαρά Δευτέρα"
+      },
+      {
+        "date": "25/3/2026",
+        "name": "Εθνική Επέτειος 25ης Μαρτίου"
+      },
+      {
+        "date": "6/4/2026 - 18/4/2026",
+        "name": "Διακοπές Πάσχα"
+      },
+      {
+        "date": "1/5/2026",
+        "name": "Πρωτομαγιά"
+      },
+      {
+        "date": "1/6/2026",
+        "name": "Αγίου Πνεύματος"
+      }
+    ],
+    "exam_periods": [
+      {
+        "exams_start": "19/1/2026",
+        "exams_end": "21/2/2026"
+      },
+      {
+        "exams_start": "8/6/2026",
+        "exams_end": "11/7/2026"
+      },
+      {
+        "exams_start": "1/9/2026",
+        "exams_end": "30/9/2026"
+      }
+    ]
+  },
+  "courses": {
+    "ΨΣ-109-ΨΗΦΙΑΚΗ ΣΧΕΔΙΑΣΗ": "https://www.ds.unipi.gr/courses/digital_design/",
+    "ΨΣ-010-ΘΕΩΡΙΑ ΠΙΘΑΝΟΤΗΤΩΝ": "https://www.ds.unipi.gr/courses/probability-theory-3/",
+    "ΨΣ-010-ΘΕΩΡΙΑ ΠΙΘΑΝΟΤΗΤΩΝ (φροντιστήριο)": "https://www.ds.unipi.gr/courses/probability-theory-3/",
+    "ΨΣ-014-ΛΟΓΙΚΗ ΚΑΙ ΛΟΓΙΚΟΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ": "https://www.ds.unipi.gr/courses/mathematical-logic/",
+    "ΨΣ-006-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ & ΣΤΟΙΧΕΙΑ ΓΡΑΜΜΙΚΗΣ ΑΛΓΕΒΡΑΣ": "https://www.ds.unipi.gr/courses/mathematical-analysis-linear-algebra/",
+    "ΨΣ-006-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ & ΣΤΟΙΧΕΙΑ ΓΡΑΜΜΙΚΗΣ ΑΛΓΕΒΡΑΣ (φροντ.)": "https://www.ds.unipi.gr/courses/mathematical-analysis-linear-algebra/",
+    "ΨΣ-501-ΓΛΩΣΣΑ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΥ \"C\"": "https://www.ds.unipi.gr/courses/programming-c/",
+    "ΨΣ-502-ΑΝΤΙΚΕΙΜΕΝΟΣΤΡΕΦΗΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ": "https://www.ds.unipi.gr/courses/object-oriented-programming/",
+    "ΨΣ-201-ΑΡΧΙΤΕΚΤΟΝΙΚΕΣ ΥΠΟΛΟΓΙΣΤΩΝ": "https://www.ds.unipi.gr/courses/computer-architecture/",
+    "ΨΣ-004-ΔΙΑΚΡΙΤΑ ΜΑΘΗΜΑΤΙΚΑ": "https://www.ds.unipi.gr/courses/discrete-mathematics/",
+    "ΨΣ-004-ΔΙΑΚΡΙΤΑ ΜΑΘΗΜΑΤΙΚΑ (φροντιστήριο)": "https://www.ds.unipi.gr/courses/discrete-mathematics/",
+    "ΨΣ-012-ΣΤΟΧΑΣΤΙΚΕΣ ΑΝΕΛΙΞΕΙΣ": "https://www.ds.unipi.gr/courses/stochastic-processes/",
+    "ΨΣ-002-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ": "https://www.ds.unipi.gr/courses/mathematical-analysis-ii/",
+    "ΨΣ-002-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ (φροντιστήριο)": "https://www.ds.unipi.gr/courses/mathematical-analysis-ii/",
+    "ΨΣ-708-ΠΔΙ-ΕΚΠΑΙΔΕΥΤΙΚΗ ΨΥΧΟΛΟΓΙΑ": "https://www.ds.unipi.gr/courses/educational-psychology/",
+    "ΨΣ-307-ΣΗΜΑΤΑ ΚΑΙ ΣΥΣΤΗΜΑΤΑ": "https://www.ds.unipi.gr/courses/signals-and-systems/",
+    "ΨΣ-805-ΘΕΩΡΙΑ ΠΛΗΡΟΦΟΡΙΑΣ": "https://www.ds.unipi.gr/courses/information-theory/",
+    "ΨΣ-805-ΘΕΩΡΙΑ ΠΛΗΡΟΦΟΡΙΑΣ (φροντ.)": "https://www.ds.unipi.gr/courses/information-theory/",
+    "ΨΣ-301-ΕΙΣΑΓΩΓΗ ΣΤΙΣ ΤΗΛΕΠΙΚΟΙΝΩΝΙΕΣ": "https://www.ds.unipi.gr/courses/introduction-to-telecommunications/",
+    "ΨΣ-507-ΤΕΧΝΟΛΟΓΙΑ ΛΟΓΙΣΜΙΚΟΥ": "https://www.ds.unipi.gr/courses/software-engineering-and-systems-analysis/",
+    "ΨΣ-503-ΔΟΜΕΣ ΔΕΔΟΜΕΝΩΝ (ΤΜΗΜΑ Α:Α-Λ)": "https://www.ds.unipi.gr/courses/data-structures/",
+    "ΨΣ-503-ΔΟΜΕΣ ΔΕΔΟΜΕΝΩΝ (ΤΜΗΜΑ Β:Μ-Ω)": "https://www.ds.unipi.gr/courses/data-structures/",
+    "ΨΣ-504-ΣΧΕΔΙΑΣΜΟΣ ΒΑΣΕΩΝ ΔΕΔΟΜΕΝΩΝ": "https://www.ds.unipi.gr/courses/database-design/",
+    "ΨΣ-320-ΔΙΚΤΥΑ ΥΠΟΛΟΓΙΣΤΩΝ Ι": "https://www.ds.unipi.gr/courses/computer-networks-i/",
+    "ΨΣ-101-ΑΛΓΟΡΙΘΜΟΙ & ΠΟΛΥΠΛΟΚΟΤΗΤΑ": "https://www.ds.unipi.gr/courses/algorithms-and-complexity/",
+    "ΨΣ-101-ΑΛΓΟΡΙΘΜΟΙ & ΠΟΛΥΠΛΟΚΟΤΗΤΑ (φροντ.)": "https://www.ds.unipi.gr/courses/algorithms-and-complexity/",
+    "ΨΣ-210-ΛΕΙΤΟΥΡΓΙΚΑ ΣΥΣΤΗΜΑΤΑ - UNIX": "https://www.ds.unipi.gr/courses/operating-systems-ii-unix/",
+    "ΨΣ-011-ΣΤΑΤΙΣΤΙΚΗ": "https://www.ds.unipi.gr/courses/statistics/",
+    "ΨΣ-011-ΣΤΑΤΙΣΤΙΚΗ (φροντιστήριο)": "https://www.ds.unipi.gr/courses/statistics/",
+    "ΨΣ-529-ΑΝΑΛΥΣΗ ΔΕΔΟΜΕΝΩΝ": "https://www.ds.unipi.gr/courses/data-analysis/",
+    "ΨΣ-305-ΨΗΦΙΑΚΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ": "https://www.ds.unipi.gr/courses/digital-communications/",
+    "ΨΣ-305-ΨΗΦΙΑΚΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ (φροντ.)": "https://www.ds.unipi.gr/courses/digital-communications/",
+    "ΨΣ-801-ΠΟΛΙΤΙΚΕΣ & ΔΙΑΧΕΙΡΙΣΗ ΑΣΦΑΛΕΙΑΣ": "https://www.ds.unipi.gr/courses/security-policies-and-security-management/",
+    "ΨΣ-518-ΤΕΧΝΗΤΗ ΝΟΗΜΟΣΥΝΗ": "https://www.ds.unipi.gr/courses/artificial-intelligence/",
+    "ΨΣ-518-ΤΕΧΝΗΤΗ ΝΟΗΜΟΣΥΝΗ (φροντ.)": "https://www.ds.unipi.gr/courses/artificial-intelligence/",
+    "ΨΣ-321-ΔΙΚΤΥΑ ΥΠΟΛΟΓΙΣΤΩΝ ΙΙ (ΥΠΚ/Τ&Δ)": "http://ds.unipi.gr/courses/computer-networks-ii/",
+    "ΨΣ-309-ΕΥΡΥΖΩΝΙΚΑ ΔΙΚΤΥΑ (ΥΠΚ/Τ&Δ)": "https://www.ds.unipi.gr/courses/broadband-networks/",
+    "ΨΣ-537-ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ ΓΙΑ ΜΕΓΑΛΑ ΔΕΔΟΜΕΝΑ (ΥΠΚ/ΣΛΔ)": "https://www.ds.unipi.gr/courses/big-data-programming/",
+    "ΨΣ-731-ΠΔΙ-ΑΞΙΟΛΟΓΗΣΗ ΨΗΦΙΑΚΩΝ ΕΚΠΑΙΔΕΥΤΙΚΩΝ ΣΥΣΤΗΜΑΤΩΝ επ. (Ε/ΠΔΙ) (Επιλογή)": "https://www.ds.unipi.gr/courses/%ce%b1%ce%be%ce%b9%ce%bf%ce%bb%cf%8c%ce%b3%ce%b7%cf%83%ce%b7-%cf%88%ce%b7%cf%86%ce%b9%ce%b1%ce%ba%cf%8e%ce%bd-%ce%b5%ce%ba%cf%80%ce%b1%ce%b9%ce%b4%ce%b5%cf%85%cf%84%ce%b9%ce%ba%cf%8e%ce%bd-%cf%83/",
+    "ΨΣ-206-ΜΕΤΑΓΛΩΤΤΙΣΤΕΣ επ. (Ε/ΣΛΔ) (Επιλογή)": "https://www.ds.unipi.gr/courses/compilers/",
+    "ΨΣ-412-ΚΒΑΝΤΙΚΗ ΥΠΟΛΟΓΙΣΤΙΚΗ επ. (Ε/ΥΥΥ) (Επιλογή)": "https://www.ds.unipi.gr/courses/quantum-computing/",
+    "ΨΣ-505-ΒΑΣΕΙΣ ΔΕΔΟΜΕΝΩΝ (ΥΠΚ/ΣΛΔ)": "https://www.ds.unipi.gr/courses/database-systems/",
+    "ΨΣ-526-1-ΥΠΟΛΟΓΙΣΤΙΚΑ ΝΕΦΗ (ΥΠΚ/ΥΥΥ)": "https://www.ds.unipi.gr/courses/introduction-to-cloud-2/",
+    "ΨΣ-405-ΨΗΦΙΑΚΗ ΕΠΕΞΕΡΓΑΣΙΑ ΕΙΚΟΝΑΣ (ΥΠΚ/ΥΥΥ)": "https://www.ds.unipi.gr/courses/digital-image-processing/",
+    "ΨΣ-803-ΑΣΦΑΛΕΙΑ ΔΙΚΤΥΩΝ επ. (Ε/ΑΣΦ) (Επιλογή)": "https://www.ds.unipi.gr/courses/network-security/",
+    "ΨΣ-332-1-ΔΙΑΔΙΚΤΥΑΚΑ ΠΛΗΡΟΦΟΡΙΑΚΑ ΣΥΣΤΗΜΑΤΑ": "https://www.ds.unipi.gr/courses/online-and-portable-information-systems/",
+    "ΨΣ-326-ΠΡΩΤΟΚΟΛΛΑ ΔΙΑΔΙΚΤΥΟΥ": "https://www.ds.unipi.gr/courses/internet-protocols/",
+    "ΨΣ-406-ΕΠΙΚΟΙΝΩΝΙΕΣ ΠΟΛΥΜΕΣΩΝ": "https://www.ds.unipi.gr/courses/multimedia-communications/",
+    "ΨΣ-802-ΑΣΦΑΛΕΙΑ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ": "https://www.ds.unipi.gr/courses/information-systems-security/",
+    "ΨΣ-304-ΑΣΥΡΜΑΤΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ (ΥΠΚ/Τ&Δ)": "https://www.ds.unipi.gr/courses/wireless-communications/",
+    "ΨΣ-732-ΠΔΙ-ΕΚΠΑΙΔΕΥΤΙΚΗ ΤΕΧΝΟΛΟΓΙΑ επ. (Ε/ΠΔΙ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/educational-technology/",
+    "ΨΣ-411-ΠΡΟΗΓΜΕΝΑ ΘΕΜΑΤΑ ΤΕΧΝΗΤΗΣ ΝΟΗΜΟΣΥΝΗΣ (ΥΠΚ/ΥΥΥ)": "https://www.ds.unipi.gr/courses/advanced-topics-in-artificial-intelligence/",
+    "ΨΣ-531-ΔΟΜΗΜΕΝΗ ΑΝΑΠΑΡΑΣΤΑΣΗ ΠΛΗΡΟΦΟΡΙΩΝ (ΥΠΚ/ΣΛΔ)": "https://www.ds.unipi.gr/courses/structured-information-representation/",
+    "ΨΣ-402-ΤΕΧΝΟΛΟΓΙΑ ΠΟΛΥΜΕΣΩΝ επ. (Ε/ΥΥΥ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/multimedia-technology/",
+    "ΨΣ-807-ΤΕΧΝΟΛΟΓΙΕΣ ΔΙΑΣΦΑΛΙΣΗΣ ΙΔΙΩΤΙΚΟΤΗΤΑΣ επ. (Ε/ΑΣΦ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/privacy-enhancing-technologies/",
+    "ΨΣ-306-ΨΗΦΙΑΚΗ ΕΠΕΞΕΡΓΑΣΙΑ ΣΗΜΑΤΟΣ επ. (Ε/Τ&Δ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/digital-signal-processing/",
+    "ΨΣ-709-ΠΔΙ-ΣΥΝΕΡΓΑΤΙΚΑ ΠΕΡΙΒΑΛΛΟΝΤΑ ΜΑΘΗΣΗΣ επ. (Ε/ΠΔΙ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/collaborative-learning-environments/",
+    "ΨΣ-329-ΤΕΧΝΙΚΕΣ ΒΕΛΤΙΣΤΟΠΟΙΗΣΗΣ επ. (Ε/ΣΛΔ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/optimization-techniques/",
+    "ΨΣ-530-ΔΙΑΧΕΙΡΙΣΗ ΕΠΙΧΕΙΡΗΣΙΑΚΩΝ ΔΙΑΔΙΚΑΣΙΩΝ επ. (Ε/ΣΛΔ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/business-process-management/",
+    "ΨΣ-303-ΔΟΡΥΦΟΡΙΚΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ (ΥΔΚ/ΤΗΛ)": "https://www.ds.unipi.gr/courses/satellite-communications/",
+    "ΨΣ-331-ΣΧΕΔΙΑΣΜΟΣ ΚΑΙ ΒΕΛΤΙΣΤΟΠΟΙΗΣΗ ΔΙΚΤΥΩΝ (ΥΔΚ/ΔΙΚ)": "https://www.ds.unipi.gr/courses/satellite-communications-2/",
+    "ΨΣ-535-ΔΙΑΔΙΚΤΥΑΚΟΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ (ΥΔΚ/ΠΣ)": "https://www.ds.unipi.gr/courses/web-programming/",
+    "ΨΣ-706-ΠΔΙ-ΔΙΔΑΚΤΙΚΗ ΜΕΘΟΔΟΛΟΓΙΑ επ. (Ε/ΠΔΙ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/instructional-methods/",
+    "ΨΣ-330-ΠΡΟΣΟΜΟΙΩΣΗ ΣΥΣΤΗΜΑΤΩΝ επ. (Ε/Τ&Δ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/systems-simulation/",
+    "ΨΣ-701-ΠΔΙ-ΨΗΦΙΑΚΑ ΣΥΣΤΗΜΑΤΑ ΣΤΗΝ ΕΚΠΑΙΔΕΥΣΗ (ΥΔΚ/ΨΥ)": "https://www.ds.unipi.gr/courses/educational-digital-systems/",
+    "ΨΣ-404-ΑΝΑΓΝΩΡΙΣΗ ΠΡΟΤΥΠΩΝ (ΥΔΚ/ΔΔ)": "https://www.ds.unipi.gr/courses/pattern-recognition/",
+    "ΨΣ-910-ΣΤΡΑΤΗΓΙΚΟ ΜΑΝΑΤΖΜΕΝΤ (ΟΔΕ) επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/strategic-management/",
+    "ΨΣ-903-ΔΙΟΙΚΗΣΗ ΑΝΘΡΩΠΙΝΟΥ ΠΑΡΑΓΟΝΤΑ (ΟΔΕ) επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/human-factor-management/",
+    "ΨΣ-208-ΔΙΑΛΕΙΤΟΥΡΓΙΚΟΤΗΤΑ ΣΥΣΤΗΜΑΤΩΝ επ. (Ε/ΣΛΔ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/%ce%b9nteroperability-systems/",
+    "ΨΣ-313-ΑΝΑΠΤΥΞΗ ΤΗΛΕΠΙΚΟΙΝΩΝΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ επ. (Ε/Τ&Δ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/development-of-telecommunication-systems/",
+    "ΨΣ-310-ΑΣΥΡΜΑΤΑ ΔΙΚΤΥΑ ΜΙΚΡΗΣ ΕΜΒΕΛΕΙΑΣ επ. (Ε/Τ&Δ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/short-range-wireless-networks/",
+    "ΨΣ-520-ΣΥΣΤΗΜΑΤΑ ΕΥΦΥΩΝ ΠΡΑΚΤΟΡΩΝ (ΥΔΚ/ΑΣ)": "https://www.ds.unipi.gr/courses/intelligent-agents-and-multiagent-systems/",
+    "ΨΣ-806-ΚΡΥΠΤΟΓΡΑΦΙΑ επ. (Ε/ΑΣΦ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/cryptography/",
+    "ΨΣ-703-ΠΔΙ-ΣΥΣΤΗΜΑΤΑ ΗΛΕΚΤΡΟΝΙΚΗΣ ΜΑΘΗΣΗΣ επ. (Ε/ΠΔΙ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/e-learning-systems/",
+    "ΨΣ-513-1-ΥΠΗΡΕΣΙΟΣΤΡΕΦΕΙΣ ΑΡΧΙΤΕΚΤΟΝΙΚΕΣ ΚΑΙ ΦΟΡΗΤΗ ΥΠΟΛΟΓΙΣΤΙΚΗ επ. (Ε/ΣΛΔ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/network-oriented-information-systems/",
+    "ΨΣ-923-ΔΙΟΙΚΗΣΗ ΕΡΓΩΝ ΠΛΗΡΟΦΟΡΙΚΗΣ επ. (Ε/ΣΛΔ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/it-project-management/",
+    "ΨΣ-532-ΠΡΟΗΓΜΕΝΑ ΘΕΜΑΤΑ ΑΝΑΛΥΣΗΣ ΔΕΔΟΜΕΝΩΝ επ. (Ε/ΣΛΔ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/advanced-data-analysis-issues/",
+    "ΨΣ-534-ΑΛΓΟΡΙΘΜΟΙ ΗΛΕΚΤΡΟΝΙΚΩΝ ΑΓΟΡΩΝ επ. (Ε/ΥΥΥ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/algorithms-for-electronic-markets/",
+    "ΨΣ-733-ΠΔΙ-ΕΚΠΑΙΔΕΥΤΙΚΟΣ ΣΧΕΔΙΑΣΜΟΣ STEM επ. (Ε/ΠΔΙ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/educational-design/",
+    "ΨΣ-302-ΣΥΣΤΗΜΑΤΑ ΚΙΝΗΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ (ΥΔΚ/ΤΗΛ)": "https://www.ds.unipi.gr/courses/mobile-communication-systems/",
+    "ΨΣ-322-ΔΙΑΧΕΙΡΙΣΗ ΔΙΚΤΥΩΝ (ΥΔΚ/ΔΙΚ)": "https://www.ds.unipi.gr/courses/network-management/",
+    "ΨΣ-333-ΔΙΑΔΙΚΤΥΟ ΤΩΝ ΠΡΑΓΜΑΤΩΝ (Ε/Τ&Δ)": "https://www.ds.unipi.gr/courses/internet-of-things/",
+    "ΨΣ-809-ΙΔΙΩΤΙΚΟΤΗΤΑ ΣΤΟ ΔΙΑΔΙΚΤΥΟ επ. (Ε/ΑΣΦ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/internet-privacy/",
+    "ΨΣ-506-ΑΠΟΘΗΚΕΣ ΚΑΙ ΕΞΟΡΥΞΗ ΔΕΔΟΜΕΝΩΝ (ΥΔΚ/ΔΔ)": "https://www.ds.unipi.gr/courses/data-warehouses-and-data-mining/",
+    "ΨΣ-722-ΤΗΛΕΪΑΤΡΙΚΗ επ. (Ε/ΥΥΥ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/telemedicine/",
+    "ΨΣ-207-ΚΑΤΑΝΕΜΗΜΕΝΑ ΣΥΣΤΗΜΑΤΑ (ΥΔΚ/ΑΣ)": "https://www.ds.unipi.gr/courses/distributed-systems/",
+    "ΨΣ-734-ΠΔΙ-ΔΙΔΑΚΤΙΚΗ ΤΗΣ ΠΛΗΡΟΦΟΡΙΚΗΣ επ. (Ε/ΠΔΙ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/didactics-of-digital-technologies/",
+    "ΨΣ-730-ΔΙΑΧΕΙΡΙΣΗ ΚΑΙΝΟΤΟΜΙΑΣ ΚΑΙ ΨΗΦΙΑΚΗΣ ΕΠΙΧΕΙΡΗΜΑΤΙΚΟΤΗΤΑΣ επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/innovation-management/",
+    "ΨΣ-312-ΠΡΟΧΩΡΗΜΕΝΑ ΘΕΜΑΤΑ ΑΣΥΡΜΑΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/Τ&Δ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/advanced-topics-in-wireless-communications/",
+    "ΨΣ-804-ΑΣΦΑΛΕΙΑ ΚΙΝΗΤΩΝ & ΑΣΥΡΜΑΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/ΑΣΦ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/mobile-and-wireless-communications-security/",
+    "ΨΣ-521-ΑΝΑΚΤΗΣΗ ΠΛΗΡΟΦΟΡΙΩΝ επ. (Ε/ΣΛΔ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/information-retrieval/",
+    "ΨΣ-203-ΕΝΣΩΜΑΤΩΜΕΝΑ ΣΥΣΤΗΜΑΤΑ επ. (Ε/ΥΥΥ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/embedded-systems/",
+    "ΨΣ-409-ΚΟΙΝΩΝΙΚΑ ΔΙΚΤΥΑ επ. (Ε/ΥΥΥ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/social-networks/",
+    "ΨΣ-710-ΣΥΜΒΟΥΛΕΥΤΙΚΕΣ ΥΠΗΡΕΣΙΕΣ επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/it-centric-professional-development/",
+    "ΨΣ-721-ΠΛΗΡΟΦΟΡΙΑΚΑ ΣΥΣΤΗΜΑΤΑ ΥΓΕΙΑΣ επ. (Ε/ΥΥΥ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/healthcare-information-systems/",
+    "ΨΣ-704-ΔΙΑΧΕΙΡΙΣΗ ΓΝΩΣΗΣ ΚΑΙ ΙΚΑΝΟΤΗΤΩΝ (Ε/ΥΥΥ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/knowledge-and-competence-management/",
+    "ΨΣ-323-ΔΙΚΤΥΑ ΚΙΝΗΤΩΝ ΚΑΙ ΠΡΟΣΩΠΙΚΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/Τ&Δ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/mobile-and-personal-communication-networks/",
+    "ΨΣ-514-1-ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΑΚΥΒΕΡΝΗΣΗ επ. (Ε/ΣΛΔ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/e-business/",
+    "ΨΣ-512-1-ΜΕΘΟΔΟΛΟΓΙΕΣ ΑΝΑΠΤΥΞΗΣ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ (ΥΔΚ/ΠΣ)": "https://www.ds.unipi.gr/courses/information-systems/",
+    "ΨΣ-720-ΗΛΕΚΤΡΟΝΙΚΕΣ ΥΠΗΡΕΣΙΕΣ ΥΓΕΙΑΣ (ΥΔΚ/ΨΥ)": "https://www.ds.unipi.gr/courses/e-health-services/",
+    "ΨΣ-907-ΠΤΥΧΙΑΚΗ ΕΡΓΑΣΙΑ": "https://www.ds.unipi.gr/courses/final-year-project/",
+    "ΨΣ-906-ΠΤΥΧΙΑΚΗ ΕΡΓΑΣΙΑ": "https://www.ds.unipi.gr/courses/final-year-project/",
+    "ΨΣ-920-1-ΠΡΑΚΤΙΚΗ ΑΣΚΗΣΗ επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/student-placement/",
+    "ΨΣ-920-ΠΡΑΚΤΙΚΗ ΑΣΚΗΣΗ επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)": "https://www.ds.unipi.gr/courses/student-placement/"
+  },
+  "exams": [
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΠΡΟΧΩΡΗΜΕΝΑ ΘΕΜΑΤΑ ΑΣΥΡΜΑΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/Τ&Δ)",
+      "lectureHall": [
+        "ΚΕΚΤ-336"
+      ],
+      "semester": 8,
+      "date": "08/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΝΑΛΥΣΗ ΚΑΙ ΣΧΕΔΙΑΣΜΟΣ ΣΥΣΤΗΜΑΤΩΝ (μόνο εξέταση)",
+      "lectureHall": [
+        "ΚΕΚΤ-007-008 (Εργ.)"
+      ],
+      "semester": 2,
+      "date": "08/06/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#a22323"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΠΡΩΤΟΚΟΛΛΑ ΔΙΑΔΙΚΤΥΟΥ",
+      "lectureHall": [
+        "ΚΕΚΤ-002",
+        "ΚΕΚΤ-102",
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-106",
+        "ΚΕΚΤ-107",
+        "ΚΕΚΤ-108",
+        "ΚΕΚΤ-201"
+      ],
+      "semester": 6,
+      "date": "08/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "20:00:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΣΤΟΧΑΣΤΙΚΕΣ ΑΝΕΛΙΞΕΙΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-101",
+        "ΚΕΚΤ-102",
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-106",
+        "ΚΕΚΤ-108",
+        "ΚΕΚΤ-201"
+      ],
+      "semester": 2,
+      "date": "09/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "20:00:00",
+      "division": "Α - Ω",
+      "color": "#a22323"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΠΡΟΗΓΜΕΝΑ ΘΕΜΑΤΑ ΤΕΧΝΗΤΗΣ ΝΟΗΜΟΣΥΝΗΣ (ΥΠΚ/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-102",
+        "ΚΕΚΤ-103"
+      ],
+      "semester": 6,
+      "date": "10/06/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΕΥΦΥΗ ΣΥΣΤΗΜΑΤΑ (μόνο εξέταση, όσοι το οφείλουν ως υποχρεωτικό)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 4,
+      "date": "10/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#10436e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΚΟΙΝΩΝΙΚΑ ΔΙΚΤΥΑ επ. (Ε/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-335",
+        "ΚΕΚΤ-339"
+      ],
+      "semester": 8,
+      "date": "10/06/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΑΧΕΙΡΙΣΗ ΔΙΚΤΥΩΝ (ΥΔΚ/ΔΙΚ)",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-002"
+      ],
+      "semester": 8,
+      "date": "11/06/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ ΠΑΓΚΟΣΜΙΟΥ ΙΣΤΟΥ (μόνο εξέταση)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 4,
+      "date": "11/06/2026",
+      "startTime": "13:30:00",
+      "endTime": "15:30:00",
+      "division": "Α - Ω",
+      "color": "#10436e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΝΑΚΤΗΣΗ ΠΛΗΡΟΦΟΡΙΩΝ επ. (Ε/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-002"
+      ],
+      "semester": 8,
+      "date": "12/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΑΔΙΚΤΥΑΚΑ ΠΛΗΡΟΦΟΡΙΑΚΑ ΣΥΣΤΗΜΑΤΑ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-106"
+      ],
+      "semester": 6,
+      "date": "12/06/2026",
+      "startTime": "13:30:00",
+      "endTime": "15:30:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΚΤΥΑ ΥΠΟΛΟΓΙΣΤΩΝ Ι",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 4,
+      "date": "15/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#10436e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΤΕΧΝΟΛΟΓΙΑ ΠΟΛΥΜΕΣΩΝ επ. (Ε/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-101",
+        "ΚΕΚΤ-335",
+        "ΚΕΚΤ-336",
+        "ΚΕΚΤ-339"
+      ],
+      "semester": 6,
+      "date": "15/06/2026",
+      "startTime": "13:30:00",
+      "endTime": "15:30:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΣΦΑΛΕΙΑ ΚΙΝΗΤΩΝ & ΑΣΥΡΜΑΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/ΑΣΦ)",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-101",
+        "ΚΕΚΤ-107"
+      ],
+      "semester": 8,
+      "date": "15/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "20:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΤΗΛΕΪΑΤΡΙΚΗ επ. (Ε/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-108"
+      ],
+      "semester": 8,
+      "date": "16/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-106",
+        "ΚΕΚΤ-201",
+        "ΚΕΚΤ-202",
+        "ΚΕΚΤ-203",
+        "ΚΕΚΤ-204"
+      ],
+      "semester": 2,
+      "date": "16/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "21:00:00",
+      "division": "Α - Ω",
+      "color": "#a22323"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΙΔΙΩΤΙΚΟΤΗΤΑ ΣΤΟ ΔΙΑΔΙΚΤΥΟ επ. (Ε/ΑΣΦ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 8,
+      "date": "17/06/2026",
+      "startTime": "09:00:00",
+      "endTime": "17:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΣΦΑΛΕΙΑ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-106",
+        "ΚΕΚΤ-107"
+      ],
+      "semester": 6,
+      "date": "18/06/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΜΕΘΟΔΟΛΟΓΙΕΣ ΑΝΑΠΤΥΞΗΣ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ (ΥΔΚ/ΠΣ)",
+      "lectureHall": [
+        "ΚΕΚΤ-106"
+      ],
+      "semester": 8,
+      "date": "18/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "20:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΣΥΣΤΗΜΑΤΑ ΚΙΝΗΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ (ΥΔΚ/ΤΗΛ)",
+      "lectureHall": [
+        "ΚΕΚΤ-108",
+        "ΚΕΚΤ-339"
+      ],
+      "semester": 8,
+      "date": "19/06/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΤΕΧΝΟΛΟΓΙΕΣ ΔΙΑΣΦΑΛΙΣΗΣ ΙΔΙΩΤΙΚΟΤΗΤΑΣ επ. (Ε/ΑΣΦ)",
+      "lectureHall": [
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-335",
+        "ΚΕΚΤ-336"
+      ],
+      "semester": 6,
+      "date": "19/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΣΧΕΔΙΑΣΜΟΣ ΒΑΣΕΩΝ ΔΕΔΟΜΕΝΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-002",
+        "ΚΕΚΤ-101",
+        "ΚΕΚΤ-102",
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-107",
+        "ΚΕΚΤ-108"
+      ],
+      "semester": 4,
+      "date": "22/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#10436e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΝΤΙΚΕΙΜΕΝΟΣΤΡΕΦΗΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-002",
+        "ΚΕΚΤ-Π. αμφ",
+        "ΚΕΚΤ-101",
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-106"
+      ],
+      "semester": 2,
+      "date": "22/06/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#a22323"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΑΔΙΚΤΥΟ ΤΩΝ ΠΡΑΓΜΑΤΩΝ (Ε/Τ&Δ)",
+      "lectureHall": [
+        "ΚΕΚΤ-202",
+        "ΚΕΚΤ-203"
+      ],
+      "semester": 8,
+      "date": "22/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "20:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΗΛΕΚΤΡΟΝΙΚΕΣ ΥΠΗΡΕΣΙΕΣ ΥΓΕΙΑΣ (ΥΔΚ/ΨΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "semester": 8,
+      "date": "23/06/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΤΕΧΝΙΚΕΣ ΒΕΛΤΙΣΤΟΠΟΙΗΣΗΣ επ. (Ε/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-101",
+        "ΚΕΚΤ-102"
+      ],
+      "semester": 6,
+      "date": "23/06/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΟΙΚΗΣΗ ΟΛΙΚΗΣ ΠΟΙΟΤΗΤΑΣ (ΟΔΕ) (μόνο εξέταση όσοι το οφείλουν ως υποχρεωτικό) (ΗΥ/ΣΕΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-Π. αμφ",
+        "ΚΕΚΤ-102",
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-106",
+        "ΚΕΚΤ-107"
+      ],
+      "semester": 8,
+      "date": "24/06/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΣΥΡΜΑΤΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ (ΥΠΚ/Τ&Δ)",
+      "lectureHall": [
+        "ΚΕΚΤ-101",
+        "ΚΕΚΤ-108",
+        "ΚΕΚΤ-336",
+        "ΚΕΚΤ-339"
+      ],
+      "semester": 6,
+      "date": "25/06/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΚΑΤΑΝΕΜΗΜΕΝΑ ΣΥΣΤΗΜΑΤΑ (ΥΔΚ/ΑΣ)",
+      "lectureHall": [
+        "ΚΕΚΤ-202",
+        "ΚΕΚΤ-203"
+      ],
+      "semester": 8,
+      "date": "25/06/2026",
+      "startTime": "13:30:00",
+      "endTime": "15:30:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΛΓΟΡΙΘΜΟΙ & ΠΟΛΥΠΛΟΚΟΤΗΤΑ",
+      "lectureHall": [
+        "ΚΕΚΤ-101",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-106",
+        "ΚΕΚΤ-107",
+        "ΚΕΚΤ-108",
+        "ΚΕΚΤ-203",
+        "ΚΕΚΤ-204"
+      ],
+      "semester": 4,
+      "date": "26/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#10436e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΞΙΟΛΟΓΗΣΗ ΕΠΙΔΟΣΕΩΝ ΤΗΛΕΠΙΚΟΙΝΩΝΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ επ. (μόνο εξέταση) (Ε/Τ&Δ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 8,
+      "date": "26/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "20:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΨΗΦΙΑΚΗ ΕΠΕΞΕΡΓΑΣΙΑ ΣΗΜΑΤΟΣ επ. (Ε/Τ&Δ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 6,
+      "date": "26/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "20:00:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΑΧΕΙΡΙΣΗ ΓΝΩΣΗΣ ΚΑΙ ΙΚΑΝΟΤΗΤΩΝ (Ε/ΥΥΥ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 8,
+      "date": "29/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΣΥΝΕΡΓΑΤΙΚΑ ΠΕΡΙΒΑΛΛΟΝΤΑ ΜΑΘΗΣΗΣ επ. (Ε/ΠΔΙ)",
+      "lectureHall": [
+        "Γρ. Καθηγήτριας"
+      ],
+      "semester": 6,
+      "date": "29/06/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΣΥΜΒΟΥΛΕΥΤΙΚΕΣ ΥΠΗΡΕΣΙΕΣ επ. (Ε/ΓΕΝΙΚΟ)",
+      "lectureHall": [
+        "Γρ. Καθηγήτριας"
+      ],
+      "semester": 8,
+      "date": "29/06/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΣΤΑΤΙΣΤΙΚΗ",
+      "lectureHall": [
+        "ΚΕΚΤ-002",
+        "ΚΕΚΤ-Π. αμφ",
+        "ΚΕΚΤ-202",
+        "ΚΕΚΤ-203",
+        "ΚΕΚΤ-204"
+      ],
+      "semester": 4,
+      "date": "29/06/2026",
+      "startTime": "18:00:00",
+      "endTime": "21:00:00",
+      "division": "Α - Ω",
+      "color": "#10436e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΠΛΗΡΟΦΟΡΙΑΚΑ ΣΥΣΤΗΜΑΤΑ ΥΓΕΙΑΣ επ. (Ε/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-106"
+      ],
+      "semester": 8,
+      "date": "30/06/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΕΠΙΚΟΙΝΩΝΙΕΣ ΠΟΛΥΜΕΣΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-002",
+        "ΚΕΚΤ-Π. αμφ",
+        "ΚΕΚΤ-106"
+      ],
+      "semester": 6,
+      "date": "30/06/2026",
+      "startTime": "13:30:00",
+      "endTime": "15:30:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΟΜΗΜΕΝΗ ΑΝΑΠΑΡΑΣΤΑΣΗ ΠΛΗΡΟΦΟΡΙΩΝ (ΥΠΚ/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-106",
+        "ΚΕΚΤ-107"
+      ],
+      "semester": 6,
+      "date": "01/07/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΚΤΥΑ ΚΙΝΗΤΩΝ ΚΑΙ ΠΡΟΣΩΠΙΚΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/Τ&Δ)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "semester": 8,
+      "date": "01/07/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΑΧΕΙΡΙΣΗ ΚΑΙΝΟΤΟΜΙΑΣ ΚΑΙ ΨΗΦΙΑΚΗΣ ΕΠΙΧΕΙΡΗΜΑΤΙΚΟΤΗΤΑΣ επ. (Ε/ΓΕΝΙΚΟ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 8,
+      "date": "01/07/2026",
+      "startTime": "18:00:00",
+      "endTime": "20:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΝΑΛΥΣΗ ΔΕΔΟΜΕΝΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-002",
+        "ΚΕΚΤ-Π. αμφ"
+      ],
+      "semester": 4,
+      "date": "02/07/2026",
+      "startTime": "13:30:00",
+      "endTime": "15:30:00",
+      "division": "Α - Ω",
+      "color": "#10436e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΠΟΘΗΚΕΣ ΚΑΙ ΕΞΟΡΥΞΗ ΔΕΔΟΜΕΝΩΝ (ΥΔΚ/ΔΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-335",
+        "ΚΕΚΤ-336",
+        "ΚΕΚΤ-339"
+      ],
+      "semester": 8,
+      "date": "02/07/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΠΡΑΚΤΙΚΗ ΑΣΚΗΣΗ επ. (Ε/ΓΕΝΙΚΟ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 8,
+      "date": "03/07/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΠΤΥΧΙΑΚΗ ΕΡΓΑΣΙΑ",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 8,
+      "date": "03/07/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΑΚΡΙΤΑ ΜΑΘΗΜΑΤΙΚΑ",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-002",
+        "ΚΕΚΤ-Π. αμφ",
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-104",
+        "ΚΕΚΤ-105",
+        "ΚΕΚΤ-106"
+      ],
+      "semester": 2,
+      "date": "03/07/2026",
+      "startTime": "13:30:00",
+      "endTime": "15:30:00",
+      "division": "Α - Ω",
+      "color": "#a22323"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΕΝΕΡΓΕΙΑΚΑ ΣΥΣΤΗΜΑΤΑ ΚΑΙ ΠΟΛΙΤΙΚΕΣ επ. (μόνο εξέταση) (Ε/ΓΕΝΙΚΟ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 8,
+      "date": "03/07/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΑΧΕΙΡΙΣΗ ΕΠΙΧΕΙΡΗΣΙΑΚΩΝ ΔΙΑΔΙΚΑΣΙΩΝ επ. (Ε/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "semester": 6,
+      "date": "06/07/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΕΚΠΑΙΔΕΥΤΙΚΗ ΤΕΧΝΟΛΟΓΙΑ επ. (Ε/ΠΔΙ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 6,
+      "date": "06/07/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΑΚΥΒΕΡΝΗΣΗ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ (μόνο εξέταση) (Ε/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-336"
+      ],
+      "semester": 8,
+      "date": "07/07/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΑΡΧΙΤΕΚΤΟΝΙΚΕΣ ΥΠΟΛΟΓΙΣΤΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-001",
+        "ΚΕΚΤ-002",
+        "ΚΕΚΤ-Π. αμφ",
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-106"
+      ],
+      "semester": 2,
+      "date": "07/07/2026",
+      "startTime": "15:45:00",
+      "endTime": "17:45:00",
+      "division": "Α - Ω",
+      "color": "#a22323"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΔΙΔΑΚΤΙΚΗ ΤΗΣ ΠΛΗΡΟΦΟΡΙΚΗΣ επ. (Ε/ΠΔΙ)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "semester": 8,
+      "date": "08/07/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: UNIX",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-106",
+        "ΚΕΚΤ-201",
+        "ΚΕΚΤ-202",
+        "ΚΕΚΤ-203",
+        "ΚΕΚΤ-204"
+      ],
+      "semester": 4,
+      "date": "08/07/2026",
+      "startTime": "13:30:00",
+      "endTime": "15:30:00",
+      "division": "Α - Ω",
+      "color": "#10436e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΕΝΣΩΜΑΤΩΜΕΝΑ ΣΥΣΤΗΜΑΤΑ επ. (Ε/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-107"
+      ],
+      "semester": 8,
+      "date": "09/07/2026",
+      "startTime": "11:15:00",
+      "endTime": "13:15:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΕΞΕΤΑΣΗ: ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΑΚΥΒΕΡΝΗΣΗ επ. (Ε/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-106"
+      ],
+      "semester": 8,
+      "date": "10/07/2026",
+      "startTime": "09:00:00",
+      "endTime": "11:00:00",
+      "division": "Α - Ω",
+      "color": "#5e226e"
+    }
+  ],
+  "labs": [
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΣΦΑΛΕΙΑ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 1,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 1,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΑΔΙΚΤΥΑΚΑ ΠΛΗΡΟΦΟΡΙΑΚΑ ΣΥΣΤΗΜΑΤΑ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 1,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 1,
+          "time": "13:00-15:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΕΠΙΚΟΙΝΩΝΙΕΣ ΠΟΛΥΜΕΣΩΝ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 1,
+          "time": "15:00-17:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΟΜΗΜΕΝΗ ΑΝΑΠΑΡΑΣΤΑΣΗ ΠΛΗΡΟΦΟΡΙΩΝ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 1,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        },
+        {
+          "day": 1,
+          "time": "13:00-15:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΤΕΧΝΟΛΟΓΙΕΣ ΔΙΑΣΦΑΛΙΣΗΣ ΙΔΙΩΤΙΚΟΤΗΤΑΣ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 1,
+          "time": "15:00-17:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΚΟΙΝΩΝΙΚΑ ΔΙΚΤΥΑ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 1,
+          "time": "09:00-11:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΕΚΠΑΙΔΕΥΤΙΚΗ ΤΕΧΝΟΛΟΓΙΑ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 1,
+          "time": "15:00-17:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        },
+        {
+          "day": 2,
+          "time": "12:00-14:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΜΕΘΟΔΟΛΟΓΙΕΣ ΑΝΑΠΤΥΞΗΣ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 1,
+          "time": "08:00-11:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        },
+        {
+          "day": 3,
+          "time": "11:00-13:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΚΤΥΑ ΚΙΝΗΤΩΝ ΚΑΙ ΠΡΟΣΩΠΙΚΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 1,
+          "time": "11:00-14:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΠΡΟΧΩΡΗΜΕΝΑ ΘΕΜΑΤΑ ΑΣΥΡΜΑΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 1,
+          "time": "14:00-17:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        },
+        {
+          "day": 5,
+          "time": "16:00-18:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΠΡΩΤΟΚΟΛΛΑ ΔΙΑΔΙΚΤΥΟΥ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 2,
+          "time": "08:00-10:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 2,
+          "time": "10:00-12:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΝΤΙΚΕΙΜΕΝΟΣΤΡΕΦΗΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ",
+      "semester": 2,
+      "data": [
+        {
+          "day": 2,
+          "time": "13:00-15:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 2,
+          "time": "15:00-17:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 5,
+          "time": "12:00-14:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 5,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#741818"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΡΧΙΤΕΚΤΟΝΙΚΕΣ ΥΠΟΛΟΓΙΣΤΩΝ",
+      "semester": 2,
+      "data": [
+        {
+          "day": 2,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        },
+        {
+          "day": 2,
+          "time": "13:00-15:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        },
+        {
+          "day": 2,
+          "time": "15:00-17:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#741818"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΣΥΡΜΑΤΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 2,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΣΥΝΕΡΓΑΤΙΚΑ ΠΕΡΙΒΑΛΛΟΝΤΑ ΜΑΘΗΣΗΣ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 2,
+          "time": "09:00-12:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΠΛΗΡΟΦΟΡΙΑΚΑ ΣΥΣΤΗΜΑΤΑ ΥΓΕΙΑΣ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 2,
+          "time": "14:00-17:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        },
+        {
+          "day": 3,
+          "time": "14:00-16:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΠΟΘΗΚΕΣ ΚΑΙ ΕΞΟΡΥΞΗ ΔΕΔΟΜΕΝΩΝ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 2,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΑΚΥΒΕΡΝΗΣΗ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 2,
+          "time": "14:00-17:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        },
+        {
+          "day": 5,
+          "time": "14:00-16:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΑΧΕΙΡΙΣΗ ΕΠΙΧΕΙΡΗΣΙΑΚΩΝ ΔΙΑΔΙΚΑΣΙΩΝ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 3,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΣΧΕΔΙΑΣΜΟΣ ΒΑΣΕΩΝ ΔΕΔΟΜΕΝΩΝ",
+      "semester": 4,
+      "data": [
+        {
+          "day": 3,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 3,
+          "time": "13:00-15:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#0c3455"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΝΑΛΥΣΗ ΔΕΔΟΜΕΝΩΝ",
+      "semester": 4,
+      "data": [
+        {
+          "day": 3,
+          "time": "13:00-15:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 3,
+          "time": "15:00-17:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "16:00-18:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#0c3455"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΛΕΙΤΟΥΡΓΙΚΑ ΣΥΣΤΗΜΑΤΑ - UNIX",
+      "semester": 4,
+      "data": [
+        {
+          "day": 3,
+          "time": "15:00-17:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 3,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#0c3455"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΣΥΣΤΗΜΑΤΑ ΚΙΝΗΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 3,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        },
+        {
+          "day": 5,
+          "time": "11:00-14:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΗΛΕΚΤΡΟΝΙΚΕΣ ΥΠΗΡΕΣΙΕΣ ΥΓΕΙΑΣ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 3,
+          "time": "16:00-18:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        },
+        {
+          "day": 4,
+          "time": "14:00-17:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΕΝΣΩΜΑΤΩΜΕΝΑ ΣΥΣΤΗΜΑΤΑ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 3,
+          "time": "08:00-11:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΑΧΕΙΡΙΣΗ ΔΙΚΤΥΩΝ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 3,
+          "time": "11:00-14:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        },
+        {
+          "day": 5,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΑΔΙΚΤΥΟ ΤΩΝ ΠΡΑΓΜΑΤΩΝ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 3,
+          "time": "14:00-17:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        },
+        {
+          "day": 5,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΚΤΥΑ ΥΠΟΛΟΓΙΣΤΩΝ Ι",
+      "semester": 4,
+      "data": [
+        {
+          "day": 4,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "16:00-18:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#0c3455"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΣΥΜΒΟΥΛΕΥΤΙΚΕΣ ΥΠΗΡΕΣΙΕΣ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 4,
+          "time": "11:00-14:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΤΕΧΝΙΚΕΣ ΒΕΛΤΙΣΤΟΠΟΙΗΣΗΣ",
+      "semester": 6,
+      "data": [
+        {
+          "day": 4,
+          "time": "14:00-16:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΑΧΕΙΡΙΣΗ ΚΑΙΝΟΤΟΜΙΑΣ ΚΑΙ ΨΗΦΙΑΚΗΣ ΕΠΙΧΕΙΡΗΜΑΤΙΚΟΤΗΤΑΣ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 4,
+          "time": "11:00-14:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΚΑΤΑΝΕΜΗΜΕΝΑ ΣΥΣΤΗΜΑΤΑ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 5,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΤΗΛΕΙΑΤΡΙΚΗ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 5,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΔΑΚΤΙΚΗ ΤΗΣ ΠΛΗΡΟΦΟΡΙΚΗΣ",
+      "semester": 8,
+      "data": [
+        {
+          "day": 5,
+          "time": "15:00-18:00",
+          "labhall": "ΕΡΓΑΣΤΗΡΙΟ 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΓΛΩΣΣΑ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΥ C",
+      "semester": 1,
+      "data": [
+        {
+          "day": 1,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 1,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 1,
+          "time": "13:00-15:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 1,
+          "time": "15:00-17:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "16:00-18:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#741818"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΨΗΦΙΑΚΗ ΣΧΕΔΙΑΣΗ",
+      "semester": 1,
+      "data": [
+        {
+          "day": 1,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        },
+        {
+          "day": 1,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#741818"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΞΙΟΛΟΓΗΣΗ ΨΗΦΙΑΚΩΝ ΕΚΠΑΙΔΕΥΤΙΚΩΝ ΣΥΣΤΗΜΑΤΩΝ",
+      "semester": 5,
+      "data": [
+        {
+          "day": 1,
+          "time": "09:00-11:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΨΗΦΙΑΚΑ ΣΥΣΤΗΜΑΤΑ ΣΤΗΝ ΕΚΠΑΙΔΕΥΣΗ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 1,
+          "time": "13:00-15:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ ΓΙΑ ΜΕΓΑΛΑ ΔΕΔΟΜΕΝΑ",
+      "semester": 5,
+      "data": [
+        {
+          "day": 1,
+          "time": "13:00-15:00",
+          "labhall": "ΕΡΓΑΣΤ. 107"
+        },
+        {
+          "day": 5,
+          "time": "08:00-10:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΤΕΧΝΟΛΟΓΙΑ ΛΟΓΙΣΜΙΚΟΥ",
+      "semester": 3,
+      "data": [
+        {
+          "day": 2,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 4,
+          "time": "10:00-12:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 5,
+          "time": "10:00-12:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 5,
+          "time": "12:00-14:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#0c3455"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΥΠΗΡΕΣΙΟΣΤΡΕΦΕΙΣ ΑΡΧΙΤΕΚΤΟΝΙΚΕΣ ΚΑΙ ΦΟΡΗΤΗ ΥΠΟΛΟΓΙΣΤΙΚΗ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 2,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΑΔΙΚΤΥΑΚΟΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 2,
+          "time": "16:00-18:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΟΡΥΦΟΡΙΚΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 2,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΠΡΟΣΟΜΟΙΩΣΗ ΣΥΣΤΗΜΑΤΩΝ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 2,
+          "time": "16:00-18:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΠΡΟΗΓΜΕΝΑ ΘΕΜΑΤΑ ΑΝΑΛΥΣΗΣ ΔΕΔΟΜΕΝΩΝ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 2,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΨΗΦΙΑΚΗ ΕΠΕΞΕΡΓΑΣΙΑ ΕΙΚΟΝΑΣ",
+      "semester": 5,
+      "data": [
+        {
+          "day": 2,
+          "time": "12:00-14:00",
+          "labhall": "ΕΡΓΑΣΤ. 107"
+        },
+        {
+          "day": 4,
+          "time": "10:00-12:00",
+          "labhall": "ΕΡΓΑΣΤ. 107"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΟΜΕΣ ΔΕΔΟΜΕΝΩΝ",
+      "semester": 3,
+      "data": [
+        {
+          "day": 3,
+          "time": "10:00-12:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 3,
+          "time": "12:00-14:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#0c3455"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΥΠΟΛΟΓΙΣΤΙΚΑ ΝΕΦΗ",
+      "semester": 5,
+      "data": [
+        {
+          "day": 3,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΣΗΜΑΤΑ ΚΑΙ ΣΥΣΤΗΜΑΤΑ",
+      "semester": 3,
+      "data": [
+        {
+          "day": 3,
+          "time": "10:00-12:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#0c3455"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΚΤΥΑ ΥΠΟΛΟΓΙΣΤΩΝ ΙΙ",
+      "semester": 5,
+      "data": [
+        {
+          "day": 3,
+          "time": "14:00-16:00",
+          "labhall": "13.00-14.00"
+        },
+        {
+          "day": 3,
+          "time": "16:00-18:00",
+          "labhall": "13.00-14.00"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΣΥΡΜΑΤΑ ΔΙΚΤΥΑ ΜΙΚΡΗΣ ΕΜΒΕΛΕΙΑΣ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 3,
+          "time": "16:00-18:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΚΡΥΠΤΟΓΡΑΦΙΑ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 3,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. 107"
+        },
+        {
+          "day": 3,
+          "time": "11:00-13:00",
+          "labhall": "ΕΡΓΑΣΤ. 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΣΦΑΛΕΙΑ ΔΙΚΤΥΩΝ",
+      "semester": 5,
+      "data": [
+        {
+          "day": 4,
+          "time": "12:00-14:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΒΑΣΕΙΣ ΔΕΔΟΜΕΝΩΝ",
+      "semester": 5,
+      "data": [
+        {
+          "day": 4,
+          "time": "09:00-11:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        }
+      ],
+      "color": "#353534"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΝΑΓΝΩΡΙΣΗ ΠΡΟΤΥΠΩΝ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 4,
+          "time": "14:00-16:00",
+          "labhall": "13.00-14.00"
+        },
+        {
+          "day": 4,
+          "time": "16:00-18:00",
+          "labhall": "13.00-14.00"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΑΛΓΟΡΙΘΜΟΙ ΗΛΕΚΤΡΟΝΙΚΩΝ ΑΓΟΡΩΝ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 4,
+          "time": "09:00-11:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΕΚΠΑΙΔΕΥΤΙΚΟΣ ΣΧΕΔΙΑΣΜΟΣ STEM",
+      "semester": 7,
+      "data": [
+        {
+          "day": 4,
+          "time": "14:00-16:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΣΥΣΤΗΜΑΤΑ ΗΛΕΚΤΡΟΝΙΚΗΣ ΜΑΘΗΣΗΣ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 4,
+          "time": "16:00-18:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΔΙΑΛΕΙΤΟΥΡΓΙΚΟΤΗΤΑ ΣΥΣΤΗΜΑΤΩΝ",
+      "semester": 7,
+      "data": [
+        {
+          "day": 4,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ. 107"
+        }
+      ],
+      "color": "#461b54"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΕΙΣΑΓΩΓΗ ΣΤΙΣ ΤΗΛΕΠΙΚΟΙΝΩΝΙΕΣ",
+      "semester": 3,
+      "data": [
+        {
+          "day": 5,
+          "time": "14:00-16:00",
+          "labhall": "ΕΡΓΑΣΤ.ΙΣΟΓΕΙΟΥ"
+        },
+        {
+          "day": 5,
+          "time": "10:00-12:00",
+          "labhall": "ΕΡΓΑΣΤ. ΗΜΙΩΡΟΦΟΥ"
+        },
+        {
+          "day": 5,
+          "time": "14:00-16:00",
+          "labhall": "13.00-14.00"
+        }
+      ],
+      "color": "#0c3455"
+    },
+    {
+      "name": "ΕΡΓΑΣΤ.: ΕΥΡΥΖΩΝΙΚΑ ΔΙΚΤΥΑ",
+      "semester": 5,
+      "data": [
+        {
+          "day": 5,
+          "time": "09:00-11:00",
+          "labhall": "ΝΕΟΚΛΑΣΙΚΟ ΚΤΙΡΙΟ - ΑΙΘΟΥΣΑ Β102"
+        }
+      ],
+      "color": "#353534"
+    }
+  ],
+  "schedule": [
+    {
+      "title": "ΨΣ-002-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        4,
+        5
+      ],
+      "startTime": [
+        "10:15:00",
+        "10:15:00"
+      ],
+      "endTime": [
+        "12:00:00",
+        "12:00:00"
+      ],
+      "semester": 2,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-002-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ ΙΙ (φροντιστήριο)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "09:15:00"
+      ],
+      "endTime": [
+        "10:00:00"
+      ],
+      "semester": 2,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-004-ΔΙΑΚΡΙΤΑ ΜΑΘΗΜΑΤΙΚΑ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        5,
+        3
+      ],
+      "startTime": [
+        "08:15:00",
+        "11:15:00"
+      ],
+      "endTime": [
+        "10:00:00",
+        "13:00:00"
+      ],
+      "semester": 2,
+      "professor": [
+        "ΒΟΥΡΟΣ Γ.",
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-004-ΔΙΑΚΡΙΤΑ ΜΑΘΗΜΑΤΙΚΑ (φροντιστήριο)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "13:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 2,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-012-ΣΤΟΧΑΣΤΙΚΕΣ ΑΝΕΛΙΞΕΙΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        1,
+        2
+      ],
+      "startTime": [
+        "11:15:00",
+        "11:15:00"
+      ],
+      "endTime": [
+        "13:00:00",
+        "13:00:00"
+      ],
+      "semester": 2,
+      "professor": [
+        "ΑΛΕΞΙΟΥ Α."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-201-ΑΡΧΙΤΕΚΤΟΝΙΚΕΣ ΥΠΟΛΟΓΙΣΤΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "15:00:00"
+      ],
+      "semester": 2,
+      "professor": [
+        "ΑΝΑΣΤΑΣΟΠΟΥΛΟΣ Α.",
+        "ΜΗΛΙΩΝΗΣ Α."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-502-ΑΝΤΙΚΕΙΜΕΝΟΣΤΡΕΦΗΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "13:15:00"
+      ],
+      "endTime": [
+        "16:00:00"
+      ],
+      "semester": 2,
+      "professor": [
+        "ΓΕΩΡΓΙΟΥ Δ.",
+        "ΚΟΥΦΗ Β.",
+        "ΜΕΝΥΧΤΑΣ Α.",
+        "ΠΡΕΝΤΖΑ Α."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-011-ΣΤΑΤΙΣΤΙΚΗ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        3,
+        5
+      ],
+      "startTime": [
+        "08:15:00",
+        "12:15:00"
+      ],
+      "endTime": [
+        "10:00:00",
+        "13:00:00"
+      ],
+      "semester": 4,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-011-ΣΤΑΤΙΣΤΙΚΗ (φροντιστήριο)",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        3,
+        5
+      ],
+      "startTime": [
+        "10:15:00",
+        "13:15:00"
+      ],
+      "endTime": [
+        "11:00:00",
+        "14:00:00"
+      ],
+      "semester": 4,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-101-ΑΛΓΟΡΙΘΜΟΙ & ΠΟΛΥΠΛΟΚΟΤΗΤΑ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 4,
+      "professor": [
+        "ΤΕΛΕΛΗΣ Ο."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-101-ΑΛΓΟΡΙΘΜΟΙ & ΠΟΛΥΠΛΟΚΟΤΗΤΑ (φροντ.)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 4,
+      "professor": [
+        "ΤΕΛΕΛΗΣ Ο."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-210-ΛΕΙΤΟΥΡΓΙΚΑ ΣΥΣΤΗΜΑΤΑ - UNIX",
+      "lectureHall": [
+        "ΚΕΚΤ-202"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "18:15:00"
+      ],
+      "endTime": [
+        "21:00:00"
+      ],
+      "semester": 4,
+      "professor": [
+        "ΚΟΥΛΟΥΡΗΣ Δ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-320-ΔΙΚΤΥΑ ΥΠΟΛΟΓΙΣΤΩΝ Ι",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 4,
+      "professor": [
+        "ΓΑΛΑΝΗ Α.",
+        "ΔΕΜΕΣΤΙΧΑΣ Π."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-504-ΣΧΕΔΙΑΣΜΟΣ ΒΑΣΕΩΝ ΔΕΔΟΜΕΝΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 4,
+      "professor": [
+        "ΣΤΟΥΓΙΑΝΝΟΥ Ε.",
+        "ΧΑΛΚΙΔΗ Μ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-529-ΑΝΑΛΥΣΗ ΔΕΔΟΜΕΝΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 4,
+      "professor": [
+        "ΔΟΥΛΚΕΡΙΔΗΣ Χ.",
+        "ΜΟΥΤΣΕΛΟΣ Κ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-304-ΑΣΥΡΜΑΤΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ (ΥΠΚ/Τ&Δ)",
+      "lectureHall": [
+        "ΚΕΚΤ-108"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "15:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΒΟΥΓΙΟΥΚΑΣ Δ.",
+        "ΚΑΝΑΤΑΣ Α."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-326-ΠΡΩΤΟΚΟΛΛΑ ΔΙΑΔΙΚΤΥΟΥ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΡΟΥΣΚΑΣ Α.",
+        "ΧΑΛΕΠΛΙΔΗΣ Ε."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-332-1-ΔΙΑΔΙΚΤΥΑΚΑ ΠΛΗΡΟΦΟΡΙΑΚΑ ΣΥΣΤΗΜΑΤΑ",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "09:15:00"
+      ],
+      "endTime": [
+        "12:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΚΥΡΙΑΖΗΣ Δ.",
+        "ΜΕΝΥΧΤΑΣ Α.",
+        "ΠΑΝΟΥ Α."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-406-ΕΠΙΚΟΙΝΩΝΙΕΣ ΠΟΛΥΜΕΣΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "13:15:00"
+      ],
+      "endTime": [
+        "16:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΜΑΓΚΛΟΓΙΑΝΝΗΣ Η.",
+        "ΜΟΥΤΣΕΛΟΣ Κ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-411-ΠΡΟΗΓΜΕΝΑ ΘΕΜΑΤΑ ΤΕΧΝΗΤΗΣ ΝΟΗΜΟΣΥΝΗΣ (ΥΠΚ/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-202"
+      ],
+      "daysOfWeek": [
+        1,
+        3
+      ],
+      "startTime": [
+        "09:15:00",
+        "17:15:00"
+      ],
+      "endTime": [
+        "11:00:00",
+        "19:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΒΟΥΡΟΣ Γ.",
+        "ΣΠΑΘΑΡΗΣ Χ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-531-ΔΟΜΗΜΕΝΗ ΑΝΑΠΑΡΑΣΤΑΣΗ ΠΛΗΡΟΦΟΡΙΩΝ (ΥΠΚ/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-001"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "15:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΠΡΕΝΤΖΑ Α.",
+        "ΣΤΟΥΓΙΑΝΝΟΥ Ε."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-802-ΑΣΦΑΛΕΙΑ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΓΚΡΙΤΖΑΛΗΣ Σ.",
+        "ΜΑΚΡΗ Ε.Λ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-306-ΨΗΦΙΑΚΗ ΕΠΕΞΕΡΓΑΣΙΑ ΣΗΜΑΤΟΣ επ. (Ε/Τ&Δ) (Eπιλογή)",
+      "lectureHall": [
+        "ΝΕΟΚΛ-Β102"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "15:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΕΥΘΥΜΟΓΛΟΥ Γ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-329-ΤΕΧΝΙΚΕΣ ΒΕΛΤΙΣΤΟΠΟΙΗΣΗΣ επ. (Ε/ΣΛΔ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-104"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΤΕΛΕΛΗΣ Ο."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-402-ΤΕΧΝΟΛΟΓΙΑ ΠΟΛΥΜΕΣΩΝ επ. (Ε/ΥΥΥ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-303"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΣΓΟΥΡΟΣ Ν.-Μ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-530-ΔΙΑΧΕΙΡΙΣΗ ΕΠΙΧΕΙΡΗΣΙΑΚΩΝ ΔΙΑΔΙΚΑΣΙΩΝ επ. (Ε/ΣΛΔ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΚΟΥΦΗ Β."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-709-ΠΔΙ-ΣΥΝΕΡΓΑΤΙΚΑ ΠΕΡΙΒΑΛΛΟΝΤΑ ΜΑΘΗΣΗΣ επ. (Ε/ΠΔΙ) (Eπιλογή)",
+      "lectureHall": [
+        "ΝΕΟΚΛ-Β102"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "09:15:00"
+      ],
+      "endTime": [
+        "12:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΠΑΡΑΣΚΕΥΑ Φ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-732-ΠΔΙ-ΕΚΠΑΙΔΕΥΤΙΚΗ ΤΕΧΝΟΛΟΓΙΑ επ. (Ε/ΠΔΙ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΓΚΟΤΖΟΣ Δ.",
+        "ΣΑΜΨΩΝ Δ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-807-ΤΕΧΝΟΛΟΓΙΕΣ ΔΙΑΣΦΑΛΙΣΗΣ ΙΔΙΩΤΙΚΟΤΗΤΑΣ επ. (Ε/ΑΣΦ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 6,
+      "professor": [
+        "ΜΑΚΡΗ Ε.Λ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-207-ΚΑΤΑΝΕΜΗΜΕΝΑ ΣΥΣΤΗΜΑΤΑ (ΥΔΚ/ΑΣ)",
+      "lectureHall": [
+        "ΓΛ21-105"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΜΗΛΙΩΝΗΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-302-ΣΥΣΤΗΜΑΤΑ ΚΙΝΗΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ (ΥΔΚ/ΤΗΛ)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΚΑΝΑΤΑΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-322-ΔΙΑΧΕΙΡΙΣΗ ΔΙΚΤΥΩΝ (ΥΔΚ/ΔΙΚ)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΓΑΛΑΝΗ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-333-ΔΙΑΔΙΚΤΥΟ ΤΩΝ ΠΡΑΓΜΑΤΩΝ (Ε/Τ&Δ)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΒΟΥΓΙΟΥΚΑΣ Δ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-506-ΑΠΟΘΗΚΕΣ ΚΑΙ ΕΞΟΡΥΞΗ ΔΕΔΟΜΕΝΩΝ (ΥΔΚ/ΔΔ)",
+      "lectureHall": [
+        "ΓΛ21-103"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΣΤΟΥΓΙΑΝΝΟΥ Ε.",
+        "ΧΑΛΚΙΔΗ Μ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-512-1-ΜΕΘΟΔΟΛΟΓΙΕΣ ΑΝΑΠΤΥΞΗΣ ΠΛΗΡΟΦΟΡΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ (ΥΔΚ/ΠΣ)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΜΕΝΥΧΤΑΣ Α.",
+        "ΧΑΛΕΠΛΙΔΗΣ Ε."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-720-ΗΛΕΚΤΡΟΝΙΚΕΣ ΥΠΗΡΕΣΙΕΣ ΥΓΕΙΑΣ (ΥΔΚ/ΨΥ)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΛΙΑΛΙΟΥ Π."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-907-ΠΤΥΧΙΑΚΗ ΕΡΓΑΣΙΑ",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "_ΜΕΛΟΣ ΔΕΠ_"
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-203-ΕΝΣΩΜΑΤΩΜΕΝΑ ΣΥΣΤΗΜΑΤΑ επ. (Ε/ΥΥΥ) (Eπιλογή)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΜΗΛΙΩΝΗΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-312-ΠΡΟΧΩΡΗΜΕΝΑ ΘΕΜΑΤΑ ΑΣΥΡΜΑΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/Τ&Δ) (Eπιλογή)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΑΛΕΞΙΟΥ Α.",
+        "ΕΥΘΥΜΟΓΛΟΥ Γ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-323-ΔΙΚΤΥΑ ΚΙΝΗΤΩΝ ΚΑΙ ΠΡΟΣΩΠΙΚΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/Τ&Δ) (Eπιλογή)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΡΟΥΣΚΑΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-409-ΚΟΙΝΩΝΙΚΑ ΔΙΚΤΥΑ επ. (Ε/ΥΥΥ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-304"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΣΓΟΥΡΟΣ Ν.-Μ.",
+        "ΧΑΛΕΠΛΙΔΗΣ Ε."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-514-1-ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΑΚΥΒΕΡΝΗΣΗ επ. (Ε/ΣΛΔ) (Eπιλογή)",
+      "lectureHall": [
+        "ΝΕΟΚΛ-Β102"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΤΑΝΤΑΡΟΥΔΑΣ Ν."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-521-ΑΝΑΚΤΗΣΗ ΠΛΗΡΟΦΟΡΙΩΝ επ. (Ε/ΣΛΔ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-303"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΔΟΥΛΚΕΡΙΔΗΣ Χ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-704-ΔΙΑΧΕΙΡΙΣΗ ΓΝΩΣΗΣ ΚΑΙ ΙΚΑΝΟΤΗΤΩΝ (Ε/ΥΥΥ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-204"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΓΚΟΤΖΟΣ Δ.",
+        "ΣΑΜΨΩΝ Δ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-710-ΣΥΜΒΟΥΛΕΥΤΙΚΕΣ ΥΠΗΡΕΣΙΕΣ επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)",
+      "lectureHall": [
+        "ΝΕΟΚΛ-Β102"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΠΑΡΑΣΚΕΥΑ Φ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-721-ΠΛΗΡΟΦΟΡΙΑΚΑ ΣΥΣΤΗΜΑΤΑ ΥΓΕΙΑΣ επ. (Ε/ΥΥΥ) (Eπιλογή)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΛΙΑΛΙΟΥ Π."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-722-ΤΗΛΕΪΑΤΡΙΚΗ επ. (Ε/ΥΥΥ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΜΑΓΚΛΟΓΙΑΝΝΗΣ Η.",
+        "ΜΟΥΤΣΕΛΟΣ Κ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-730-ΔΙΑΧΕΙΡΙΣΗ ΚΑΙΝΟΤΟΜΙΑΣ ΚΑΙ ΨΗΦΙΑΚΗΣ ΕΠΙΧΕΙΡΗΜΑΤΙΚΟΤΗΤΑΣ επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΡΕΤΑΛΗΣ Σ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-734-ΠΔΙ-ΔΙΔΑΚΤΙΚΗ ΤΗΣ ΠΛΗΡΟΦΟΡΙΚΗΣ επ. (Ε/ΠΔΙ) (Eπιλογή)",
+      "lectureHall": [
+        "ΑΝΔ150-107"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΘΕΟΔΩΡΟΥ Π.",
+        "ΡΕΤΑΛΗΣ Σ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-804-ΑΣΦΑΛΕΙΑ ΚΙΝΗΤΩΝ & ΑΣΥΡΜΑΤΩΝ ΕΠΙΚΟΙΝΩΝΙΩΝ επ. (Ε/ΑΣΦ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-105"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΞΕΝΑΚΗΣ Χ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-809-ΙΔΙΩΤΙΚΟΤΗΤΑ ΣΤΟ ΔΙΑΔΙΚΤΥΟ επ. (Ε/ΑΣΦ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-102"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 8,
+      "professor": [
+        "ΓΚΡΙΤΖΑΛΗΣ Σ.",
+        "ΞΕΝΑΚΗΣ Χ.",
+        "ΠΑΝΟΥ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-920-1-ΠΡΑΚΤΙΚΗ ΑΣΚΗΣΗ επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 8,
+      "professor": [],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-006-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ & ΣΤΟΙΧΕΙΑ ΓΡΑΜΜΙΚΗΣ ΑΛΓΕΒΡΑΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        3,
+        5,
+        2,
+        5
+      ],
+      "startTime": [
+        "08:15:00",
+        "10:15:00",
+        "11:15:00",
+        "11:15:00"
+      ],
+      "endTime": [
+        "10:00:00",
+        "11:00:00",
+        "12:00:00",
+        "12:00:00"
+      ],
+      "semester": 1,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-006-ΜΑΘΗΜΑΤΙΚΗ ΑΝΑΛΥΣΗ & ΣΤΟΙΧΕΙΑ ΓΡΑΜΜΙΚΗΣ ΑΛΓΕΒΡΑΣ (φροντ.)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "13:00:00"
+      ],
+      "semester": 1,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-010-ΘΕΩΡΙΑ ΠΙΘΑΝΟΤΗΤΩΝ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        5,
+        3
+      ],
+      "startTime": [
+        "08:15:00",
+        "11:15:00"
+      ],
+      "endTime": [
+        "10:00:00",
+        "13:00:00"
+      ],
+      "semester": 1,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-010-ΘΕΩΡΙΑ ΠΙΘΑΝΟΤΗΤΩΝ (φροντιστήριο)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "10:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 1,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-014-ΛΟΓΙΚΗ ΚΑΙ ΛΟΓΙΚΟΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-103",
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        2,
+        3
+      ],
+      "startTime": [
+        "13:15:00",
+        "13:15:00"
+      ],
+      "endTime": [
+        "15:00:00",
+        "15:00:00"
+      ],
+      "semester": 1,
+      "professor": [
+        "ΜΗΛΙΩΝΗΣ Α."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-109-ΨΗΦΙΑΚΗ ΣΧΕΔΙΑΣΗ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "09:15:00"
+      ],
+      "endTime": [
+        "12:00:00"
+      ],
+      "semester": 1,
+      "professor": [
+        "ΜΑΚΡΗ Ε.Λ."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-501-ΓΛΩΣΣΑ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΥ \"C\"",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 1,
+      "professor": [
+        "ΚΥΡΙΑΖΗΣ Δ.",
+        "ΜΕΝΥΧΤΑΣ Α.",
+        "ΠΑΝΟΥ Α."
+      ],
+      "color": "#a22323"
+    },
+    {
+      "title": "ΨΣ-301-ΕΙΣΑΓΩΓΗ ΣΤΙΣ ΤΗΛΕΠΙΚΟΙΝΩΝΙΕΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "15:00:00"
+      ],
+      "semester": 3,
+      "professor": [
+        "ΒΟΥΓΙΟΥΚΑΣ Δ.",
+        "ΚΑΝΑΤΑΣ Α.",
+        "ΧΑΛΕΠΛΙΔΗΣ Ε."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-307-ΣΗΜΑΤΑ ΚΑΙ ΣΥΣΤΗΜΑΤΑ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 3,
+      "professor": [
+        "ΕΥΘΥΜΟΓΛΟΥ Γ.",
+        "ΧΑΛΕΠΛΙΔΗΣ Ε."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-503-ΔΟΜΕΣ ΔΕΔΟΜΕΝΩΝ (ΤΜΗΜΑ Α:Α-Λ)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 3,
+      "professor": [
+        "ΓΑΛΑΝΗ Α.",
+        "ΤΕΛΕΛΗΣ Ο."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-503-ΔΟΜΕΣ ΔΕΔΟΜΕΝΩΝ (ΤΜΗΜΑ Β:Μ-Ω)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 3,
+      "professor": [
+        "ΓΑΛΑΝΗ Α.",
+        "ΔΟΥΛΚΕΡΙΔΗΣ Χ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-507-ΤΕΧΝΟΛΟΓΙΑ ΛΟΓΙΣΜΙΚΟΥ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 3,
+      "professor": [
+        "ΠΡΕΝΤΖΑ Α.",
+        "ΣΤΟΥΓΙΑΝΝΟΥ Ε."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-708-ΠΔΙ-ΕΚΠΑΙΔΕΥΤΙΚΗ ΨΥΧΟΛΟΓΙΑ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 3,
+      "professor": [
+        "ΠΑΡΑΣΚΕΥΑ Φ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-805-ΘΕΩΡΙΑ ΠΛΗΡΟΦΟΡΙΑΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-203"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 3,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-805-ΘΕΩΡΙΑ ΠΛΗΡΟΦΟΡΙΑΣ (φροντ.)",
+      "lectureHall": [
+        "ΚΕΚΤ-203"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "18:15:00"
+      ],
+      "endTime": [
+        "20:00:00"
+      ],
+      "semester": 3,
+      "professor": [
+        "ΦΙΛΙΠΠΑΚΗΣ Μ."
+      ],
+      "color": "#10436e"
+    },
+    {
+      "title": "ΨΣ-305-ΨΗΦΙΑΚΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΕΥΘΥΜΟΓΛΟΥ Γ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-305-ΨΗΦΙΑΚΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ (φροντ.)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΒΟΥΓΙΟΥΚΑΣ Δ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-309-ΕΥΡΥΖΩΝΙΚΑ ΔΙΚΤΥΑ (ΥΠΚ/Τ&Δ)",
+      "lectureHall": [
+        "ΓΛ21-104"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΑΛΕΞΙΟΥ Α."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-321-ΔΙΚΤΥΑ ΥΠΟΛΟΓΙΣΤΩΝ ΙΙ (ΥΠΚ/Τ&Δ)",
+      "lectureHall": [
+        "ΓΛ21-305"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "09:15:00"
+      ],
+      "endTime": [
+        "12:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΓΑΛΑΝΗ Α.",
+        "ΔΕΜΕΣΤΙΧΑΣ Π."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-405-ΨΗΦΙΑΚΗ ΕΠΕΞΕΡΓΑΣΙΑ ΕΙΚΟΝΑΣ (ΥΠΚ/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΜΑΓΚΛΟΓΙΑΝΝΗΣ Η.",
+        "ΜΟΥΤΣΕΛΟΣ Κ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-505-ΒΑΣΕΙΣ ΔΕΔΟΜΕΝΩΝ (ΥΠΚ/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΜΑΝΟΥΣΟΠΟΥΛΟΣ Χ.",
+        "ΧΑΛΚΙΔΗ Μ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-518-ΤΕΧΝΗΤΗ ΝΟΗΜΟΣΥΝΗ",
+      "lectureHall": [
+        "ΚΕΚΤ-203"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΒΟΥΡΟΣ Γ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-518-ΤΕΧΝΗΤΗ ΝΟΗΜΟΣΥΝΗ (φροντ.)",
+      "lectureHall": [
+        "ΚΕΚΤ-105"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "18:15:00"
+      ],
+      "endTime": [
+        "20:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΒΟΥΡΟΣ Γ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-526-1-ΥΠΟΛΟΓΙΣΤΙΚΑ ΝΕΦΗ (ΥΠΚ/ΥΥΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΜΕΝΥΧΤΑΣ Α.",
+        "ΧΑΛΕΠΛΙΔΗΣ Ε."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-537-ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ ΓΙΑ ΜΕΓΑΛΑ ΔΕΔΟΜΕΝΑ (ΥΠΚ/ΣΛΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "15:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΔΟΥΛΚΕΡΙΔΗΣ Χ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-801-ΠΟΛΙΤΙΚΕΣ & ΔΙΑΧΕΙΡΙΣΗ ΑΣΦΑΛΕΙΑΣ",
+      "lectureHall": [
+        "ΚΕΚΤ-103"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΓΚΡΙΤΖΑΛΗΣ Σ.",
+        "ΜΑΚΡΗ Ε.Λ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-206-ΜΕΤΑΓΛΩΤΤΙΣΤΕΣ επ. (Ε/ΣΛΔ) (Επιλογή)",
+      "lectureHall": [
+        "ΓΛ21-303"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΣΓΟΥΡΟΣ Ν.-Μ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-412-ΚΒΑΝΤΙΚΗ ΥΠΟΛΟΓΙΣΤΙΚΗ επ. (Ε/ΥΥΥ) (Επιλογή)",
+      "lectureHall": [
+        "ΓΛ21-103"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "09:15:00"
+      ],
+      "endTime": [
+        "12:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΣΓΟΥΡΟΣ Ν.-Μ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-731-ΠΔΙ-ΑΞΙΟΛΟΓΗΣΗ ΨΗΦΙΑΚΩΝ ΕΚΠΑΙΔΕΥΤΙΚΩΝ ΣΥΣΤΗΜΑΤΩΝ επ. (Ε/ΠΔΙ) (Επιλογή)",
+      "lectureHall": [
+        "ΓΛ21-203"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "09:15:00"
+      ],
+      "endTime": [
+        "12:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΓΚΟΤΖΟΣ Δ.",
+        "ΡΕΤΑΛΗΣ Σ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-803-ΑΣΦΑΛΕΙΑ ΔΙΚΤΥΩΝ επ. (Ε/ΑΣΦ) (Επιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 5,
+      "professor": [
+        "ΓΚΡΙΤΖΑΛΗΣ Σ.",
+        "ΞΕΝΑΚΗΣ Χ."
+      ],
+      "color": "#4e4e4d"
+    },
+    {
+      "title": "ΨΣ-303-ΔΟΡΥΦΟΡΙΚΕΣ ΕΠΙΚΟΙΝΩΝΙΕΣ (ΥΔΚ/ΤΗΛ)",
+      "lectureHall": [
+        "ΓΛ21-405"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΒΟΥΓΙΟΥΚΑΣ Δ.",
+        "ΚΑΝΑΤΑΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-331-ΣΧΕΔΙΑΣΜΟΣ ΚΑΙ ΒΕΛΤΙΣΤΟΠΟΙΗΣΗ ΔΙΚΤΥΩΝ (ΥΔΚ/ΔΙΚ)",
+      "lectureHall": [
+        "ΓΛ21-303"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΡΟΥΣΚΑΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-404-ΑΝΑΓΝΩΡΙΣΗ ΠΡΟΤΥΠΩΝ (ΥΔΚ/ΔΔ)",
+      "lectureHall": [
+        "ΚΕΚΤ-336"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΜΑΓΚΛΟΓΙΑΝΝΗΣ Η.",
+        "ΜΟΥΤΣΕΛΟΣ Κ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-520-ΣΥΣΤΗΜΑΤΑ ΕΥΦΥΩΝ ΠΡΑΚΤΟΡΩΝ (ΥΔΚ/ΑΣ)",
+      "lectureHall": [
+        "ΚΕΚΤ-002",
+        "ΓΛ21-404"
+      ],
+      "daysOfWeek": [
+        3,
+        2
+      ],
+      "startTime": [
+        "14:15:00",
+        "17:15:00"
+      ],
+      "endTime": [
+        "16:00:00",
+        "19:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΒΟΥΡΟΣ Γ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-535-ΔΙΑΔΙΚΤΥΑΚΟΣ ΠΡΟΓΡΑΜΜΑΤΙΣΜΟΣ (ΥΔΚ/ΠΣ)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΚΟΥΦΗ Β."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-701-ΠΔΙ-ΨΗΦΙΑΚΑ ΣΥΣΤΗΜΑΤΑ ΣΤΗΝ ΕΚΠΑΙΔΕΥΣΗ (ΥΔΚ/ΨΥ)",
+      "lectureHall": [
+        "ΚΕΚΤ-001"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΓΚΟΤΖΟΣ Δ.",
+        "ΣΑΜΨΩΝ Δ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-906-ΠΤΥΧΙΑΚΗ ΕΡΓΑΣΙΑ",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 7,
+      "professor": [],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-208-ΔΙΑΛΕΙΤΟΥΡΓΙΚΟΤΗΤΑ ΣΥΣΤΗΜΑΤΩΝ επ. (Ε/ΣΛΔ) (Eπιλογή)",
+      "lectureHall": [
+        "ΝΕΟΚΛ-Β102"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΠΡΕΝΤΖΑ Α.",
+        "ΣΤΟΥΓΙΑΝΝΟΥ Ε."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-310-ΑΣΥΡΜΑΤΑ ΔΙΚΤΥΑ ΜΙΚΡΗΣ ΕΜΒΕΛΕΙΑΣ επ. (Ε/Τ&Δ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-336"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΑΛΕΞΙΟΥ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-313-ΑΝΑΠΤΥΞΗ ΤΗΛΕΠΙΚΟΙΝΩΝΙΑΚΩΝ ΣΥΣΤΗΜΑΤΩΝ επ. (Ε/Τ&Δ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-001"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΜΗΛΙΩΝΗΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-330-ΠΡΟΣΟΜΟΙΩΣΗ ΣΥΣΤΗΜΑΤΩΝ επ. (Ε/Τ&Δ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-404"
+      ],
+      "daysOfWeek": [
+        1
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΡΟΥΣΚΑΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-513-1-ΥΠΗΡΕΣΙΟΣΤΡΕΦΕΙΣ ΑΡΧΙΤΕΚΤΟΝΙΚΕΣ ΚΑΙ ΦΟΡΗΤΗ ΥΠΟΛΟΓΙΣΤΙΚΗ επ. (Ε/ΣΛΔ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        3
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΚΟΥΦΗ Β.",
+        "ΜΕΝΥΧΤΑΣ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-532-ΠΡΟΗΓΜΕΝΑ ΘΕΜΑΤΑ ΑΝΑΛΥΣΗΣ ΔΕΔΟΜΕΝΩΝ επ. (Ε/ΣΛΔ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-303"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΧΑΛΚΙΔΗ Μ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-534-ΑΛΓΟΡΙΘΜΟΙ ΗΛΕΚΤΡΟΝΙΚΩΝ ΑΓΟΡΩΝ επ. (Ε/ΥΥΥ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "08:15:00"
+      ],
+      "endTime": [
+        "11:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΤΕΛΕΛΗΣ Ο."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-703-ΠΔΙ-ΣΥΣΤΗΜΑΤΑ ΗΛΕΚΤΡΟΝΙΚΗΣ ΜΑΘΗΣΗΣ επ. (Ε/ΠΔΙ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-001"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "12:15:00"
+      ],
+      "endTime": [
+        "15:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΓΚΟΤΖΟΣ Δ.",
+        "ΣΑΜΨΩΝ Δ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-706-ΠΔΙ-ΔΙΔΑΚΤΙΚΗ ΜΕΘΟΔΟΛΟΓΙΑ επ. (Ε/ΠΔΙ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-303"
+      ],
+      "daysOfWeek": [
+        2
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΠΑΡΑΣΚΕΥΑ Φ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-733-ΠΔΙ-ΕΚΠΑΙΔΕΥΤΙΚΟΣ ΣΧΕΔΙΑΣΜΟΣ STEM επ. (Ε/ΠΔΙ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "15:15:00"
+      ],
+      "endTime": [
+        "18:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΘΕΟΔΩΡΟΥ Π.",
+        "ΡΕΤΑΛΗΣ Σ."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-806-ΚΡΥΠΤΟΓΡΑΦΙΑ επ. (Ε/ΑΣΦ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-002"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΞΕΝΑΚΗΣ Χ.",
+        "ΠΑΝΟΥ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-903-ΔΙΟΙΚΗΣΗ ΑΝΘΡΩΠΙΝΟΥ ΠΑΡΑΓΟΝΤΑ (ΟΔΕ) επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-202",
+        "Γρ. Καθηγήτριας"
+      ],
+      "daysOfWeek": [
+        1,
+        1
+      ],
+      "startTime": [
+        "10:15:00",
+        "13:15:00"
+      ],
+      "endTime": [
+        "13:00:00",
+        "14:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΜΠΟΥΡΑΝΤΑ Α."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-910-ΣΤΡΑΤΗΓΙΚΟ ΜΑΝΑΤΖΜΕΝΤ (ΟΔΕ) επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)",
+      "lectureHall": [
+        "ΚΕΚΤ-202",
+        "Γρ. Καθηγητή"
+      ],
+      "daysOfWeek": [
+        2,
+        5
+      ],
+      "startTime": [
+        "11:15:00",
+        "12:15:00"
+      ],
+      "endTime": [
+        "14:00:00",
+        "13:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΓΕΩΡΓΟΠΟΥΛΟΣ Ν."
+      ],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-920-ΠΡΑΚΤΙΚΗ ΑΣΚΗΣΗ επ. (Ε/ΓΕΝΙΚΟ) (Eπιλογή)",
+      "lectureHall": [
+        "Γρ. Καθηγητή"
+      ],
+      "daysOfWeek": [
+        4
+      ],
+      "startTime": [
+        "11:15:00"
+      ],
+      "endTime": [
+        "14:00:00"
+      ],
+      "semester": 7,
+      "professor": [],
+      "color": "#5e226e"
+    },
+    {
+      "title": "ΨΣ-923-ΔΙΟΙΚΗΣΗ ΕΡΓΩΝ ΠΛΗΡΟΦΟΡΙΚΗΣ επ. (Ε/ΣΛΔ) (Eπιλογή)",
+      "lectureHall": [
+        "ΓΛ21-303"
+      ],
+      "daysOfWeek": [
+        5
+      ],
+      "startTime": [
+        "14:15:00"
+      ],
+      "endTime": [
+        "17:00:00"
+      ],
+      "semester": 7,
+      "professor": [
+        "ΜΑΚΡΗ Ε.Λ."
+      ],
+      "color": "#5e226e"
+    }
+  ],
+  "teachers": {
+    "ΑΛΕΞΙΟΥ Α.": "https://www.ds.unipi.gr/faculty/alexiou/",
+    "ΒΟΥΓΙΟΥΚΑΣ Δ.": "https://www.ds.unipi.gr/faculty/dvouyiou/",
+    "ΒΟΥΡΟΣ Γ.": "https://www.ds.unipi.gr/faculty/georgev/",
+    "ΓΑΛΑΝΗ Α.": "https://www.ds.unipi.gr/lab-teaching-staff/agalani/",
+    "ΓΚΟΤΖΟΣ Δ.": "https://www.ds.unipi.gr/lab-teaching-staff/dgkotzos/",
+    "ΓΚΡΙΤΖΑΛΗΣ Σ.": "https://www.ds.unipi.gr/faculty/sgritz/",
+    "ΔΕΜΕΣΤΙΧΑΣ Π.": "https://www.ds.unipi.gr/faculty/pdemest/",
+    "ΔΟΥΛΚΕΡΙΔΗΣ Χ.": "https://www.ds.unipi.gr/faculty/cdoulk/",
+    "ΕΥΘΥΜΟΓΛΟΥ Γ.": "https://www.ds.unipi.gr/faculty/gefthymo/",
+    "ΚΑΝΑΤΑΣ Α.": "https://www.ds.unipi.gr/faculty/kanatas/",
+    "ΚΟΥΦΗ Β.": "https://www.ds.unipi.gr/lab-teaching-staff/vassok/",
+    "ΚΥΡΙΑΖΗΣ Δ.": "https://www.ds.unipi.gr/faculty/dimos/",
+    "ΜΑΓΚΛΟΓΙΑΝΝΗΣ Η.": "https://www.ds.unipi.gr/faculty/imaglo/",
+    "ΜΑΚΡΗ Ε.Λ.": "https://www.ds.unipi.gr/lab-teaching-staff/elmak/",
+    "ΜΑΝΟΥΣΟΠΟΥΛΟΣ Χ.": "https://www.ds.unipi.gr/lab-teaching-staff/cman/",
+    "ΜΕΝΥΧΤΑΣ Α.": "https://www.ds.unipi.gr/faculty/amenychtas/",
+    "ΜΗΛΙΩΝΗΣ Α.": "https://www.ds.unipi.gr/faculty/meliones/",
+    "ΜΟΥΤΣΕΛΟΣ Κ.": "https://www.ds.unipi.gr/lab-teaching-staff/kmouts/",
+    "ΞΕΝΑΚΗΣ Χ.": "https://www.ds.unipi.gr/faculty/xenakis/",
+    "ΠΑΝΟΥ Α.": "https://www.ds.unipi.gr/lab-teaching-staff/apanou/",
+    "ΠΑΡΑΣΚΕΥΑ Φ.": "https://www.ds.unipi.gr/faculty/fparaske/",
+    "ΠΡΕΝΤΖΑ Α.": "https://www.ds.unipi.gr/faculty/aprentza/",
+    "ΡΕΤΑΛΗΣ Σ.": "https://www.ds.unipi.gr/faculty/retal/",
+    "ΡΟΥΣΚΑΣ Α.": "https://www.ds.unipi.gr/faculty/arouskas/",
+    "ΣΑΜΨΩΝ Δ.": "https://www.ds.unipi.gr/faculty/sampson/",
+    "ΣΓΟΥΡΟΣ Ν.-Μ.": "https://www.ds.unipi.gr/faculty/sgouros/",
+    "ΣΤΟΥΓΙΑΝΝΟΥ Ε.": "https://www.ds.unipi.gr/lab-teaching-staff/estoug/",
+    "ΦΙΛΙΠΠΑΚΗΣ Μ.": "https://www.ds.unipi.gr/faculty/mfilip/",
+    "ΧΑΛΕΠΛΙΔΗΣ Ε.": "https://www.ds.unipi.gr/lab-teaching-staff/ehalep/",
+    "ΧΑΛΚΙΔΗ Μ.": "https://www.ds.unipi.gr/faculty/mhalk/",
+    "ΤΕΛΕΛΗΣ Ο.": "https://www.ds.unipi.gr/faculty/telelis/"
+  }
+}
