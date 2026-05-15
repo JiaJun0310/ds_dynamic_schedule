@@ -70,7 +70,7 @@ body {
     align-items: center;
     /* min-height: 80vh;        */
     width: 100%;
-    padding: 20px;
+    /* padding: 20px; */
     background-size: cover;
     background-position: center;
     height: auto;
@@ -331,7 +331,7 @@ select {
 }
 
 .editCourse input {
-    width: 100%;
+    /* width: 100%; */
     padding: 8px;
     background-color: white;
 }
@@ -501,10 +501,16 @@ select {
     margin: 50px auto 100px auto;
 }
 
+/* #AcademicCalendarEditWrapper .editCourse {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+} */
 #AcademicCalendarEditWrapper .editCourse {
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 #AcademicCalendarEditWrapper h2 {
@@ -551,13 +557,13 @@ select {
 @media (max-width: 767px) {
 
     .semesterBox,
-    .holidayBox
-     {
+    .holidayBox {
         grid-template-columns: none !important;
-     }
+    }
 
+    /* TODO: fix the exam box for mobile view */
     /* .examBox {
-        grid-template-columns: none !important;             TODO: fix the exam box for mobile view
+        grid-template-columns: none !important;
     } */
 
     .editButtonWrapper {
@@ -618,12 +624,11 @@ select {
         grid-template-columns: 1fr;
     }
 
-
     .editCourse label {
         width: 100%;
         align-items: stretch;
     }
-    
+
 
     .title,
     .lectureHall,
@@ -639,10 +644,10 @@ select {
     .examsStartTime,
     .examsEndTime,
     .examsDivision,
-    .labTitle, 
+    .labTitle,
     .labSemesters,
     .labHall,
-    .labDaysOfWeek, 
+    .labDaysOfWeek,
     .labStartTime,
     .labEndTime,
     .semesterName,
@@ -659,7 +664,7 @@ select {
     }
 
 
-    
-   
-    
+
+
+
 }
