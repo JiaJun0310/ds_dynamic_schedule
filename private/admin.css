@@ -154,7 +154,9 @@ body {
 #editProgramButton,
 #editExamButton,
 #editLabButton,
-#editAcademicCalendar {
+#editAcademicCalendar,
+#editTeachersLink,
+#editCoursesLink {
     animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
     font-size: 20px;
     border: 1px solid rgb(107, 6, 6);
@@ -169,7 +171,9 @@ body {
 #editProgramButton:hover,
 #editExamButton:hover,
 #editLabButton:hover,
-#editAcademicCalendar:hover {
+#editAcademicCalendar:hover,
+#editTeachersLink:hover,
+#editCoursesLink:hover {
     background-color: #9f2b3d;
 }
 
@@ -178,6 +182,8 @@ body {
 #examsSelectWrapper,
 #labsSelectWrapper,
 #AcademicCalendarWrapper,
+#TeachersWrapper,
+#CoursesWrapper,
 #editWrapper,
 #examsEditWrapper,
 #labsEditWrapper {
@@ -188,7 +194,9 @@ body {
 #programSelectWrapper,
 #examsSelectWrapper,
 #labsSelectWrapper,
-#AcademicCalendarWrapper {
+#AcademicCalendarWrapper,
+#TeachersWrapper,
+#CoursesWrapper {
     font-family: sans-serif;
     justify-content: center;
     align-items: flex-start;
@@ -282,7 +290,9 @@ body {
 #editWrapper,
 #examsEditWrapper,
 #labsEditWrapper,
-#AcademicCalendarEditWrapper {
+#AcademicCalendarEditWrapper,
+#TeachersEditWrapper,
+#CoursesEditWrapper {
     font-family: sans-serif;
     justify-content: center;
     align-items: center;
@@ -458,7 +468,9 @@ select {
 #editWrapper button,
 #examsEditWrapper button,
 #labsEditWrapper button,
-#AcademicCalendarEditWrapper button {
+#AcademicCalendarEditWrapper button,
+#TeachersEditWrapper button,
+#CoursesEditWrapper button {
     background-color: #8c2635;
     color: #f0f0f0;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
@@ -475,7 +487,9 @@ select {
 #editWrapper button:hover,
 #examsEditWrapper button:hover,
 #labsEditWrapper button:hover,
-#AcademicCalendarEditWrapper button:hover {
+#AcademicCalendarEditWrapper button:hover,
+#TeachersEditWrapper button:hover,
+#CoursesEditWrapper button:hover {
     background-color: #9f2b3d;
 }
 
@@ -483,7 +497,9 @@ select {
 #backButton,
 #examsBackButton,
 #labsBackButton,
-#AcademicCalendarBackButton {
+#AcademicCalendarBackButton,
+#TeachersBackButton,
+#CoursesBackButton {
     position: absolute;
     top: 10px;
     left: 20px;
@@ -501,11 +517,6 @@ select {
     margin: 50px auto 100px auto;
 }
 
-/* #AcademicCalendarEditWrapper .editCourse {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-} */
 #AcademicCalendarEditWrapper .editCourse {
     width: 100%;
     max-width: 1000px;
@@ -553,6 +564,36 @@ select {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
+#TeachersEditWrapper .editCourse h2,
+#CoursesEditWrapper .editCourse h2{
+    margin-bottom: 50px;
+}
+
+.teacherBox,
+.coursesBox {
+    display: flex;
+    margin-bottom: 15px;
+    gap: 20px;
+}
+
+.teacherName{
+    width: 180px;
+}
+
+.coursesTitle {
+    width: 300px;
+}
+
+.teacherLink,
+.coursesLink {
+    width: 400px;
+}
+
+/* #TeachersEditWrapper button {
+    display: grid;
+    align-items: center;
+} */
+
 
 @media (max-width: 767px) {
 
@@ -577,7 +618,9 @@ select {
     #editProgramButton,
     #editExamButton,
     #editLabButton,
-    #editAcademicCalendar {
+    #editAcademicCalendar,
+    #editTeachersLink,
+    #editCoursesLink {
         width: 90%;
         max-width: 350px;
         height: 70px;
@@ -591,7 +634,9 @@ select {
     #backButton,
     #examsBackButton,
     #labsBackButton,
-    #AcademicCalendarBackButton {
+    #AcademicCalendarBackButton,
+    #TeachersBackButton,
+    #CoursesBackButton {
         position: static;
         align-self: flex-start;
         margin-left: 30px;
@@ -600,7 +645,9 @@ select {
     #programSelectWrapper,
     #examsSelectWrapper,
     #labsSelectWrapper,
-    #AcademicCalendarWrapper {
+    #AcademicCalendarWrapper,
+    #TeachersWrapper,
+    #CoursesWrapper {
         flex-direction: column;
         align-items: center;
     }

@@ -871,6 +871,115 @@ app.post("/updateAcademicCalendar", (req, res) => {
 });
 
 
+// Used in admin.js to get all the data for the teachers
+app.get("/getTeachers", (req, res) => {
+    try {
+        const filePath = path.join(
+            __dirname,
+            "jsonData",
+            "teachers.json",
+        );
+
+        if (!fs.existsSync(filePath)) {
+            return res
+                .status(404)
+                .json({ message: "Teachers file not found" });
+        }
+
+        const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+        res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to load teachers",
+        });
+    }
+});
+
+//gets the new data of the teachers and updates the teachers json file
+app.post("/updateTeachers", (req, res) => {
+    try {
+        const updatedTeachers = req.body;
+
+        const filePath = path.join(
+            __dirname,
+            "jsonData",
+            "teachers.json",
+        );
+
+        fs.writeFileSync(
+            filePath,
+            JSON.stringify(updatedTeachers, null, 2),
+            "utf8",
+        );
+
+        res.status(200).json({
+            message: "Teachers updated successfully!",
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({ message: "Failed to save teachers" });
+    }
+});
+
+// Used in admin.js to get all the data for the courses
+app.get("/getCourses", (req, res) => {
+    try {
+        const filePath = path.join(
+            __dirname,
+            "jsonData",
+            "courses.json",
+        );
+
+        if (!fs.existsSync(filePath)) {
+            return res
+                .status(404)
+                .json({ message: "Courses file not found" });
+        }
+
+        const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+        res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to load courses",
+        });
+    }
+});
+
+//gets the new data of the courses and updates the courses json file
+app.post("/updateCourses", (req, res) => {
+    try {
+        const updatedCourses = req.body;
+
+        const filePath = path.join(
+            __dirname,
+            "jsonData",
+            "courses.json",
+        );
+
+        fs.writeFileSync(
+            filePath,
+            JSON.stringify(updatedCourses, null, 2),
+            "utf8",
+        );
+
+        res.status(200).json({
+            message: "Courses updated successfully!",
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({ message: "Failed to save courses" });
+    }
+});
+
+
 // Merges all primary calendar, class, exam, lab, schedule, and teacher data into one master JSON file
 app.post("/mergeAll", verifyToken, async (req, res) => {
     try {

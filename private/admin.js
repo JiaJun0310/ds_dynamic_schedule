@@ -61,9 +61,9 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                     alert(
                         //If everything goes correct (which it will because it's an amazing pipeline) this alert will apear
                         "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
-                            extractData +
-                            "\n2. Database: " +
-                            (syncResult.message || "Updated"),
+                        extractData +
+                        "\n2. Database: " +
+                        (syncResult.message || "Updated"),
                     );
                 } else if (id === "acCal") {
                     //If the document uploaded was in the accademic calendar field
@@ -92,15 +92,15 @@ document.querySelectorAll(".fileBox").forEach((box) => {
 
                     const syncResult = await syncResponse.json();
 
-                   
+
 
                     await triggerGlobalMerge();
 
                     alert(
                         "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
-                            extractData +
-                            "\n2. Files: " +
-                            (syncResult.message || "Updated"),
+                        extractData +
+                        "\n2. Files: " +
+                        (syncResult.message || "Updated"),
                     );
                 } else if (id === "exams") {
                     const extractResponse = await fetch(
@@ -123,9 +123,9 @@ document.querySelectorAll(".fileBox").forEach((box) => {
                     alert(
                         //If everything goes correct (which it will because it's an amazing pipeline) this alert will apear
                         "Η διαδικασία ολοκληρώθηκε!\n1. Εξαγωγή: " +
-                            extractData +
-                            "\n2. Database: " +
-                            (syncResult.message || "Updated"),
+                        extractData +
+                        "\n2. Database: " +
+                        (syncResult.message || "Updated"),
                     );
                 } else {
                     alert("Το αρχείο ανέβηκε!");
@@ -184,6 +184,19 @@ const AcademicCalendarEditWrapper = document.getElementById(
     "AcademicCalendarEditWrapper",
 );
 
+//for teachers
+const editTeachersLink = document.getElementById("editTeachersLink");
+const TeachersWrapper = document.getElementById("TeachersWrapper");
+const TeachersBackButton = document.getElementById("TeachersBackButton");
+const TeachersEditWrapper = document.getElementById("TeachersEditWrapper");
+
+//for courses
+const editCoursesLink = document.getElementById("editCoursesLink");
+const CoursesWrapper = document.getElementById("CoursesWrapper");
+const CoursesBackButton = document.getElementById("CoursesBackButton");
+const CoursesEditWrapper = document.getElementById("CoursesEditWrapper");
+
+
 //When the edit button is clicked it over writes the admin page and loads the academic calendar edit page
 editAcademicCalendar.onclick = async () => {
     adminPage.style.display = "none";
@@ -219,6 +232,26 @@ editLabButton.onclick = () => {
 
     labsSelectWrapper.style.display = "flex";
     labsEditWrapper.style.display = "flex";
+};
+
+//When the edit button is clicked it over writes the admin page and loads the teachers link edit page
+editTeachersLink.onclick = async () => {
+    adminPage.style.display = "none";
+    editButtonWrapper.style.display = "none";
+
+    TeachersWrapper.style.display = "flex";
+
+    await TeachersLink();
+};
+
+//When the edit button is clicked it over writes the admin page and loads the courses link edit page
+editCoursesLink.onclick = async () => {
+    adminPage.style.display = "none";
+    editButtonWrapper.style.display = "none";
+
+    CoursesWrapper.style.display = "flex";
+
+    await CoursesLink();
 };
 
 //When the back button is pressed it clears the content of the academic calendar edit page and overwrites it with the admin page
@@ -280,6 +313,37 @@ labsBackButton.onclick = () => {
 
     labsSelectWrapper.style.display = "none";
     labsEditWrapper.style.display = "none";
+
+    if (window.innerWidth <= 767) {
+        editButtonWrapper.style.display = "flex";
+    }
+};
+
+
+//When the back button is pressed it clears the content of the teachers edit page and overwrites it with the admin page
+TeachersBackButton.onclick = () => {
+    TeachersEditWrapper.innerHTML = "";
+
+    adminPage.style.display = "flex";
+    editButtonWrapper.style.display = "grid";
+
+    TeachersWrapper.style.display = "none";
+    TeachersEditWrapper.style.display = "none";
+
+    if (window.innerWidth <= 767) {
+        editButtonWrapper.style.display = "flex";
+    }
+};
+
+//When the back button is pressed it clears the content of the courses edit page and overwrites it with the admin page
+CoursesBackButton.onclick = () => {
+    CoursesEditWrapper.innerHTML = "";
+
+    adminPage.style.display = "flex";
+    editButtonWrapper.style.display = "grid";
+
+    CoursesWrapper.style.display = "none";
+    CoursesEditWrapper.style.display = "none";
 
     if (window.innerWidth <= 767) {
         editButtonWrapper.style.display = "flex";
@@ -370,14 +434,14 @@ courseSelect.addEventListener("change", async () => {
                  
                     <select name="semester">
                         ${[1, 2, 3, 4, 5, 6, 7, 8]
-                            .map(
-                                (s) => `
+                .map(
+                    (s) => `
                             <option value="${s}" ${s == semesterSelect.value[semesterSelect.value.length - 1] ? "selected" : ""}>
                                 ${s}
                             </option>
                         `,
-                            )
-                            .join("")}
+                )
+                .join("")}
                     </select>
 
                 </label><br>
@@ -407,14 +471,14 @@ courseSelect.addEventListener("change", async () => {
 
                         <select name="day">
                             ${[1, 2, 3, 4, 5]
-                                .map(
-                                    (d) => `
+                    .map(
+                        (d) => `
                                 <option value="${d}" ${d == lecture.day ? "selected" : ""}>
                                     ${d}
                                 </option>
                             `,
-                                )
-                                .join("")}
+                    )
+                    .join("")}
                         </select>
                        
                     </label><br>
@@ -609,14 +673,14 @@ examsCourseSelect.addEventListener("change", async () => {
                  
                     <select name="semester">
                         ${[1, 2, 3, 4, 5, 6, 7, 8]
-                            .map(
-                                (s) => `
+                .map(
+                    (s) => `
                             <option value="${s}" ${s == examsSemesterSelect.value[examsSemesterSelect.value.length - 1] ? "selected" : ""}>
                                 ${s}
                             </option>
                         `,
-                            )
-                            .join("")}
+                )
+                .join("")}
                     </select>
                 
                 </label><br>
@@ -787,14 +851,14 @@ labsCourseSelect.addEventListener("change", async () => {
                  
                     <select name="semester">
                         ${[1, 2, 3, 4, 5, 6, 7, 8]
-                            .map(
-                                (s) => `
+                .map(
+                    (s) => `
                             <option value="${s}" ${s == labsSemesterSelect.value[labsSemesterSelect.value.length - 1] ? "selected" : ""}>
                                 ${s}
                             </option>
                         `,
-                            )
-                            .join("")}
+                )
+                .join("")}
                     </select>
 
                 </label><br>
@@ -824,14 +888,14 @@ labsCourseSelect.addEventListener("change", async () => {
 
                         <select name="day">
                             ${[1, 2, 3, 4, 5]
-                                .map(
-                                    (d) => `
+                    .map(
+                        (d) => `
                                 <option value="${d}" ${d == lab.day ? "selected" : ""}>
                                     ${d}
                                 </option>
                             `,
-                                )
-                                .join("")}
+                    )
+                    .join("")}
                         </select>
                        
                     </label><br>
@@ -983,8 +1047,8 @@ async function loadAcademicCalendar() {
             <h2>Εξάμηνα</h2>
 
             ${data.semesters
-                .map(
-                    (semester) => `
+            .map(
+                (semester) => `
                 <div class="semesterBox">
 
                     <label>
@@ -1004,16 +1068,16 @@ async function loadAcademicCalendar() {
 
                 </div>
             `,
-                )
-                .join("")}
+            )
+            .join("")}
 
             <h2>Αργίες</h2>
 
             ${data.holidays
-                .map((holiday) => {
-                    const date = parseDateField(holiday.date);
+            .map((holiday) => {
+                const date = parseDateField(holiday.date);
 
-                    return `
+                return `
                     <div class="holidayBox">
 
                         <label>
@@ -1021,9 +1085,8 @@ async function loadAcademicCalendar() {
                             <input class="holidayName" value="${holiday.name}">
                         </label>
 
-                        ${
-                            date.isRange
-                                ? `
+                        ${date.isRange
+                        ? `
                                     <label>
                                         Από:
                                         <input type="date" class="holidayStart" value="${date.start}">
@@ -1034,24 +1097,24 @@ async function loadAcademicCalendar() {
                                         <input type="date" class="holidayEnd" value="${date.end}">
                                     </label>
                                 `
-                                : `
+                        : `
                                     <label>
                                         Ημερομηνία:
                                         <input type="date" class="holidayDate" value="${date.start}">
                                     </label>
                                 `
-                        }
+                    }
 
                     </div>
                 `;
-                })
-                .join("")}
+            })
+            .join("")}
 
             <h2>Εξεταστικές</h2>
 
             ${data.exam_periods
-                .map(
-                    (exam) => `
+            .map(
+                (exam) => `
                 <div class="examBox">
 
                     <label>
@@ -1066,8 +1129,8 @@ async function loadAcademicCalendar() {
 
                 </div>
             `,
-                )
-                .join("")}
+            )
+            .join("")}
 
         </div>
     `;
@@ -1166,6 +1229,173 @@ AcademicCalendarEditWrapper.addEventListener("click", async (e) => {
     }
 });
 
+//load teachers and their corresponding link
+async function TeachersLink() {
+    const res = await fetch("/getTeachers");
+    const data = await res.json();
+
+    TeachersEditWrapper.innerHTML = `
+        <div class="editCourse">
+
+            <h2>Σύνδεσμοι Διδασκόντων</h2>
+
+            ${Object.entries(data).map(([name, link]) => `
+                    <div class="teacherBox">
+
+                        <label>
+                            Όνομα Διδάσκοντα:
+                            <input type="text" class="teacherName" value="${name}">
+                        </label>
+
+                        <label>
+                            Σύνδεσμος:
+                            <input type="text" class="teacherLink" value="${link}">
+                        </label>
+
+                    </div>
+                    `
+    ).join("")}
+            
+        </div>
+    `;
+
+    //create the add button dynamically
+    // const addButton = document.createElement("button");
+    // addButton.id = "addTeachers";
+    // addButton.textContent = "Προσθήκη";
+
+    // TeachersEditWrapper.appendChild(addButton);
+
+    //create the save button dynamically
+    const button = document.createElement("button");
+    button.id = "saveTeachers";
+    button.textContent = "Αποθήκευση";
+
+    TeachersEditWrapper.appendChild(button);
+}
+
+
+//saves the changes of the teachers
+TeachersEditWrapper.addEventListener("click", async (e) => {
+    if (e.target.id === "saveTeachers") {
+        const names = document.querySelectorAll(".teacherName");
+        const links = document.querySelectorAll(".teacherLink");
+
+        const updatedTeachers = {};
+
+        names.forEach((nameInput, index) => {
+
+            const name = nameInput.value.trim();
+            const link = links[index].value.trim();
+
+            updatedTeachers[name] = link;
+        });
+
+        // send updated object to backend
+        try {
+            const res = await fetch("/updateTeachers", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedTeachers),
+            });
+
+            if (!res.ok) throw new Error("Save failed");
+
+            await triggerGlobalMerge();
+            alert("Saved!");
+        } catch (error) {
+            console.error(err);
+            alert("Error saving teachers");
+        }
+    }
+
+});
+
+//load courses and their corresponding link
+async function CoursesLink() {
+    const res = await fetch("/getCourses");
+    const data = await res.json();
+
+    CoursesEditWrapper.innerHTML = `
+        <div class="editCourse">
+
+            <h2>Σύνδεσμοι Μαθημάτων</h2>
+
+            ${Object.entries(data).map(([title, link]) => `
+                    <div class="coursesBox">
+
+                        <label>
+                            Όνομα Μαθήματος:
+                            <input type="text" class="coursesTitle" value="${title}">
+                        </label>
+
+                        <label>
+                            Σύνδεσμος:
+                            <input type="text" class="coursesLink" value="${link}">
+                        </label>
+
+                    </div>
+                    `
+    ).join("")}
+            
+        </div>
+    `;
+
+    //create the add button dynamically
+    // const addButton = document.createElement("button");
+    // addButton.id = "addTeachers";
+    // addButton.textContent = "Προσθήκη";
+
+    // TeachersEditWrapper.appendChild(addButton);
+
+    //create the save button dynamically
+    const button = document.createElement("button");
+    button.id = "saveCourses";
+    button.textContent = "Αποθήκευση";
+
+    CoursesEditWrapper.appendChild(button);
+}
+
+
+//saves the changes of the teachers
+CoursesEditWrapper.addEventListener("click", async (e) => {
+    if (e.target.id === "saveCourses") {
+        const titles = document.querySelectorAll(".coursesTitle");
+        const links = document.querySelectorAll(".coursesLink");
+
+        const updatedCourses = {};
+
+        titles.forEach((titleInput, index) => {
+
+            const title = titleInput.value.trim();
+            const link = links[index].value.trim();
+
+            updatedCourses[title] = link;
+        });
+
+        // send updated object to backend
+        try {
+            const res = await fetch("/updateCourses", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedCourses),
+            });
+
+            if (!res.ok) throw new Error("Save failed");
+
+            await triggerGlobalMerge();
+            alert("Saved!");
+        } catch (error) {
+            console.error(err);
+            alert("Error saving courses");
+        }
+    }
+
+});
 
 
 // Background helper to keep the unified master JSON updated
@@ -1174,7 +1404,7 @@ async function triggerGlobalMerge() {
     try {
         // 1. Tell the backend to rebuild allData.json
         const mergeResponse = await fetch("/mergeAll", { method: "POST" });
-        
+
         if (!mergeResponse.ok) {
             throw new Error("Failed to compile master dataset on the server.");
         }
@@ -1183,20 +1413,20 @@ async function triggerGlobalMerge() {
 
         // 2. Fetch the newly created file from the static folder
         const downloadRes = await fetch("/jsonData/allData.json");
-        
+
         if (downloadRes.ok) {
             const blob = await downloadRes.blob();
             const url = window.URL.createObjectURL(blob);
-            
+
             // 3. Create a temporary anchor element to force the browser download
             const a = document.createElement("a");
             a.style.display = "none";
             a.href = url;
             a.download = "allData.json"; // The filename it will save as
-            
+
             document.body.appendChild(a);
             a.click();
-            
+
             // 4. Clean up memory and remove the temporary element
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
