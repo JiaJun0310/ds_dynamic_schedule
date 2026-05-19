@@ -14,11 +14,6 @@
         <p>Επεξεργασία δεδομένων, παρακαλώ περιμένετε...</p>
     </div>
 
-    <header>
-        <img id="logo" src="../images/logo_unipi.svg"></img>
-
-    </header>
-
     <!-- div that includes the upload of the files -->
     <div class="adminWrapper">
 
@@ -75,6 +70,18 @@
         <div class="editBox">
             <button type="button" id="editLabButton">
                 <h3>Επεξεργασία Προγράμματος Εργαστηρίων</h3>
+            </button>
+        </div>
+
+        <div class="editBox">
+            <button type="button" id="editTeachersLink">
+                <h3>Επεξεργασία Συνδέσμων Διδασκόντων</h3>
+            </button>
+        </div>
+
+        <div class="editBox">
+            <button type="button" id="editCoursesLink">
+                <h3>Επεξεργασία Συνδέσμων Μαθημάτων</h3>
             </button>
         </div>
 
@@ -220,6 +227,35 @@
         </div>
 
     </div>
+
+    <!-- div that includes the back button and the edit wrapper for the teachers -->
+    <div id="TeachersWrapper">
+
+        <button type="button" id="TeachersBackButton">
+            <h3>Πίσω</h3>
+        </button>
+
+         <!-- div that contains the edit of the teachers that is created dynamically in js -->
+        <div id="TeachersEditWrapper">
+
+        </div>
+
+    </div>
+
+    <!-- div that includes the back button and the edit wrapper for the teachers -->
+    <div id="CoursesWrapper">
+
+        <button type="button" id="CoursesBackButton">
+            <h3>Πίσω</h3>
+        </button>
+
+         <!-- div that contains the edit of the teachers that is created dynamically in js -->
+        <div id="CoursesEditWrapper">
+
+        </div>
+
+    </div>
+
 
     <script src="/secure-admin-script.js"></script>
 
