@@ -1,0 +1,1158 @@
+/* Animation creating a shutter deopping down effect */
+@keyframes shutterOpen {
+    0% {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+/* Global reset */
+* {
+    box-sizing: border-box;
+}
+
+/* Body layout */
+body {
+    margin: 0;
+    padding-right: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    background-color: rgb(107, 6, 6);
+}
+
+/* Header bar */
+header {
+    background-color: #2f385f;
+    height: 100px;
+    width: 100%;
+    position: relative;
+    overflow: visible;
+    z-index: 1000;
+}
+
+/* Main container */
+main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Wrapper for calendar + sidebar */
+#wrapper {
+    display: flex;
+    flex: 1;
+    width: 100%;
+}
+
+/* Calendar section */
+#calendar {
+    flex: 4;
+    height: min-content;
+    background-color: white;
+    font-family: sans-serif;
+}
+
+/* Sidebar (semesters list) */
+#semesters {
+    flex: 1;
+    background-color: rgb(107, 6, 6);
+    border-left: 2px solid rgb(107, 6, 6);
+    border-right: 2px solid rgb(107, 6, 6);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Semester button container */
+.buttonDiv {
+    display: flex;
+    height: 3.5em;
+    cursor: pointer;
+    justify-content: space-between; /* Pushes text to middle and arrow to right */
+    align-items: center;
+    background-color: #8c2635;
+    border: 3px solid rgb(107, 6, 6);
+    padding: 0 15px; /* Adds some breathing room on the sides */
+    transition: background-color 0.2s ease;
+}
+
+/* Hover effect for semester buttons */
+.buttonDiv:hover {
+    color: rgb(176, 166, 166);
+    background-color: #a22538;
+}
+
+/* Semester button text */
+.semesterButtons {
+    margin: 0; /* REMOVES default paragraph margins that cause off-centering */
+    flex-grow: 1;
+    text-align: center;
+    font-size: 1em;
+    color: white;
+    font-family: sans-serif;
+    font-weight: 500;
+}
+
+/* Course item container */
+.course {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 5px;
+    color: white;
+    border: 2px solid rgb(86, 3, 3);
+    font-family: sans-serif;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+
+    overflow: hidden;
+    justify-content: space-between;
+
+    padding-left: 30px;
+    padding-right: 20px;
+}
+
+/* Course text */
+.course p {
+    flex: 1;
+    margin: 0;
+    justify-content: space-between;
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Course checkbox */
+.checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #2f385f;
+    background-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    outline: none;
+    border-radius: 2px;
+}
+
+.checkbox::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #b73c4f;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.checkbox:checked {
+    border-color: #b73c4f;
+}
+
+.checkbox:checked::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.checkbox:hover {
+    border-color: #a95b71;
+
+}
+
+.checkbox:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.checkbox:active {
+    transform: scale(0.95);
+}
+
+
+/* Visible course (animation state) */
+.course.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Generic image sizing */
+.pointer {
+    height: 30px; 
+    width: 30px;
+    margin-left: 10px;
+}
+
+/* Footer section */
+footer {
+    background-color: hsl(229, 34%, 28%);
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    padding: 20px 0;
+    width: 100%;
+}
+
+/* Announcement links */
+.announcements {
+    color: #bec6ea;
+}
+
+/* Calendar slot height */
+.fc-timegrid-slot {
+    height: max(4vh, 2.5em) !important;
+}
+
+/* Logo image */
+#logo {
+    height: 100%;
+    width: auto;
+}
+
+
+
+/* Calendar button spacing */
+.fc .fc-button {
+    margin-top: 10px;
+    margin-right: 5px;
+}
+
+/* Remove extra margin from prev button */
+.fc .fc-prev-button {
+    margin-right: 0 !important;
+}
+
+/* Calendar custom button sizes */
+.fc-downloadBtn-button {
+    height: 40px;
+    width: 107px;
+}
+
+.fc-today-button {
+    height: 40px;
+    width: 107px;
+}
+
+.fc-prev-button {
+    height: 40px;
+    width: 53.5px;
+}
+
+.fc-next-button {
+    height: 40px;
+    width: 53.5px;
+}
+
+.fc-viewBtn-button {
+    height: 40px;
+    width: 107px;
+}
+
+/* Bottom button container */
+#clearDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 10px;
+    background-color: rgb(107, 6, 6);
+    width: 100%;
+    margin-top: auto;
+}
+
+/* Toggle button (mobile only) */
+#toggleScreen {
+    display: none;
+}
+
+/* General button styling */
+.bottomButtons {
+    background-color: #2f385f;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    width: 90%;
+    max-width: 250px;
+    height: 50px;
+    font-size: 0.85em;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Button hover effect */
+.bottomButtons:hover {
+    background-color: #202848;
+}
+
+/* Sidebar wrapper container */
+#semesterWrapper {
+    transform-origin: top;
+    animation: shutterOpen 0.5s ease-out forwards;
+    overflow: hidden;
+    background-color: rgb(107, 6, 6);
+    display: flex;
+    flex-direction: column;
+    /* height: 1140px; */
+    overflow-y: auto;
+
+
+    width: 280px;
+    /* Sets the default starting width */
+    min-width: 150px;
+    /* Allows it to shrink more */
+
+}
+
+/* Box containing the radiobuttons */
+#radioBox {
+    background-color: #252d4f;
+    padding: 3px;
+    color: white;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+/* The label of the buttons, contains the text and the (hidden) clickable circle */
+#radioBox label {
+    background-color: #465286;
+    border: 2px solid #252d4f;
+    padding: 10px;
+    color: white;
+
+    font-size: 70%;
+    cursor: pointer;
+    flex-grow: 1;
+    /* These two commands make the buttons resizable when the sidebar is resized */
+    flex-basis: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* When the mouse hovers over the button it changes color */
+#radioBox label:hover {
+    background-color: #525f98;
+
+}
+
+/* Hiding the default clickable circle */
+#radioBox input[type="radio"] {
+    margin-right: 20px;
+    display: none;
+
+}
+
+/* The entire label triggers the radiobutton to be clicked. When selected, its appearance changes. */
+#radioBox label:has(input:checked) {
+    background-color: #252d4f;
+    border: 2px solid #465286;
+}
+
+#search {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+    background-color: #252d4f;
+    height: 3%;
+}
+
+#searchbar {
+    width: 80%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: none;
+    background-color: #848fbe;
+   font-size: 18px;
+    resize: none;
+    outline: none;
+
+}
+
+#filter {
+    background: none;
+    border: none;
+    cursor: pointer;
+    min-width: 35px;
+    min-height: 35px
+}
+
+.resizer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6px;
+    /* Thickness of the grab area */
+    height: 100%;
+    cursor: col-resize;
+    z-index: 50;
+    transition: background-color 0.2s;
+}
+
+.resizer:hover,
+.resizer.dragging {
+    background-color: rgba(255, 255, 255, 0.2);
+    /* Slight white highlight when dragging */
+}
+
+#examsBox {
+    display: none;
+    flex-direction: column;
+}
+
+#normalExam,
+#embolimExam {
+    display: flex;
+    height: 3.5em;
+
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    background-color: #465286;
+    border: 3px solid #252d4f;
+    color: white;
+}
+
+/* When the mouse hovers over the button it changes color */
+#normalExam:hover,
+#embolimExam:hover {
+    background-color: #525f98;
+}
+
+/* Class to be added when the button is clicked */
+#normalExam.active,
+#embolimExam.active {
+    background-color: #252d4f;
+    border: 2px solid #465286;
+
+}
+
+#labSlotPopup{
+    font-family: sans-serif; 
+    color: #ffffff; 
+    background-color: #2f385f; 
+    border: 3px solid #0d0f1e; 
+    border-radius: 8px; 
+    padding: 20px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+    width: 500px;
+}
+
+#labSlotCancel{
+    padding: 5px 10px;
+    color: rgb(0, 0, 0); 
+    background-color: rgb(198, 197, 203);
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+
+#labSlotCancel:hover{
+    background-color: rgb(169, 168, 176);
+}
+
+#labSlotConfirm{
+    padding: 5px 10px; 
+    background: #8c2635; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+}
+
+#labSlotConfirm:hover{
+    background: #a83042;
+}
+
+
+/* --- Styling για το Warning Popup --- */
+#labWarningPopup {
+    font-family: sans-serif; 
+    color: #ffffff; 
+    background-color: #2f385f; 
+    border: 3px solid #0d0f1e; 
+    border-radius: 8px; 
+    padding: 20px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+    width: 500px;
+    max-width: 90vw; /* Για να μην χαλάει σε μικρές οθόνες */
+}
+
+#labWarningPopup h3 {
+    margin-top: 0;
+    color: #e74c3c; /* Κρατάμε το κόκκινο του Warning για έμφαση */
+}
+
+#labWarningPopup .warning-buttons {
+    display: flex; 
+    gap: 10px; 
+    justify-content: flex-end; 
+    margin-top: 20px;
+}
+
+#labWarningNeverAgain {
+    padding: 5px 10px;
+    color: rgb(0, 0, 0); 
+    background-color: rgb(198, 197, 203);
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+
+#labWarningNeverAgain:hover {
+    background-color: rgb(169, 168, 176);
+}
+
+#labWarningGotIt {
+    padding: 5px 10px; 
+    background: #8c2635; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+}
+
+#labWarningGotIt:hover {
+    background: #a83042;
+}
+
+.labRadioButton {
+  
+    appearance: none;
+    -webkit-appearance: none;
+    
+    width: 18px;
+    height: 18px;
+    border: 2px solid #8c2635;
+    border-radius: 50%;
+    background-color: #2f385f;
+    margin-right: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+
+.labRadioButton:checked {
+    background-color: #8c2635;
+    box-shadow: inset 0 0 0 3px #2f385f; 
+}
+
+#filterMenu{
+    font-family: sans-serif;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+    background-color: #252d4f;
+    height: 4%;
+}
+
+.filterParam{
+    width: 40%;
+    height: 100%;
+    padding: 2px;
+    background-color: #465286;
+    border: 3px solid #252d4f;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+#filterSubmit{
+    padding-left: 7px;
+    width: 20%;
+    height: 90%;
+    background-color: #242b4a;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    border-radius: 4px; 
+    cursor: pointer; 
+}
+
+#filterSubmit:hover{
+    background-color: #1a1f37;
+}
+
+
+/* 1. MOVE positioning to the new wrapper container */
+.dropdown {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 50%; /* Keep your original height logic here */
+  display: inline-block;
+}
+
+/* 2. ADJUST the settings image to fit inside the wrapper */
+#settings {
+    margin-top: 6px;
+    height: 35px;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+#settings:hover {
+    transform: rotate(45deg);
+}
+
+/* 3. The actual menu (same as before, but aligns perfectly now) */
+.dropdown-content {
+  display: none; /* Hidden by default */
+  position: absolute; 
+  top: 100%; /* Pushes it exactly below the image */
+  right: 0; /* Aligns the menu to the right edge of the icon */
+  background-color: white;
+  min-width: 150px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  z-index: 100;
+  overflow: hidden;
+  margin-top: 10px; /* Optional: adds a little breathing room below the icon */
+}
+
+/* Styling for the links inside the menu */
+.dropdown-content a {
+  color: #333;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+/* Hover effect on links */
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Class added by JavaScript to make the menu visible */
+.show {
+  display: block;
+}
+
+/* Styling for the checkbox container */
+.dropdown-checkbox {
+  color: #333;
+  padding: 12px 16px;
+  display: flex;       /* Aligns box and text in a row */
+  align-items: center; /* Centers them vertically */
+  gap: 10px;           /* Adds space between the box and the text */
+  font-family: sans-serif;
+  font-size: 14px;
+  cursor: pointer;     /* Shows the pointer finger on hover */
+}
+
+/* Match the hover effect of the links */
+.dropdown-checkbox:hover {
+  background-color: #f1f1f1;
+}
+
+.slider{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    background-color: #83d2ff;
+    border: 4px solid #83d2ff;
+    border-radius:50px;
+    transition: background-color 0.5s ease;
+    transition: var(--fc-border-color) 0.5s ease;
+    margin-left: auto;
+}
+
+#dark-mode-toggle {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+}
+
+#sun{
+    height: 17px;
+    width: 17px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#moon{
+    opacity: 0;
+    height: 0px;
+    width: 0px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* --- Bulletproof FullCalendar Dark Theme --- */
+
+body.dark-theme .slider{
+    
+    height: 30px;
+    width: 30px;
+    background-color: #1c184b;
+    border: 4px solid #1c184b;
+    border-radius: 17px;
+
+    transition: background-color 0.5s ease;
+    transition: var(--fc-border-color) 0.5s ease;
+    margin-left: auto;
+}
+
+body.dark-theme #sun{
+    opacity: 0;
+    height: 0px;
+    width: 0px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+body.dark-theme #moon{
+    opacity: 1;
+    height: 15px;
+    width: 15px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+body.dark-theme .fc {
+  /* Override FullCalendar's native CSS variables */
+  --fc-page-bg-color: #1e1e1e;
+  --fc-neutral-bg-color: #2a2a2a;
+  --fc-neutral-text-color: #ffffff;
+  --fc-border-color: #444444;
+  --fc-today-bg-color: #4400ff !important;
+  --fc-button-text-color: #ffffff;
+  --fc-button-bg-color: #333333;
+  --fc-button-border-color: #555555;
+  --fc-button-hover-bg-color: #444444;
+  --fc-button-hover-border-color: #666666;
+  --fc-button-active-bg-color: #555555;
+  --fc-button-active-border-color: #777777;
+
+  /* Force the text color */
+  color: #ffffff;
+}
+
+/* Force the backgrounds of the grids, tables, and cells to be dark */
+body.dark-theme .fc-theme-standard .fc-scrollgrid,
+body.dark-theme .fc-theme-standard td,
+body.dark-theme .fc-theme-standard th,
+body.dark-theme .fc-view-harness,
+body.dark-theme .fc-view {
+  background-color: #1e1e1e !important;
+  border-color: #444444 !important;
+}
+
+/* Keep header links (like days/times) readable */
+body.dark-theme .fc a {
+  color: #dddddd !important;
+}
+
+/* Fix the color of the "more" popover if events stack up */
+body.dark-theme .fc-popover {
+  background-color: #2a2a2a !important;
+  border-color: #444444 !important;
+}
+body.dark-theme .fc-popover-header {
+  background-color: #333333 !important;
+}
+
+/* FullCalendar Header & Buttons to Dark Mode */
+
+/* 1. Fix the Calendar Title Text */
+body.dark-theme .fc .fc-toolbar-title {
+    color: #ffffff !important;
+}
+
+body.dark-theme .fc .fc-timegrid-col.fc-day-today {
+    background-color: #00668332 !important;
+    position: relative;
+    z-index: 1000;
+}
+
+body.dark-theme .fc-timegrid-col-frame {
+  border-left: solid 0.01px #444444 !important;
+  z-index: 1000
+}
+
+body.dark-theme .fc-header-toolbar {
+    background-color: #1e1e1e !important;
+    margin: 0px !important;
+    padding-bottom: 24px !important;
+}
+
+/* 2. Fix the Header Buttons (Today, Arrows, View options) */
+body.dark-theme .fc .fc-button-primary {
+  background-color: #333333 !important;
+  border-color: #555555 !important;
+  color: #ffffff !important;
+  box-shadow: none !important; /* Removes any weird Bootstrap glowing borders */
+}
+
+/* 3. Hover state for buttons */
+body.dark-theme .fc .fc-button-primary:hover {
+  background-color: #4a4a4a !important;
+  border-color: #666666 !important;
+  color: #ffffff !important;
+}
+
+/* 4. Active/Clicked state for buttons */
+body.dark-theme .fc .fc-button-primary:not(:disabled):active,
+body.dark-theme .fc .fc-button-primary.fc-button-active {
+  background-color: #555555 !important;
+  border-color: #777777 !important;
+  color: #ffffff !important;
+}
+
+/* 5. Fix the little arrow icons inside the prev/next buttons */
+body.dark-theme .fc .fc-icon {
+  color: #ffffff !important;
+}
+
+
+/* --- Dark Mode for the Settings Dropdown --- */
+body.dark-theme .dropdown-content {
+  background-color: #2a2a2a; /* Matches your dark theme */
+  border: 1px solid #444444;
+}
+
+body.dark-theme .dropdown-content a,
+body.dark-theme .dropdown-checkbox {
+  color: #ffffff;
+}
+
+body.dark-theme .dropdown-content a:hover,
+body.dark-theme .dropdown-checkbox:hover {
+  background-color: #444444;
+}
+
+/* --- PDF Download Link in Sidebar --- */
+#pdf-wrapper, #exam-pdf-wrapper {
+    text-align: center;
+    margin: 20px 0; /* Gives it some breathing room at the bottom of the list */
+}
+
+#pdf-download-link {
+    color: #bec6ea; /* Soft blue matching your existing links */
+    text-decoration: underline;
+    font-size: 0.85em; /* Keeps it small and subtle */
+    font-family: sans-serif;
+    transition: color 0.2s ease;
+}
+
+#pdf-download-link:hover {
+    color: #ffffff; /* Brightens up when the user hovers over it */
+}
+
+
+/* Mobile layout */
+@media (max-width: 767px) {
+
+    #wrapper {
+        flex-direction: column-reverse;
+    }
+
+    #calendar {
+        flex: none;
+        width: 100%;
+        display: none;
+    }
+
+    #clearDiv {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .bottomButtons {
+        flex: 1;
+        height: 55px;
+        margin: 5px;
+    }
+
+    #toggleScreen {
+        display: block;
+    }
+
+    #semesters {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        padding-bottom: 5px;
+    }
+
+    #semesterWrapper {
+        width: 100% !important;
+        min-width: unset;
+        max-width: unset;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fc .fc-toolbar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .fc #fc-dom-1 {
+        margin-top: 10px;
+    }
+}
+
+/* Small screens layout */
+@media (max-width: 485px) {
+
+    .fc-toolbar-chunk:nth-child(3) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "view download"
+            "today next_prev";
+        gap: 10px;
+    }
+
+    .fc-downloadBtn-button {
+        grid-area: download;
+    }
+
+    .fc-today-button {
+        grid-area: today;
+    }
+
+    .fc-button-group {
+        grid-area: next_prev;
+    }
+
+    .fc-viewBtn-button {
+        grid-area: view;
+    }
+
+    .fc-downloadBtn-button,
+    .fc-button-group {
+        justify-self: end;
+    }
+}
+
+/* Tablet layout */
+@media (min-width: 768px) and (max-width: 1100px) {
+
+    .fc-toolbar-chunk:nth-child(3) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "download view"
+            "today next_prev";
+        gap: 10px;
+        margin-right: 10px;
+    }
+
+    .fc-downloadBtn-button {
+        grid-area: download;
+    }
+
+    .fc-today-button {
+        grid-area: today;
+    }
+
+    .fc-button-group {
+        grid-area: next_prev;
+    }
+
+    .fc-viewBtn-button {
+        grid-area: view;
+    }
+
+    .fc-downloadBtn-button,
+    .fc-button-group {
+        justify-self: end;
+    }
+
+}
+
+/* --- Legal Disclaimer Banner --- */
+.legal-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2f385f; 
+    color: white;
+    padding: 15px 10px;
+    text-align: center;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+    z-index: 10001; 
+    display: none; 
+    font-family: sans-serif;
+}
+
+.legal-content p {
+    display: inline-block;
+    margin: 0 15px 10px 15px;
+    font-size: 0.9em;
+    vertical-align: middle;
+}
+
+.legal-content a {
+    color: #bec6ea;
+    text-decoration: underline;
+}
+
+.legal-content button {
+    background-color: #8c2635; 
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.2s;
+    vertical-align: middle;
+}
+
+.legal-content button:hover {
+    background-color: #a83042;
+}
+
+@media (max-width: 400px){
+    #settings {
+        height: 40px;
+        width: 40px;
+    }
+    #logo{
+        width: 260px;
+    }
+    header{
+        height: 80px;
+    }
+
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5); 
+  }
+  70% {
+    transform: scale(1.05); 
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1); 
+  }
+}
+
+/* Login page wrapper */
+.loginWrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    min-height: 80vh;       
+    background: radial-gradient(#3c516f, #0a0f29);
+    overflow-y: auto;
+}
+
+/* Login box */
+.loginBox {
+    animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
+    background-color: #2f385f;
+    color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;      
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+    width: 100%;
+    max-width: 400px;        
+    font-family: sans-serif;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 15px;               
+}
+
+#username
+{
+    font-size: 18px;
+}
+
+#password
+{
+    font-size: 18px;
+}
+
+.connectBtn {
+    background-color: #8c2635;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    width: 90%;
+    max-width: 250px;
+    height: 50px;
+    font-size: 0.85em;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Button hover effect */
+.connectBtn:hover {
+    background-color: #a22538;
+}
+
+.password-box{
+  position: relative;
+  width: 310px;
+}
+
+.password-box input{
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  padding-right: 45px;
+  padding-left: 10px;
+  box-sizing: border-box;
+}
+
+#ShowPassword{
+  position: absolute;
+  right: 10px;
+  top: 38%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: black;
+  font-size: 20px; 
+}

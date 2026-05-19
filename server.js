@@ -40,9 +40,13 @@ const storage = multer.diskStorage({
 //saves the file to /upload
 const upload = multer({ storage: storage });
 
-// connectDB(); //connect to db through db.js
+app.use(express.static(path.join(__dirname, "public")));
 
-// CHANGED: Allow frontend on port 1234 to talk to backend and send cookies
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+
+
 app.use(cors({ origin: 'http://localhost:1234', credentials: true })); 
 app.use(express.json()); //use json option with express
 app.use(cookieParser()); //use http cookie
@@ -927,8 +931,8 @@ const verifyAdminPage = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-        // Redirect back to your frontend Parcel server's login page
-        return res.redirect("http://localhost:1234/login.html");
+        // Redirect to the local login page instead of the old Parcel server
+        return res.redirect("/");
     }
 
     try {
@@ -936,11 +940,10 @@ const verifyAdminPage = (req, res, next) => {
         next();
     } catch (err) {
         res.clearCookie("token");
-        return res.redirect("http://localhost:1234/login.html");
+        return res.redirect("/");
     }
 };
 
-// Secure routes for the admin dashboard
 // Secure routes for the admin dashboard
 app.get("/admin", verifyAdminPage, (req, res) => {
     res.sendFile(path.join(__dirname, "private", "admin.html"));
